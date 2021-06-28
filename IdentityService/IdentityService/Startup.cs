@@ -16,6 +16,7 @@ using IdentityService.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using IdentityServer4.AspNetIdentity;
+using Microsoft.OpenApi.Models;
 
 
 namespace IdentityService
@@ -45,6 +46,11 @@ namespace IdentityService
                 throw new NullReferenceException("AuthorizationConnection string is not founded in config file");
             }
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo{ Title = "IdentityService API", Version = "v1"});
+            });
+
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<AuthorizationContext>()
                 .AddDefaultTokenProviders();
@@ -53,14 +59,9 @@ namespace IdentityService
                 .AddInMemoryClients(Config.Clients)
                 .AddInMemoryApiScopes(Config.ApiScopes)
                 .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddTestUsers(Config.TestUsers)
                 .AddAspNetIdentity<User>()
                 .AddInMemoryApiResources(Config.ApiResources)
                 .AddDeveloperSigningCredential();
-
-            /*
-            */
-
 
         }
 
@@ -71,18 +72,32 @@ namespace IdentityService
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+
             app.UseIdentityServer();
 
             app.UseAuthorization();
 
-
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers();
             });
+
+            if(env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "IdentityService V1");
+                    c.RoutePrefix = string.Empty;
+                });
+            }
+
         }
     }
 }

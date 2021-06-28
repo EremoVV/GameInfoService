@@ -12,6 +12,5 @@ namespace IdentityService.Models.Authorization
         public string City { get; set; }
         public DateTime Birthday { get; set; }
 
-
     }
 }

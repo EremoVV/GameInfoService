@@ -6,64 +6,100 @@ using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using IdentityServer4.Events;
+using IdentityServer4.Extensions;
+using IdentityServer4.Services;
 using IdentityService.Models.Authorization;
 using IdentityService.Contexts;
+using IdentityService.Models;
+using IdentityService.Models.ViewModels;
+using Microsoft.AspNetCore.Authentication;
 
 
 namespace IdentityService.Controllers
 {
-    //[ApiController]
-    //[Route("[controller]")]
+    [ApiController]
+    [Route("[controller]")]
     public class AccountController : Controller
     {
 
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private AuthorizationContext _authorizationContext;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, AuthorizationContext authorizationContext)
+        private readonly IIdentityServerInteractionService _interaction;
+        private readonly IEventService _events; //Event logging system
+        //private AuthorizationContext _authorizationContext; Context for Identity
+
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IEventService events, IIdentityServerInteractionService interaction)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _authorizationContext = authorizationContext;
+            _events = events;
+            _interaction = interaction;
         }
-        [HttpGet]
+        [HttpGet("[action]")]
         public JwtSecurityToken Index()
         {
             return new JwtSecurityToken();
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public JsonResult GetUsers()
         {
             return new JsonResult(_userManager.Users.ToList());
         }
 
-        [HttpPost]
-        public async Task<string> RegisterUser(User user, string password)
+        [HttpPost("[action]")]
+        public async Task<string> RegisterUser(UserRegisterView userRegister)
         {
-            var result = await _userManager.CreateAsync(user, password);
-            if (result.Succeeded) return "Success";
+            if (TryValidateModel(userRegister))
+            {
+                User newUser = new User
+                {
+                    UserName = userRegister.UserName,
+                    Email = userRegister.Email,
+                    Birthday = userRegister.Birthday,
+                    Country = userRegister.Country,
+                    City = userRegister.City
+                };
+                var result = await _userManager.CreateAsync(newUser, userRegister.Password);
+                if (result.Succeeded) return "Success";
+            }
             return "Error";
         }
-        [HttpPost]
-        public async Task<string> Signin(User user, string password)
+        [HttpPost("[action]")]
+        public async Task<bool> Signin(UserLoginView userLogin)
         {
-            if (!await _signInManager.CanSignInAsync(user))
+            ClaimsPrincipal principal = new ClaimsPrincipal();
+            if (TryValidateModel(userLogin))
             {
-                if (await _userManager.CheckPasswordAsync(user, password))
+                User user = await _userManager.FindByNameAsync(userLogin.UserName);
+                var result = await _signInManager.PasswordSignInAsync(user, userLogin.Password, false,lockoutOnFailure: true); 
+                if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, false);
-                    return "Signed in";
+                    principal = await _signInManager.ClaimsFactory.CreateAsync(user);
+                    await HttpContext.SignInAsync(principal);
                 }
-                return "Incorrect password";
             }
-            return "User already is signed in";
+            return principal.IsAuthenticated();
         }
-        [HttpDelete]
+        [HttpDelete("[action]")]
         public async void DeleteUser(string id)
         {
             await _userManager.DeleteAsync(await _userManager.FindByIdAsync(id));
+        }
+
+        [HttpGet("[action]")]
+        public async Task<RedirectResult> ViewUserInfo()
+        {
+            return Redirect("https://localhost:44366/connect/userinfo");
+        }
+
+        [HttpPost("[action]")]
+        public async Task<string> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return "Logged out";
         }
     }
 }

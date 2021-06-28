@@ -11,7 +11,19 @@ namespace IdentityService
     {
         public static IEnumerable<Client> Clients => new Client[]
         {
-
+            new Client
+            {
+                ClientId = "ReactClient",
+                ClientSecrets =
+                {
+                    new Secret("ReactClientSecret".Sha256())
+                },
+                AllowedScopes = {},
+                AllowedGrantTypes =
+                {
+                    GrantType.ClientCredentials
+                }
+            }
         };
 
         public static IEnumerable<ApiScope> ApiScopes => new ApiScope[]
