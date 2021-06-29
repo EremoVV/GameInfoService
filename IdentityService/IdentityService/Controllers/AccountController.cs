@@ -4,17 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
+using System.Net.Http;
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using System.Threading;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
 using IdentityServer4.Services;
+using IdentityServer4.Validation;
 using IdentityService.Models.Authorization;
 using IdentityService.Contexts;
 using IdentityService.Models;
 using IdentityService.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication;
-
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace IdentityService.Controllers
 {
@@ -74,11 +80,20 @@ namespace IdentityService.Controllers
             if (TryValidateModel(userLogin))
             {
                 User user = await _userManager.FindByNameAsync(userLogin.UserName);
-                var result = await _signInManager.PasswordSignInAsync(user, userLogin.Password, false,lockoutOnFailure: true); 
-                if (result.Succeeded)
+                if (user != null)
                 {
-                    principal = await _signInManager.ClaimsFactory.CreateAsync(user);
-                    await HttpContext.SignInAsync(principal);
+                    var result = await _signInManager.PasswordSignInAsync(user, userLogin.Password, false, lockoutOnFailure: false);
+                    if (result.Succeeded)
+                    {
+                        principal = await _signInManager.CreateUserPrincipalAsync(user);
+                        await HttpContext.SignInAsync(principal);
+
+                        var authContext = await _interaction.GetAuthorizationContextAsync("/home");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("User", "User not found");
                 }
             }
             return principal.IsAuthenticated();
@@ -101,5 +116,20 @@ namespace IdentityService.Controllers
             await _signInManager.SignOutAsync();
             return "Logged out";
         }
+
+        [HttpGet("[action]")]
+        public async Task<string> GetToken()
+        {
+            return await HttpContext.GetTokenAsync("Bearer");
+        }
+
+        [Authorize]
+        [HttpGet("[action]")]
+        public async Task<bool> IsAuthenticated()
+        {
+            var result = await HttpContext.AuthenticateAsync();
+            return result.Succeeded;
+        }
+
     }
 }
