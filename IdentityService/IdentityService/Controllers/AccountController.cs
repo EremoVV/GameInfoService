@@ -5,13 +5,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Web;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading;
+using IdentityModel.Client;
+using IdentityServer4;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
+using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
 using IdentityService.Models.Authorization;
@@ -21,6 +26,7 @@ using IdentityService.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using IdentityModel;
 
 namespace IdentityService.Controllers
 {
@@ -44,9 +50,9 @@ namespace IdentityService.Controllers
             _interaction = interaction;
         }
         [HttpGet("[action]")]
-        public JwtSecurityToken Index()
+        public RedirectResult Index()
         {
-            return new JwtSecurityToken();
+            return Redirect("https://localhost:5001/.well-known/openid-configuration");
         }
 
         [HttpGet("[action]")]
@@ -69,26 +75,41 @@ namespace IdentityService.Controllers
                     City = userRegister.City
                 };
                 var result = await _userManager.CreateAsync(newUser, userRegister.Password);
+                await _userManager.AddToRoleAsync(newUser, "user");
+                await _userManager.AddClaimsAsync(newUser, new[]
+                {
+                    new Claim(ClaimTypes.Name, newUser.UserName),
+                    new Claim(ClaimTypes.Role, "user")
+                });
                 if (result.Succeeded) return "Success";
             }
             return "Error";
         }
         [HttpPost("[action]")]
-        public async Task<bool> Signin(UserLoginView userLogin)
+        public async Task<string> SignInUser(ClientLoginCredentials login)
         {
-            ClaimsPrincipal principal = new ClaimsPrincipal();
-            if (TryValidateModel(userLogin))
+            if (TryValidateModel(login))
             {
-                User user = await _userManager.FindByNameAsync(userLogin.UserName);
+                User user = await _userManager.FindByNameAsync(login.UserName);
                 if (user != null)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(user, userLogin.Password, false, lockoutOnFailure: false);
+                    var result = await _signInManager.PasswordSignInAsync(user, login.Password, false, lockoutOnFailure: false);
                     if (result.Succeeded)
                     {
-                        principal = await _signInManager.CreateUserPrincipalAsync(user);
-                        await HttpContext.SignInAsync(principal);
+                        var client = new HttpClient();
+                        var response = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
+                        {
+                            Address = "https://localhost:5001/connect/token",
 
-                        var authContext = await _interaction.GetAuthorizationContextAsync("/home");
+                            ClientId = login.ClientId,
+                            ClientSecret = login.ClientSecret,
+
+                            Scope = login.Scope,
+
+                            UserName = login.UserName,
+                            Password = login.Password
+                        });
+                        return response.AccessToken;
                     }
                 }
                 else
@@ -96,40 +117,37 @@ namespace IdentityService.Controllers
                     ModelState.AddModelError("User", "User not found");
                 }
             }
-            return principal.IsAuthenticated();
+
+            return ModelState.ToString();
+
         }
+
+        [HttpGet("[action]")]
+        public async Task<JsonElement> GetUserInfo(string bearerToken)
+        {
+            var client = new HttpClient();
+
+            var response = await client.GetUserInfoAsync(new UserInfoRequest
+            {
+                Address = "https://localhost:5001/connect/userinfo",
+                Token = bearerToken
+            });
+
+            return response.Json;
+        }
+
         [HttpDelete("[action]")]
         public async void DeleteUser(string id)
         {
             await _userManager.DeleteAsync(await _userManager.FindByIdAsync(id));
         }
 
-        [HttpGet("[action]")]
-        public async Task<RedirectResult> ViewUserInfo()
-        {
-            return Redirect("https://localhost:44366/connect/userinfo");
-        }
-
         [HttpPost("[action]")]
-        public async Task<string> Logout()
+        public async Task<string> SignOutUser()
         {
             await _signInManager.SignOutAsync();
+            await HttpContext.SignOutAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
             return "Logged out";
         }
-
-        [HttpGet("[action]")]
-        public async Task<string> GetToken()
-        {
-            return await HttpContext.GetTokenAsync("Bearer");
-        }
-
-        [Authorize]
-        [HttpGet("[action]")]
-        public async Task<bool> IsAuthenticated()
-        {
-            var result = await HttpContext.AuthenticateAsync();
-            return result.Succeeded;
-        }
-
     }
 }

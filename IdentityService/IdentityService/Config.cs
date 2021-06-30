@@ -27,20 +27,25 @@ namespace IdentityService
             },
             new Client
             {
-                ClientName = "Client Application2",
+                ClientName = "Web Browser Client",
                 ClientId = "Browser",
                 AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                 ClientSecrets = { new Secret("1554db43-3015-47a8-a748-55bd76b6af48".Sha256()) },
                 AllowedScopes = new List<string> {"api1.read", "openid", "profile", "email"}
+            },
+            new Client
+            {
+                ClientName = "Catalog",
+                ClientId = "CatalogSecretN1"
             }
 
         };
 
         public static IEnumerable<ApiScope> ApiScopes => new ApiScope[]
         {
-            new ApiScope
-            {
-                Name = "api1.read"
+            new ApiScope{
+                Name = "Catalog API",
+                DisplayName = "Catalog"
             }
         };
 

@@ -56,12 +56,26 @@ namespace IdentityService
                 .AddDefaultTokenProviders();
 
             services.AddIdentityServer()
+                .AddJwtBearerClientAuthentication()
                 .AddInMemoryClients(Config.Clients)
                 .AddInMemoryApiScopes(Config.ApiScopes)
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddAspNetIdentity<User>()
                 .AddInMemoryApiResources(Config.ApiResources)
                 .AddDeveloperSigningCredential();
+
+
+            //services.AddAuthentication("token")
+            //    .AddJwtBearer("token", options =>
+            //    {
+            //        options.Authority = "localhost:5000";
+
+            //        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+            //    })
+            //    .AddOAuth2Introspection("Bearer", options =>
+            //    {
+            //        options.Authority = "localhost:5000";
+            //    });
 
         }
 
@@ -77,9 +91,11 @@ namespace IdentityService
             app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseIdentityServer();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>
             {

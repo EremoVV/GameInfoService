@@ -19,9 +19,9 @@ namespace Catalog.Controllers
         }
 
         [HttpGet("[action]")]
-        public RedirectResult UserInfo()
+        public string Info()
         {
-            return Redirect("");
+            return "Catalog Info Action";
         }
     }
 }
