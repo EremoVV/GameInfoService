@@ -95,6 +95,7 @@ namespace IdentityService
             app.UseAuthentication();
             app.UseAuthorization();
 
+            //app.UseIdentity;
             app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>

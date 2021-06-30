@@ -52,7 +52,7 @@ namespace IdentityService.Controllers
         [HttpGet("[action]")]
         public RedirectResult Index()
         {
-            return Redirect("https://localhost:5001/.well-known/openid-configuration");
+            return Redirect("https://localhost:5000/.well-known/openid-configuration");
         }
 
         [HttpGet("[action]")]
@@ -96,10 +96,11 @@ namespace IdentityService.Controllers
                     var result = await _signInManager.PasswordSignInAsync(user, login.Password, false, lockoutOnFailure: false);
                     if (result.Succeeded)
                     {
+
                         var client = new HttpClient();
                         var response = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
                         {
-                            Address = "https://localhost:5001/connect/token",
+                            Address = "https://localhost:5000/connect/token",
 
                             ClientId = login.ClientId,
                             ClientSecret = login.ClientSecret,
@@ -109,6 +110,7 @@ namespace IdentityService.Controllers
                             UserName = login.UserName,
                             Password = login.Password
                         });
+                        await HttpContext.AuthenticateAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
                         return response.AccessToken;
                     }
                 }
@@ -129,7 +131,7 @@ namespace IdentityService.Controllers
 
             var response = await client.GetUserInfoAsync(new UserInfoRequest
             {
-                Address = "https://localhost:5001/connect/userinfo",
+                Address = "https://localhost:5000/connect/userinfo",
                 Token = bearerToken
             });
 
