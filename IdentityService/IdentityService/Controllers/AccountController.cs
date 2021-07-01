@@ -88,6 +88,9 @@ namespace IdentityService.Controllers
         [HttpPost("[action]")]
         public async Task<string> SignInUser(ClientLoginCredentials login)
         {
+
+            //ClientLoginCredentials login = JsonSerializer.Deserialize<ClientLoginCredentials>(creds);
+
             if (TryValidateModel(login))
             {
                 User user = await _userManager.FindByNameAsync(login.UserName);

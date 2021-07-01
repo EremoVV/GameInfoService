@@ -14,20 +14,17 @@ namespace IdentityService
         {
             new Client
             {
-                ClientId = "ReactClient",
-                ClientSecrets =
-                {
-                    new Secret("ReactClientSecret".Sha256())
+                ClientName = "React",
+
+                ClientId = "ReactWebClient",
+                ClientSecrets = { new Secret("a6a0ece0-0052-4678-82ae-ecc8817d489d".Sha256()) },
+                AllowedScopes = {"openid"},
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPassword
                 },
-                AllowedScopes = {},
-                AllowedGrantTypes =
-                {
-                    GrantType.ClientCredentials
-                }
-            },
             new Client
             {
                 ClientName = "Web Browser Client",
+
                 ClientId = "Browser",
                 AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                 ClientSecrets = { new Secret("1554db43-3015-47a8-a748-55bd76b6af48".Sha256()) },
@@ -36,7 +33,11 @@ namespace IdentityService
             new Client
             {
                 ClientName = "Catalog",
-                ClientId = "CatalogSecretN1"
+
+                ClientId = "CatalogService",
+                ClientSecrets = { new Secret("1554db43-3015-47a8-a748-55bd76b6af48".Sha256()) },
+
+                AllowedScopes = new List<string> {"api1.read", "openid", "profile", "email"}
             }
 
         };
