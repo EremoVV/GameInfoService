@@ -38,16 +38,13 @@ namespace IdentityService.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
-        private readonly IIdentityServerInteractionService _interaction;
         private readonly IEventService _events; //Event logging system
-        //private AuthorizationContext _authorizationContext; Context for Identity
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IEventService events, IIdentityServerInteractionService interaction)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IEventService events)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _events = events;
-            _interaction = interaction;
         }
         [HttpGet("[action]")]
         public RedirectResult Index()
@@ -86,7 +83,7 @@ namespace IdentityService.Controllers
             return "Error";
         }
         [HttpPost("[action]")]
-        public async Task<string> SignInUser(ClientLoginCredentials login)
+        public async Task<JsonResult> SignInUser(ClientLoginCredentials login)
         {
 
             //ClientLoginCredentials login = JsonSerializer.Deserialize<ClientLoginCredentials>(creds);
@@ -114,7 +111,7 @@ namespace IdentityService.Controllers
                             Password = login.Password
                         });
                         await HttpContext.AuthenticateAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
-                        return response.AccessToken;
+                        return new JsonResult(new {token = response.AccessToken });
                     }
                 }
                 else
@@ -123,7 +120,7 @@ namespace IdentityService.Controllers
                 }
             }
 
-            return ModelState.ToString();
+            return new JsonResult(new {data = ModelState});
 
         }
 
@@ -148,11 +145,11 @@ namespace IdentityService.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<string> SignOutUser()
+        public async Task<JsonResult> SignOutUser()
         {
             await _signInManager.SignOutAsync();
             await HttpContext.SignOutAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
-            return "Logged out";
+            return new JsonResult(new {status = "logged out"});
         }
     }
 }
