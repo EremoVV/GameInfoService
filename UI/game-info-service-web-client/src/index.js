@@ -1,19 +1,30 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {Button} from '@material-ui/core';
 import {TextField} from '@material-ui/core'
+import {UserManager} from 'oidc-client'
 
-let ClientCredentials = {
+let clientCredentials = {
   clientId : "ReactWebClient",
   clientSecret : "a6a0ece0-0052-4678-82ae-ecc8817d489d",
   grantType : "password",
   scope : 'openid'
 };
 
-let BearerToken = ""
+var config = {
+  authority: "https://localhost:5000",
+  cliend_id: "React",
+  redurect_uri: "",
+  response_type: "id_token token",
+  scope: "openid",
+  post_logout_redirect_uri: "http://localhost:6000/Catalog/Index"
+}
+
+var gameInfoUserManager = new UserManager(config)
+
+let bearerToken = ""
 class LoginView extends React.Component{
   constructor(props){
     super(props);
@@ -24,13 +35,13 @@ class LoginView extends React.Component{
       token : []
     }
 
-    this.SendLogin = this.SendLogin.bind(this)
+    this.sendLogin = this.sendLogin.bind(this)
   }
 
-  async SendLogin(){
-    const response = await SendLoginRequest(this.state.username, this.state.password);
+  async sendLogin(){
+    const response = await sendLoginRequest(this.state.username, this.state.password);
     const data = await response.json();
-    BearerToken = data.token;
+    bearerToken = data.token;
   }
 
   render(){
@@ -117,10 +128,10 @@ class CatalogView extends React.Component{
     this.state = {
       catalog : {}
     }
-    this.GetCatalogItems = this.GetCatalogItems.bind(this)
+    this.getCatalogItems = this.getCatalogItems.bind(this)
   }
 
-  GetCatalogItems(){
+  getCatalogItems(){
     GetCatalogItemsRequest()
     .then(response => {this.state.catalog = response.json()});
   }
@@ -129,7 +140,7 @@ class CatalogView extends React.Component{
       <div>
         <div>Item1</div>
         <div>Item2</div>
-        <Button variant="contained" color="secondary" onClick={this.GetCatalogItems}>Get catalog items</Button>
+        <Button variant="contained" color="secondary" onClick={this.getCatalogItems}>Get catalog items</Button>
       </div>
     );
   }
@@ -190,7 +201,7 @@ function GetCatalogItemsRequest(){
     method : "GET",
     headers : {
       'Contnet-Type' : 'applications/json',
-      'WWW-Authenticate' : `Bearer=${BearerToken}`
+      'www-authenticate' : `Bearer ${BearerToken}`
     }
   }
   return fetch("https://localhost:44307/Catalog/Index", requestCatalogItems)
