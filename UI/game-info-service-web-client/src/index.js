@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import {Button} from '@material-ui/core';
-import {TextField} from '@material-ui/core'
+import {Typography, Link, Button, TextField, AppBar, Toolbar} from '@material-ui/core';
 import {UserManager} from 'oidc-client'
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
 
 let clientCredentials = {
   clientId : "ReactWebClient",
@@ -68,7 +68,7 @@ class RegisterView extends React.Component{
     this.state = {
       username : "",
       password : "",
-      email : "",
+      email : "example@mail.com",
       country : "",
       city : "",
       birthdayDate : new Date()
@@ -106,7 +106,7 @@ class RegisterView extends React.Component{
         <TextField id="BirthdayDateField" label="Birthday:" type="date" defaultValue="2000-01-01" onChange={e => this.state.birthdayDate = e.target.value}/>
       </div>
     </form>
-    <Button name="Confirm" variant="contained" color="primary" onClick={() => {SendRegisterRequest(this.state.username, this.state.email, this.state.password, this.state.country, this.state.city, this.state.birthdayDate)}}>Register</Button>
+    <Button name="Confirm" variant="contained" color="primary" onClick={() => {sendRegisterRequest(this.state.username, this.state.email, this.state.password, this.state.country, this.state.city, this.state.birthdayDate)}}>Register</Button>
     </div>
     );
   }
@@ -132,7 +132,7 @@ class CatalogView extends React.Component{
   }
 
   getCatalogItems(){
-    GetCatalogItemsRequest()
+    getCatalogItemsRequest()
     .then(response => {this.state.catalog = response.json()});
   }
   render(){
@@ -146,7 +146,7 @@ class CatalogView extends React.Component{
   }
 }
 
-function SendLoginRequest(username, password){
+function sendLoginRequest(username, password){
   const requestLogin = {
     method: "POST",
     headers: {
@@ -165,7 +165,7 @@ function SendLoginRequest(username, password){
   return fetch("https://localhost:44307/Account/SignInUser", requestLogin);
 }
 
-function SendRegisterRequest(
+function sendRegisterRequest(
   username, email, password, country, city, birthdayDate
 ){
   const requestRegister = {
@@ -185,7 +185,7 @@ function SendRegisterRequest(
   fetch("https://localhost:44307/Account/Register}", requestRegister);
 }
 
-function GetUsersRequest(){
+function getUsersRequest(){
   const requestUsers = {
     method: "GET",
     headers: {
@@ -195,13 +195,13 @@ function GetUsersRequest(){
   return fetch("https://localhost:44307/Account/GetUsers", requestUsers)
 }
 
-function GetCatalogItemsRequest(){
-  alert(`BearerToken : ${BearerToken}`)
+function getCatalogItemsRequest(){
+  alert(`BearerToken : ${bearerToken}`)
   const requestCatalogItems = {
     method : "GET",
     headers : {
       'Contnet-Type' : 'applications/json',
-      'www-authenticate' : `Bearer ${BearerToken}`
+      'www-authenticate' : `Bearer ${bearerToken}`
     }
   }
   return fetch("https://localhost:44307/Catalog/Index", requestCatalogItems)
@@ -228,8 +228,43 @@ class Main extends React.Component{
   }
 }
 
+function MainWindow(){
+  return(
+    <html>
+      <head>
+        <title>Game Info Service</title>
+      </head>
+      <body>
+
+        <BrowserRouter>
+        <AppBar position="static">
+          <Toolbar>
+          <Button color="inherit" href="/catalog">Catalog</Button>
+          <Button color="inherit" href="/login">Login</Button>
+          <Button color="inherit" href="/register">Register</Button>
+          </Toolbar>
+        </AppBar>
+          <Switch>
+            <Route path="/catalog">
+              <CatalogView/>
+            </Route>
+            <Route path="/login">
+              <LoginView/>
+            </Route>
+            <Route path="/register">
+              <RegisterView/>
+            </Route>
+          </Switch>
+        </BrowserRouter>
+
+      </body>
+    </html>
+
+  );
+}
+
   ReactDOM.render(
-    <Main/>,
+    MainWindow(),
     document.getElementById('root')
   );
 
