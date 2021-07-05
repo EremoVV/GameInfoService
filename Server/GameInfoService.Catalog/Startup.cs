@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GameInfoService.Catalog
 {
@@ -36,11 +37,15 @@ namespace GameInfoService.Catalog
             services.AddAuthentication("BearerToken")
                 .AddJwtBearer("BearerToken", options =>
                 {
-                    options.Authority = "https://localhost:5001";
-
-                    options.TokenValidationParameters.ValidTypes = new[] {"at+jwt"};
+                    options.Authority = "https://localhost:5000";
 
                     options.RequireHttpsMetadata = false;
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false,
+                        ValidTypes = new[] { "at+jwt" }
+                };
                 });
             //.AddOAuth2Introspection("IntrospectionBearerToken", options =>
             //{

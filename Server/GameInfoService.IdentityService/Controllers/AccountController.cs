@@ -112,7 +112,7 @@ namespace GameInfoService.IdentityService.Controllers
                             Password = login.Password
                         });
                         await HttpContext.AuthenticateAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
-                        return Ok(response.AccessToken);
+                        return Ok(new TokenResponseDto{Token = response.AccessToken});
                     }
                 }
                 else
@@ -126,7 +126,7 @@ namespace GameInfoService.IdentityService.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonElement> GetUserInfo(string bearerToken)
+        public async Task<ActionResult> GetUserInfo(string bearerToken)
         {
             var client = new HttpClient();
 
@@ -136,7 +136,7 @@ namespace GameInfoService.IdentityService.Controllers
                 Token = bearerToken
             });
 
-            return response.Json;
+            return Ok(response);
         }
 
         [HttpDelete]

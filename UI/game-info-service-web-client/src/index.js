@@ -13,18 +13,19 @@ let clientCredentials = {
   scope : 'openid'
 };
 
-var config = {
+var gameInfoIdentityConfig = {
   authority: "https://localhost:5000",
   cliend_id: "React",
   redurect_uri: "",
   response_type: "id_token token",
-  scope: "openid",
-  post_logout_redirect_uri: "http://localhost:6000/Catalog/Index"
+  scope: ["openid", "CatalogAPI"],
+  post_logout_redirect_uri: "http://localhost:6001/api/catalog/Catalog/Index"
 }
 
-var gameInfoUserManager = new UserManager(config)
+var gameInfoUserManager = new UserManager(gameInfoIdentityConfig)
 
 let bearerToken = ""
+
 class LoginView extends React.Component{
   constructor(props){
     super(props);
@@ -56,7 +57,7 @@ class LoginView extends React.Component{
         <TextField id="PasswordField" type="password" label="Password:" onChange={e=> {this.state.password = e.target.value}}/>
       </div>
     </form>
-    <Button name="Confirm" variant="contained" color="primary" onClick={this.SendLogin}>Log In</Button>
+    <Button name="Confirm" variant="contained" color="primary" onClick={this.sendLogin}>Log In</Button>
     </div>
     );
   }
@@ -113,10 +114,13 @@ class RegisterView extends React.Component{
 }
 
 class UsersView extends React.Component{
+  constructor(props){
+    super(props)
+  }
   render(){
     return(
       <div>
-        <Button variant="contained" color="secondary">GetUsers</Button>
+        <Button variant="contained" color="secondary" onClick={getUsersRequest}>GetUsers</Button>
       </div>
     );
   }
@@ -162,7 +166,7 @@ function sendLoginRequest(username, password){
       Scope : "openid"
     })
   };
-  return fetch("https://localhost:44307/Account/SignInUser", requestLogin);
+  return fetch("https://localhost:44361/api/identity/Account/SignInUser", requestLogin);
 }
 
 function sendRegisterRequest(
@@ -182,7 +186,7 @@ function sendRegisterRequest(
       BirthdayDate : birthdayDate
     })
   };
-  fetch("https://localhost:44307/Account/Register}", requestRegister);
+  fetch("https://localhost:44361/api/identity/Account/Register}", requestRegister);
 }
 
 function getUsersRequest(){
@@ -192,7 +196,7 @@ function getUsersRequest(){
       'Content-Type': 'application/json'
   }
   }
-  return fetch("https://localhost:44307/Account/GetUsers", requestUsers)
+  return fetch("https://localhost:44361/api/identity/Account/GetUsers", requestUsers)
 }
 
 function getCatalogItemsRequest(){
@@ -201,32 +205,12 @@ function getCatalogItemsRequest(){
     method : "GET",
     headers : {
       'Contnet-Type' : 'applications/json',
-      'www-authenticate' : `Bearer ${bearerToken}`
+      'Authorization' : `Bearer ${bearerToken}`
     }
   }
-  return fetch("https://localhost:44307/Catalog/Index", requestCatalogItems)
+  return fetch("https://localhost:44361/api/catalog/Catalog/Index", requestCatalogItems)
 }
 
-
-
-class Main extends React.Component{
-  render(){
-    return(
-      <div>
-        <div>
-          <CatalogView/>
-        </div>
-        <div>
-          <LoginView/>
-        </div>
-        {/* <div>
-          <RegisterView/>
-        </div> */}
-      </div>
-
-    );
-  }
-}
 
 function MainWindow(){
   return(
@@ -240,16 +224,29 @@ function MainWindow(){
         <AppBar position="static">
           <Toolbar>
           <Button color="inherit" href="/catalog">Catalog</Button>
+          <Button color="inherit" href="/users">Users</Button>
           <Button color="inherit" href="/login">Login</Button>
           <Button color="inherit" href="/register">Register</Button>
+          <Button color="inherit" href="/catalog">Logout</Button>
           </Toolbar>
         </AppBar>
           <Switch>
             <Route path="/catalog">
               <CatalogView/>
             </Route>
+            <Route path="/users">
+              <UsersView/>
+            </Route>
             <Route path="/login">
-              <LoginView/>
+              <div>
+                <div>
+                <LoginView/>
+                </div>
+                <div>
+                <CatalogView/>
+                </div>
+              </div>
+
             </Route>
             <Route path="/register">
               <RegisterView/>

@@ -18,7 +18,7 @@ namespace GameInfoService.IdentityService
 
                 ClientId = "ReactWebClient",
                 ClientSecrets = { new Secret("a6a0ece0-0052-4678-82ae-ecc8817d489d".Sha256()) },
-                AllowedScopes = {"openid"},
+                AllowedScopes = {"openid", "CatalogAPI"},
                 AllowedGrantTypes = GrantTypes.ResourceOwnerPassword
                 },
             new Client
@@ -45,14 +45,19 @@ namespace GameInfoService.IdentityService
         public static IEnumerable<ApiScope> ApiScopes => new ApiScope[]
         {
             new ApiScope{
-                Name = "Catalog API",
+                Name = "CatalogAPI",
                 DisplayName = "Catalog"
-            }
+            },
         };
 
         public static IEnumerable<ApiResource> ApiResources => new ApiResource[]
         {
+            new ApiResource
+            {
+                Name = "CatalogResource",
 
+                Scopes = new List<string> {"CatalogAPI"}
+            }
         };
 
         public static IEnumerable<IdentityResource> IdentityResources => new IdentityResource[]
