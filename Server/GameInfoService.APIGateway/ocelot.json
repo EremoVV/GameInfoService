@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/Account/Index",
+      "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -9,59 +9,11 @@
           "Port": 5000
         }
       ],
-      "UpstreamPathTemplate": "/Account/Index",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamPathTemplate": "/api/identity/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "UPDATE", "DELETE" ]
     },
     {
-      "DownstreamPathTemplate": "/Account/GetUsers",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5000
-        }
-      ],
-      "UpstreamPathTemplate": "/Account/GetUsers",
-      "UpstreamHttpMethod": [ "Get" ]
-    },
-    {
-      "DownstreamPathTemplate": "/Account/RegisterUser",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5000
-        }
-      ],
-      "UpstreamPathTemplate": "/Account/RegisterUser",
-      "UpstreamHttpMethod": [ "Post" ]
-    },
-    {
-      "DownstreamPathTemplate": "/Account/SignInUser",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5000
-        }
-      ],
-      "UpstreamPathTemplate": "/Account/SignInUser",
-      "UpstreamHttpMethod": [ "Post" ]
-    },
-    {
-      "DownstreamPathTemplate": "/Account/SignOutUser",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5000
-        }
-      ],
-      "UpstreamPathTemplate": "/Account/SignOutUser",
-      "UpstreamHttpMethod": [ "Post" ]
-    },
-    {
-      "DownstreamPathTemplate": "/Catalog/Index",
+      "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -69,9 +21,10 @@
           "Port": 6001
         }
       ],
-      "UpstreamPathTemplate": "/Catalog/Index",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamPathTemplate": "/api/catalog/{everything}",
+      "UpstreamHttpMethod": [ "GET" ]
     }
+
 
   ],
   "GlobalConfiguration": {
