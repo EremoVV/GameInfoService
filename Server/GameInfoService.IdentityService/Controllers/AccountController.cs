@@ -86,9 +86,6 @@ namespace GameInfoService.IdentityService.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> SignInUser(ClientLoginCredentialsDto login)
         {
-
-            //ClientLoginCredentials login = JsonSerializer.Deserialize<ClientLoginCredentials>(creds);
-
             if (TryValidateModel(login))
             {
                 UserEntity user = await _userManager.FindByNameAsync(login.UserName);
@@ -112,7 +109,7 @@ namespace GameInfoService.IdentityService.Controllers
                             Password = login.Password
                         });
                         await HttpContext.AuthenticateAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
-                        return Ok(new TokenResponseDto{Token = response.AccessToken});
+                        return Ok(response);
                     }
                 }
                 else

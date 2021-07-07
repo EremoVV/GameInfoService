@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import {Typography, Link, Button, TextField, AppBar, Toolbar} from '@material-ui/core';
-import {UserManager} from 'oidc-client'
-import {BrowserRouter, Route, Switch} from 'react-router-dom'
+import {Avatar, Typography, Link, Button, ButtonGroup, Card, CardMedia, CardActionArea, TextField, AppBar, Toolbar, CardContent, Grid, SvgIcon, createMuiTheme} from '@material-ui/core';
+import {UserManager} from 'oidc-client';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {makeStyles} from '@material-ui/core/styles';
+import Rating from '@material-ui/lab/Rating';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 
 let clientCredentials = {
   clientId : "ReactWebClient",
@@ -20,13 +23,46 @@ var gameInfoIdentityConfig = {
   response_type: "id_token token",
   scope: ["openid", "CatalogAPI"],
   post_logout_redirect_uri: "http://localhost:6001/api/catalog/Catalog/Index"
+};
+
+const theme = createMuiTheme({
+  spacing: 4,
+})
+
+const useStyles = makeStyles({
+  login: {
+    padding: '0 30 30 30px'
+  },
+  card: {
+    minWidth: 210,
+    minHeight: 300,
+  },
+  grid: {
+    maxWidth: 1903
+  },
+  catalogGrid: {
+    padding: theme.spacing(2)
+  },
+  gridItem: {
+    padding: 10
+  },
+});
+
+
+function getBearerToken(){
+  return document.cookie.split('=')[1];
 }
 
-var gameInfoUserManager = new UserManager(gameInfoIdentityConfig)
+function ProfileView(props){
+  return (
+    <div>
+      <h1>Welcome to your profile!</h1>
+      <Avatar>{props.name}</Avatar>
+    </div>
+  );
+}
 
-let bearerToken = ""
-
-class LoginView extends React.Component{
+class SignInView extends React.Component{
   constructor(props){
     super(props);
 
@@ -42,13 +78,12 @@ class LoginView extends React.Component{
   async sendLogin(){
     const response = await sendLoginRequest(this.state.username, this.state.password);
     const data = await response.json();
-    bearerToken = data.token;
+    document.cookie = `Authorization=${data.accessToken}; Secure`;
   }
 
   render(){
     return(
       <div>
-        <label>{this.state.token}</label>
       <form>
       <div>
         <TextField id="LoginField" label="Username:" onChange={e =>{this.state.username = e.target.value}}/>
@@ -58,6 +93,8 @@ class LoginView extends React.Component{
       </div>
     </form>
     <Button name="Confirm" variant="contained" color="primary" onClick={this.sendLogin}>Log In</Button>
+    <p>or</p>
+    <Button href="/register" variant="contained" color="primary">Register</Button>
     </div>
     );
   }
@@ -82,12 +119,6 @@ class RegisterView extends React.Component{
       <div>
         <TextField id="UsernameField" label="Username:" onChange={e => this.state.username = e.target.value}/>
       </div>
-      {/* <div>
-        <TextField id="NameField" label="Name:"/>
-      </div>
-      <div>
-        <TextField id="SurNameField" label="SurName:"/>
-      </div> */}
       <div>
         <TextField id="EmailField" type="email" label="Email:" onChange={e => this.state.email = e.target.value}/>
       </div>
@@ -113,38 +144,55 @@ class RegisterView extends React.Component{
   }
 }
 
-class UsersView extends React.Component{
-  constructor(props){
-    super(props)
-  }
-  render(){
-    return(
-      <div>
-        <Button variant="contained" color="secondary" onClick={getUsersRequest}>GetUsers</Button>
-      </div>
-    );
-  }
+const GameInfoCard = ({gameImage, gameName, gameRating}) => {
+  const classes = useStyles();
+  return (
+    <CardActionArea>
+    <Card className={classes.card}>
+      <CardMedia>
+        {gameImage}
+      </CardMedia>
+      <CardContent>
+        <Typography>
+          {gameName}
+        </Typography>
+        {/* <Rating precision={0.1} max={10} readOnly value={gameRating} size="small"></Rating> */}
+        <Avatar>{gameRating}</Avatar>
+      </CardContent>
+    </Card>
+  </CardActionArea>
+  );
 }
 
 class CatalogView extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      catalog : {}
+      catalog : [],
     }
     this.getCatalogItems = this.getCatalogItems.bind(this)
   }
-
-  getCatalogItems(){
-    getCatalogItemsRequest()
-    .then(response => {this.state.catalog = response.json()});
+  componentDidMount(){
+    this.getCatalogItems()
+  }
+  async getCatalogItems(){
+    let response = await getCatalogItemsRequest();
+    let data = await response.json();
+    this.state.catalog = data;
+    this.forceUpdate();
+    //.then(response => {this.state.catalog = response.json()});
   }
   render(){
     return(
       <div>
-        <div>Item1</div>
-        <div>Item2</div>
-        <Button variant="contained" color="secondary" onClick={this.getCatalogItems}>Get catalog items</Button>
+          <h1>Games:</h1>
+          <Grid container spacing={3} direction="row" alignItems="flex-start" >
+          {this.state.catalog.map(game => (
+              <Grid item >
+                <GameInfoCard href={`/${game.name}`} gameImage={game.picture} gameName={game.name} gameRating={game.rating}/>  
+              </Grid>
+            ))}
+         </Grid>
       </div>
     );
   }
@@ -189,81 +237,123 @@ function sendRegisterRequest(
   fetch("https://localhost:44361/api/identity/Account/Register}", requestRegister);
 }
 
-function getUsersRequest(){
-  const requestUsers = {
-    method: "GET",
-    headers: {
-      'Content-Type': 'application/json'
-  }
-  }
-  return fetch("https://localhost:44361/api/identity/Account/GetUsers", requestUsers)
-}
-
 function getCatalogItemsRequest(){
-  alert(`BearerToken : ${bearerToken}`)
   const requestCatalogItems = {
     method : "GET",
     headers : {
       'Contnet-Type' : 'applications/json',
-      'Authorization' : `Bearer ${bearerToken}`
+      'Authorization' : `Bearer ${getBearerToken()}`
     }
   }
   return fetch("https://localhost:44361/api/catalog/Catalog/Index", requestCatalogItems)
 }
 
+function ClearCookies(){
+  document.cookie = "Authorization="
+}
+
+
+function MyButton(){
+  const classes = useStyles();
+  return <Button className={classes.login}>Button</Button>
+}
+
+
+function AuthorizationCheck(){
+  if(getBearerToken() === "" || getBearerToken == null) return false;
+  else return true;
+}
+
+function AuthorizationView(props){
+  const isLoggedIn = props.isLoggedIn;
+  const classes = useStyles();
+  if(isLoggedIn){
+    return(
+      <div>
+        <Grid container className={classes.grid}>
+          <Grid item className={classes.gridItem}>
+            <Avatar alt="U">
+              <Button href="/profile"/>
+            </Avatar>
+          </Grid>
+          <Grid item className={classes.gridItem}>
+            <ButtonGroup size="large">
+              <Button variant="outlined" color="inherit" href="/catalog" onClick={ClearCookies}>Logout</Button>
+            </ButtonGroup>
+          </Grid>
+        </Grid>
+      </div>
+    );
+  }
+  else{
+    return(
+      <ButtonGroup size="large">
+        <Button className="button" color="inherit" href="/login">Sign In</Button>
+      </ButtonGroup>
+    );
+  }
+
+}
+
+function Welcoming(){
+  return(
+    <div>
+      <h3>Welcome to our site!</h3>
+    </div>
+  );
+}
 
 function MainWindow(){
   return(
-    <html>
-      <head>
-        <title>Game Info Service</title>
-      </head>
-      <body>
-
-        <BrowserRouter>
+    <div>
+      <BrowserRouter>
         <AppBar position="static">
           <Toolbar>
-          <Button color="inherit" href="/catalog">Catalog</Button>
-          <Button color="inherit" href="/users">Users</Button>
-          <Button color="inherit" href="/login">Login</Button>
-          <Button color="inherit" href="/register">Register</Button>
-          <Button color="inherit" href="/catalog">Logout</Button>
+
+            <ButtonGroup variant="text" size="large">
+              <Button color="inherit" variant="outlined" href="/home">
+                <SvgIcon><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></SvgIcon>
+                Game Info Service
+              </Button>
+              <Button color="inherit" variant="outlined" href="/catalog">
+                <DashboardIcon/>
+                Catalog
+              </Button>
+            </ButtonGroup>
+            <AuthorizationView isLoggedIn={AuthorizationCheck()}/>
           </Toolbar>
         </AppBar>
           <Switch>
+            <Route path="/home">
+              <Welcoming/>
+            </Route>
             <Route path="/catalog">
               <CatalogView/>
-            </Route>
-            <Route path="/users">
-              <UsersView/>
             </Route>
             <Route path="/login">
               <div>
                 <div>
-                <LoginView/>
-                </div>
-                <div>
-                <CatalogView/>
+                <SignInView/>
                 </div>
               </div>
-
-            </Route>
+           </Route>
             <Route path="/register">
-              <RegisterView/>
+              <RegisterView/> 
+            </Route>
+            <Route path="/profile">
+              <ProfileView name="user"/>
             </Route>
           </Switch>
-        </BrowserRouter>
-
-      </body>
-    </html>
-
+      </BrowserRouter>
+    </div>
   );
 }
 
-  ReactDOM.render(
-    MainWindow(),
-    document.getElementById('root')
-  );
+ReactDOM.render(
+  MainWindow(),
+  document.getElementById('root')
+);
+ 
 
 
 

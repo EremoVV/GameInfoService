@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GameInfoService.Catalog.Contexts;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace GameInfoService.Catalog
@@ -29,6 +31,11 @@ namespace GameInfoService.Catalog
         {
 
             services.AddControllers();
+
+            var gameInfoConnectionString = Configuration.GetConnectionString("GameInfoConnectionString");
+
+            services.AddDbContext<GameInfoContext>(options => options.UseSqlServer(gameInfoConnectionString));
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GameInfoService.Catalog", Version = "v1" });
