@@ -8,6 +8,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import InfoIcon from '@material-ui/icons/Info';
 
 let clientCredentials = {
   clientId : "ReactWebClient",
@@ -57,7 +58,7 @@ function ProfileView(props){
   return (
     <div>
       <h1>Welcome to your profile!</h1>
-      <Avatar>{props.name}</Avatar>
+      <Avatar size="lagre">{props.name}</Avatar>
     </div>
   );
 }
@@ -83,19 +84,24 @@ class SignInView extends React.Component{
 
   render(){
     return(
-      <div>
-      <form>
-      <div>
-        <TextField id="LoginField" label="Username:" onChange={e =>{this.state.username = e.target.value}}/>
-      </div>
-      <div>
+      <Grid container direction="column" alignItems="center" spacing={2}>
+        <Grid item>
+          <TextField id="LoginField" label="Username:" onChange={e =>{this.state.username = e.target.value}}/>
+        </Grid>
+        <Grid item>
         <TextField id="PasswordField" type="password" label="Password:" onChange={e=> {this.state.password = e.target.value}}/>
-      </div>
-    </form>
-    <Button name="Confirm" variant="contained" color="primary" onClick={this.sendLogin}>Log In</Button>
-    <p>or</p>
-    <Button href="/register" variant="contained" color="primary">Register</Button>
-    </div>
+        </Grid>
+        <Grid item>
+        <Grid container spacing={2}>
+          <Grid item>
+          <Button name="Confirm" variant="contained" color="primary" onClick={this.sendLogin}>Log In</Button>
+          </Grid>
+          <Grid item>
+          <Button href="/register" variant="contained" color="primary">Register</Button>
+          </Grid>
+        </Grid>
+        </Grid>
+      </Grid>
     );
   }
 }
@@ -114,32 +120,36 @@ class RegisterView extends React.Component{
   }
   render(){
     return(
-      <div>
-      <form>
-      <div>
+      <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2}>
+        <Grid item>
         <TextField id="UsernameField" label="Username:" onChange={e => this.state.username = e.target.value}/>
-      </div>
-      <div>
+        </Grid>
+        <Grid item>
         <TextField id="EmailField" type="email" label="Email:" onChange={e => this.state.email = e.target.value}/>
-      </div>
-      <div>
+        </Grid>
+        <Grid item>
         <TextField id="PasswordField" type="password" label="Password:" onChange={e => this.state.password = e.target.value}/>
-      </div>
-      <div>
+        </Grid>
+        <Grid item>
         <TextField id="PasswordConfirmField" type="password" label="Confirm password:"/>
-      </div>
-      <div>
+        </Grid>
+        <Grid item>
         <TextField id="CountryField" label="County:" onChange={e => this.state.country = e.target.value}/>
-      </div>
-      <div>
+        </Grid>
+        <Grid item>
         <TextField id="CityField" label="City:" onChange={e => this.state.city = e.target.value}/>
-      </div>
-      <div>
+        </Grid>
+        <Grid item>
         <TextField id="BirthdayDateField" label="Birthday:" type="date" defaultValue="2000-01-01" onChange={e => this.state.birthdayDate = e.target.value}/>
-      </div>
-    </form>
-    <Button name="Confirm" variant="contained" color="primary" onClick={() => {sendRegisterRequest(this.state.username, this.state.email, this.state.password, this.state.country, this.state.city, this.state.birthdayDate)}}>Register</Button>
-    </div>
+        </Grid>
+        <Grid item>
+        <Button name="Confirm" variant="contained" color="primary" onClick={() => {
+          sendRegisterRequest(this.state.username, this.state.email, this.state.password, 
+                              this.state.country, this.state.city, this.state.birthdayDate)
+          }}>Register
+          </Button>
+        </Grid>
+        </Grid>
     );
   }
 }
@@ -147,7 +157,7 @@ class RegisterView extends React.Component{
 const GameInfoCard = ({gameImage, gameName, gameRating}) => {
   const classes = useStyles();
   return (
-    <CardActionArea>
+    <CardActionArea href={`/catalog/${gameName}`} className={classes.CardActionArea}>
     <Card className={classes.card}>
       <CardMedia>
         {gameImage}
@@ -184,19 +194,33 @@ class CatalogView extends React.Component{
   }
   render(){
     return(
-      <div>
-          <h1>Games:</h1>
-          <Grid container spacing={3} direction="row" alignItems="flex-start" >
-          {this.state.catalog.map(game => (
-              <Grid item >
-                <GameInfoCard href={`/${game.name}`} gameImage={game.picture} gameName={game.name} gameRating={game.rating}/>  
-              </Grid>
-            ))}
+      <Grid container direction="column" alignItems="center">
+        <Grid item>
+        <h1>Games:</h1>
+        </Grid>
+        <Grid item>
+        <Grid container direction="row">
+              {this.state.catalog.map(function(game){
+                let grid = <Grid containter></Grid>
+                return(
+                  <Grid item>
+                    <GameInfoCard gameImage={game.picture} gameName={game.name} gameRating={game.rating}/>
+                  </Grid>
+                );
+              })}
          </Grid>
-      </div>
+        </Grid>
+      </Grid>
     );
   }
 }
+
+function BuildGameGrid(catalog){
+  let grid = <Grid containter></Grid>
+
+}
+
+
 
 function sendLoginRequest(username, password){
   const requestLogin = {
@@ -269,8 +293,7 @@ function AuthorizationView(props){
   const classes = useStyles();
   if(isLoggedIn){
     return(
-      <div>
-        <Grid container className={classes.grid}>
+        <Grid justifyContent="flex-end" direction="row-reverse" container className={classes.grid}>
           <Grid item className={classes.gridItem}>
             <Avatar alt="U">
               <Button href="/profile"/>
@@ -282,14 +305,17 @@ function AuthorizationView(props){
             </ButtonGroup>
           </Grid>
         </Grid>
-      </div>
     );
   }
   else{
     return(
-      <ButtonGroup size="large">
-        <Button className="button" color="inherit" href="/login">Sign In</Button>
-      </ButtonGroup>
+      <Grid container justifyContent="flex-end" direction="row-reverse">
+        <Grid item>
+        <ButtonGroup size="large">
+          <Button className="button" color="inherit" href="/login">Sign In</Button>
+        </ButtonGroup>
+        </Grid>
+      </Grid>
     );
   }
 
@@ -297,45 +323,49 @@ function AuthorizationView(props){
 
 function Welcoming(){
   return(
-    <div>
-      <h3>Welcome to our site!</h3>
-    </div>
+      <h1>Welcome to Game Info Service!</h1>
   );
 }
 
 function MainWindow(){
   return(
-    <div>
       <BrowserRouter>
         <AppBar position="static">
           <Toolbar>
-
-            <ButtonGroup variant="text" size="large">
-              <Button color="inherit" variant="outlined" href="/home">
-                <SvgIcon><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></SvgIcon>
-                Game Info Service
-              </Button>
-              <Button color="inherit" variant="outlined" href="/catalog">
-                <DashboardIcon/>
-                Catalog
-              </Button>
-            </ButtonGroup>
+            <Grid container>
+              <Grid item>
+                <Grid container spacing={3} alignContent="center" alignItems="center">
+                  <Grid item>
+                  <Typography>Game Info Service</Typography>
+                  </Grid>
+                  <Grid item>
+                    <ButtonGroup variant="text" size="large">
+                      <Button color="inherit" variant="outlined" href="/catalog">
+                        <DashboardIcon/>
+                        <Typography>Catalog</Typography>
+                      </Button>
+                      <Button color="inherit" variant="outlined" href="/about">
+                        <InfoIcon/>
+                        <Typography>About</Typography>
+                      </Button>
+                     </ButtonGroup>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
             <AuthorizationView isLoggedIn={AuthorizationCheck()}/>
           </Toolbar>
         </AppBar>
+        <Grid container direction="column" alignItems="center" justifyContent="center">
+          <Grid item>
           <Switch>
-            <Route path="/home">
-              <Welcoming/>
+          <Route path="/about" component={Welcoming}>
             </Route>
-            <Route path="/catalog">
+            <Route exact path="/catalog" strict>
               <CatalogView/>
             </Route>
             <Route path="/login">
-              <div>
-                <div>
-                <SignInView/>
-                </div>
-              </div>
+              <SignInView/>
            </Route>
             <Route path="/register">
               <RegisterView/> 
@@ -344,8 +374,9 @@ function MainWindow(){
               <ProfileView name="user"/>
             </Route>
           </Switch>
+          </Grid>
+        </Grid>
       </BrowserRouter>
-    </div>
   );
 }
 
