@@ -1,30 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import {Avatar, Typography, Link, Button, ButtonGroup, Card, CardMedia, CardActionArea, TextField, AppBar, Toolbar, CardContent, Grid, SvgIcon, createMuiTheme} from '@material-ui/core';
-import {UserManager} from 'oidc-client';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Avatar, Typography, Button, ButtonGroup, Card, CardMedia, CardActionArea, TextField, AppBar, Toolbar, CardContent, Grid, createMuiTheme} from '@material-ui/core';
+import {BrowserRouter, Route, Switch, Redirect, useParams} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import InfoIcon from '@material-ui/icons/Info';
 
-let clientCredentials = {
-  clientId : "ReactWebClient",
-  clientSecret : "a6a0ece0-0052-4678-82ae-ecc8817d489d",
-  grantType : "password",
-  scope : 'openid'
-};
+// let clientCredentials = {
+//   clientId : "ReactWebClient",
+//   clientSecret : "a6a0ece0-0052-4678-82ae-ecc8817d489d",
+//   grantType : "password",
+//   scope : 'openid'
+// };
 
-var gameInfoIdentityConfig = {
-  authority: "https://localhost:5000",
-  cliend_id: "React",
-  redurect_uri: "",
-  response_type: "id_token token",
-  scope: ["openid", "CatalogAPI"],
-  post_logout_redirect_uri: "http://localhost:6001/api/catalog/Catalog/Index"
-};
+// var gameInfoIdentityConfig = {
+//   authority: "https://localhost:5000",
+//   cliend_id: "React",
+//   redurect_uri: "",
+//   response_type: "id_token token",
+//   scope: ["openid", "CatalogAPI"],
+//   post_logout_redirect_uri: "http://localhost:6001/api/catalog/Catalog/Index"
+// };
 
 const theme = createMuiTheme({
   spacing: 4,
@@ -56,10 +55,14 @@ function getBearerToken(){
 
 function ProfileView(props){
   return (
-    <div>
-      <h1>Welcome to your profile!</h1>
-      <Avatar size="lagre">{props.name}</Avatar>
-    </div>
+    <Grid container direction="column" alignItems="center" spacing={2}>
+      <Grid item>
+        <Typography variant="h3">Welcome to your profile!</Typography>
+      </Grid>
+      <Grid item>
+        <Avatar size="lagre">{props.name}</Avatar>
+      </Grid>
+    </Grid>
   );
 }
 
@@ -73,23 +76,31 @@ class SignInView extends React.Component{
       token : []
     }
 
-    this.sendLogin = this.sendLogin.bind(this)
+    this.sendLogin = this.sendLogin.bind(this);
+    this.postLoginRedirect = this.postLoginRedirect.bind(this);
   }
 
   async sendLogin(){
     const response = await sendLoginRequest(this.state.username, this.state.password);
     const data = await response.json();
     document.cookie = `Authorization=${data.accessToken}; Secure`;
+    return(this.postLoginRedirect());
+  }
+
+  postLoginRedirect(){
+    if(AuthorizationCheck()){
+        window.location.replace("/catalog");
+    }
   }
 
   render(){
     return(
       <Grid container direction="column" alignItems="center" spacing={2}>
         <Grid item>
-          <TextField id="LoginField" label="Username:" onChange={e =>{this.state.username = e.target.value}}/>
+          <TextField id="LoginField" label="Username:" onChange={e => this.setState({username: e.target.value})}/>
         </Grid>
         <Grid item>
-        <TextField id="PasswordField" type="password" label="Password:" onChange={e=> {this.state.password = e.target.value}}/>
+        <TextField id="PasswordField" type="password" label="Password:" onChange={e=>this.setState({password: e.target.value})}/>
         </Grid>
         <Grid item>
         <Grid container spacing={2}>
@@ -120,27 +131,27 @@ class RegisterView extends React.Component{
   }
   render(){
     return(
-      <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2}>
+      <Grid container direction="column" alignItems="center" justifycontent="center" spacing={2}>
         <Grid item>
-        <TextField id="UsernameField" label="Username:" onChange={e => this.state.username = e.target.value}/>
+        <TextField id="UsernameField" label="Username:" onChange={e => this.setState({username : e.target.value})}/>
         </Grid>
         <Grid item>
-        <TextField id="EmailField" type="email" label="Email:" onChange={e => this.state.email = e.target.value}/>
+        <TextField id="EmailField" type="email" label="Email:" onChange={e => this.setState({email : e.target.value})}/>
         </Grid>
         <Grid item>
-        <TextField id="PasswordField" type="password" label="Password:" onChange={e => this.state.password = e.target.value}/>
+        <TextField id="PasswordField" type="password" label="Password:" onChange={e => this.setState({password : e.target.value})}/>
         </Grid>
         <Grid item>
         <TextField id="PasswordConfirmField" type="password" label="Confirm password:"/>
         </Grid>
         <Grid item>
-        <TextField id="CountryField" label="County:" onChange={e => this.state.country = e.target.value}/>
+        <TextField id="CountryField" label="County:" onChange={e => this.setState({country : e.target.value})}/>
         </Grid>
         <Grid item>
-        <TextField id="CityField" label="City:" onChange={e => this.state.city = e.target.value}/>
+        <TextField id="CityField" label="City:" onChange={e => this.setState({city : e.target.value})}/>
         </Grid>
         <Grid item>
-        <TextField id="BirthdayDateField" label="Birthday:" type="date" defaultValue="2000-01-01" onChange={e => this.state.birthdayDate = e.target.value}/>
+        <TextField id="BirthdayDateField" label="Birthday:" type="date" defaultValue="2000-01-01" onChange={e => this.setState({birthdayDate : e.target.value})}/>
         </Grid>
         <Grid item>
         <Button name="Confirm" variant="contained" color="primary" onClick={() => {
@@ -199,9 +210,8 @@ class CatalogView extends React.Component{
         <h1>Games:</h1>
         </Grid>
         <Grid item>
-        <Grid container direction="row">
+        <Grid container direction="row" spacing={2}>
               {this.state.catalog.map(function(game){
-                let grid = <Grid containter></Grid>
                 return(
                   <Grid item>
                     <GameInfoCard gameImage={game.picture} gameName={game.name} gameRating={game.rating}/>
@@ -215,12 +225,73 @@ class CatalogView extends React.Component{
   }
 }
 
-function BuildGameGrid(catalog){
-  let grid = <Grid containter></Grid>
+class GameInfoView extends React.Component{
+  constructor(props){
+    super(props)
+    this.state = {
+      name : this.props.name,
+      data : {},
+    }
+  }
+componentDidMount(){
+  this.LoadGameInfo();
+}
 
+async LoadGameInfo(){
+  let response = await getGameInfoRequest(this.state.name);
+  let data = await response.json();
+  this.state.data = data;
+  this.forceUpdate();
+}
+
+  render(){
+    return (
+      <Grid container spacing={4}>
+      <Grid item>
+        <Typography>{this.state.data.picture}</Typography>
+      </Grid>
+      <Grid item>
+        <Grid container direction="column" spacing={2}>
+          <Grid item>
+          <Typography variant="h4">{this.state.name}</Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="h5">{this.state.data.description}</Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="h6">{this.state.data.releaseDate}</Typography>
+          </Grid>
+          <Grid item>
+            <Rating size="large" precision={0.1} max={10} value={Number(this.state.data.rating)} disabled/>
+          </Grid>
+          <Grid item>
+          {this.state.data.rating}
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+    );
+  }
 }
 
 
+function GetGameInfoView(){
+  let {name} = useParams();
+  return(
+    <GameInfoView name={name}/>
+  );
+}
+
+function getGameInfoRequest(gameName){
+  const requestGameInfo = {
+    method : "GET",
+    headers : {
+      'Contnet-Type' : 'applications/json',
+      'Authorization' : `Bearer ${getBearerToken()}`
+    }
+  }
+  return fetch(`https://localhost:44361/api/catalog/Catalog/GetGameInfoByName?name=${gameName}`, requestGameInfo);
+}
 
 function sendLoginRequest(username, password){
   const requestLogin = {
@@ -276,15 +347,8 @@ function ClearCookies(){
   document.cookie = "Authorization="
 }
 
-
-function MyButton(){
-  const classes = useStyles();
-  return <Button className={classes.login}>Button</Button>
-}
-
-
 function AuthorizationCheck(){
-  if(getBearerToken() === "" || getBearerToken == null) return false;
+  if(getBearerToken() === "" || getBearerToken() == null) return false;
   else return true;
 }
 
@@ -293,7 +357,7 @@ function AuthorizationView(props){
   const classes = useStyles();
   if(isLoggedIn){
     return(
-        <Grid justifyContent="flex-end" direction="row-reverse" container className={classes.grid}>
+        <Grid justifycontent="flex-end" direction="row-reverse" container className={classes.grid}>
           <Grid item className={classes.gridItem}>
             <Avatar alt="U">
               <Button href="/profile"/>
@@ -309,7 +373,7 @@ function AuthorizationView(props){
   }
   else{
     return(
-      <Grid container justifyContent="flex-end" direction="row-reverse">
+      <Grid container justifycontent="flex-end" direction="row-reverse">
         <Grid item>
         <ButtonGroup size="large">
           <Button className="button" color="inherit" href="/login">Sign In</Button>
@@ -323,7 +387,18 @@ function AuthorizationView(props){
 
 function Welcoming(){
   return(
-      <h1>Welcome to Game Info Service!</h1>
+      <Grid container>
+        <Grid item>
+          <Grid container>
+            <Grid item>
+
+            </Grid>
+            <Grid item>
+              <Typography variant="h2">Welcome to Game Info Service!</Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
   );
 }
 
@@ -356,10 +431,13 @@ function MainWindow(){
             <AuthorizationView isLoggedIn={AuthorizationCheck()}/>
           </Toolbar>
         </AppBar>
-        <Grid container direction="column" alignItems="center" justifyContent="center">
+        <Grid container direction="column" alignItems="center" justifycontent="center">
           <Grid item>
           <Switch>
           <Route path="/about" component={Welcoming}>
+            </Route>
+            <Route path="/catalog/:name">
+              <GetGameInfoView/>
             </Route>
             <Route exact path="/catalog" strict>
               <CatalogView/>
@@ -373,6 +451,7 @@ function MainWindow(){
             <Route path="/profile">
               <ProfileView name="user"/>
             </Route>
+            <Redirect to="/about"/>
           </Switch>
           </Grid>
         </Grid>

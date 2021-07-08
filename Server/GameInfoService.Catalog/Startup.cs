@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GameInfoService.Catalog.Contexts;
+using GameInfoService.Catalog.Repositories;
+using GameInfoService.Catalog.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -35,6 +37,10 @@ namespace GameInfoService.Catalog
             var gameInfoConnectionString = Configuration.GetConnectionString("GameInfoConnectionString");
 
             services.AddDbContext<GameInfoContext>(options => options.UseSqlServer(gameInfoConnectionString));
+
+            services.AddTransient<IGameInfoRepository, GameInfoRepository>();
+
+            services.AddTransient<IGameInfoRetrieveService, GameInfoRetrieveService>();
             
             services.AddSwaggerGen(c =>
             {

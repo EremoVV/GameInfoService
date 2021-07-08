@@ -7,6 +7,7 @@ using GameInfoService.Catalog.Contexts;
 using Microsoft.AspNetCore.Authorization;
 using GameInfoService.Catalog.Models.DTOs;
 using GameInfoService.Catalog.Models.Entities;
+using GameInfoService.Catalog.Services;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -17,41 +18,24 @@ namespace GameInfoService.Catalog.Controllers
     [Route("/api/[controller]/[action]")]
     public class CatalogController : ControllerBase
     {
-        private GameInfoContext catalog;
-        public CatalogController(GameInfoContext catalog)
+        private readonly IGameInfoRetrieveService _gameInfoService;
+        public CatalogController(IGameInfoRetrieveService gameInfoService)
         {
-            this.catalog = catalog;
+            _gameInfoService = gameInfoService;
         }
 
         [HttpGet]
         [Authorize]
-        public ActionResult<List<string>> Index()
+        public ActionResult<List<GameFullInfoDto>> Index()
         {
-            return Ok(new[]
-            {
-                new GameShortInfoDto{Name = "Death Stranding", Picture = "1.png", Rating = 7.5},
-                new GameShortInfoDto{Name = "Red Dead Redemption 2", Picture = "2.png", Rating = 9},
-                new GameShortInfoDto{Name = "Death Stranding", Picture = "1.png", Rating = 7.5},
-                new GameShortInfoDto{Name = "Red Dead Redemption 2", Picture = "2.png", Rating = 9},
-                new GameShortInfoDto{Name = "Death Stranding", Picture = "1.png", Rating = 7.5},
-                new GameShortInfoDto{Name = "Red Dead Redemption 2", Picture = "2.png", Rating = 9},
-                new GameShortInfoDto{Name = "Death Stranding", Picture = "1.png", Rating = 7.5},
-                new GameShortInfoDto{Name = "Red Dead Redemption 2", Picture = "2.png", Rating = 9},
-                new GameShortInfoDto{Name = "Death Stranding", Picture = "1.png", Rating = 7.5},
-                new GameShortInfoDto{Name = "Red Dead Redemption 2", Picture = "2.png", Rating = 9},
-                new GameShortInfoDto{Name = "Death Stranding", Picture = "1.png", Rating = 7.5},
-                new GameShortInfoDto{Name = "Red Dead Redemption 2", Picture = "2.png", Rating = 9},
-                new GameShortInfoDto{Name = "Death Stranding", Picture = "1.png", Rating = 7.5},
-                new GameShortInfoDto{Name = "Red Dead Redemption 2", Picture = "2.png", Rating = 9},
-                new GameShortInfoDto{Name = "Death Stranding", Picture = "1.png", Rating = 7.5},
-                new GameShortInfoDto{Name = "Red Dead Redemption 2", Picture = "2.png", Rating = 9},
-                new GameShortInfoDto{Name = "Death Stranding", Picture = "1.png", Rating = 7.5},
-                new GameShortInfoDto{Name = "Red Dead Redemption 2", Picture = "2.png", Rating = 9},
-                new GameShortInfoDto{Name = "Death Stranding", Picture = "1.png", Rating = 7.5},
-                new GameShortInfoDto{Name = "Red Dead Redemption 2", Picture = "2.png", Rating = 9},
-                new GameShortInfoDto{Name = "Death Stranding", Picture = "1.png", Rating = 7.5},
-                new GameShortInfoDto{Name = "Red Dead Redemption 2", Picture = "2.png", Rating = 9}
-            }.ToList());
+            return Ok(_gameInfoService.GetAllGameInfos());
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult<GameFullInfoDto> GetGameInfoByName(string name)
+        {
+            return Ok(_gameInfoService.GetGameInfoByName(name));
         }
 
         [HttpGet]
