@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GameInfoService.Catalog.Models.Entities
+namespace GameInfoService.Catalog.Models.DTOs
 {
-    public class GameInfoEntity
+    public class GameInfoUpdateDto
     {
-        [Key]
-        public int Id { get; set; }
-        [Required]
         public string Name { get; set; }
-        [Required]
         public string Description { get; set; }
+        public string Picture { get; set; }
         public double Rating { get; set; }
-        [Required]
-        [Column(TypeName = "Date")]
         public DateTime ReleaseDate { get; set; }
     }
 }

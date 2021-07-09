@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GameInfoService.Catalog.Contexts;
+using GameInfoService.Catalog.MappingInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using GameInfoService.Catalog.Models.DTOs;
 using GameInfoService.Catalog.Models.Entities;
+using GameInfoService.Catalog.Models.UDMs;
 using GameInfoService.Catalog.Services;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
@@ -19,9 +21,11 @@ namespace GameInfoService.Catalog.Controllers
     public class CatalogController : ControllerBase
     {
         private readonly IGameInfoRetrieveService _gameInfoService;
-        public CatalogController(IGameInfoRetrieveService gameInfoService)
+        private readonly IGameInfoMapper _gameInfoMapper;
+        public CatalogController(IGameInfoRetrieveService gameInfoService, IGameInfoMapper gameInfoMapper)
         {
             _gameInfoService = gameInfoService;
+            _gameInfoMapper = gameInfoMapper;
         }
 
         [HttpGet]
@@ -38,33 +42,18 @@ namespace GameInfoService.Catalog.Controllers
             return Ok(_gameInfoService.GetGameInfoByName(name));
         }
 
-        [HttpGet]
-        public ActionResult<string> Info()
-        {
-            return Ok("Catalog Info Action");
-        }
-
         [HttpPost]
-        public ActionResult<string> AddInfo(GameFullInfoDto gameFullInfo)
+        public ActionResult<string> AddInfo(GameFullInfoDto gameInfo)
         {
-            GameFullInfoDto gameInfoDTO = new GameFullInfoDto
+            if (!TryValidateModel(gameInfo))
             {
-                Description = "desc",
-                Name = "name",
-                Picture = "some",
-                Rating = 4,
-                ReleaseDate = DateTime.Today
-            };
-
-            GameInfoEntity ent = new GameInfoEntity();
-
-            gameInfoDTO.Adapt(ent);
-
-            if (TryValidateModel(gameFullInfo))
-            {
-
+                return BadRequest(ModelState);
             }
-            throw new NotImplementedException();
+            else
+            {
+                _gameInfoService.AddGameInfo(_gameInfoMapper.MapToUdm(gameInfo));
+                return Accepted();
+            }
         }
 
         [HttpPost]

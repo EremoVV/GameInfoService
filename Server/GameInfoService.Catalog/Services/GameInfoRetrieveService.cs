@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GameInfoService.Catalog.Models.DTOs;
+using GameInfoService.Catalog.Models.Entities;
 using GameInfoService.Catalog.Models.UDMs;
 using GameInfoService.Catalog.Repositories;
 using Mapster;
@@ -31,6 +32,16 @@ namespace GameInfoService.Catalog.Services
         {
             return _gameInfoRepository.GetAllGameInfos()
                 .FirstOrDefault(x => x.Name.Normalize().Equals(name.Normalize())).Adapt(new GameInfoUdm());
+        }
+
+        public void AddGameInfo(GameInfoUdm gameInfo)
+        {
+            _gameInfoRepository.AddGameInfo(gameInfo.Adapt<GameInfoEntity>());
+        }
+
+        public void RemoveGameInfo(GameInfoUdm gameInfo)
+        {
+            _gameInfoRepository.RemoveGameInfo(gameInfo.Adapt<GameInfoEntity>());
         }
     }
 }

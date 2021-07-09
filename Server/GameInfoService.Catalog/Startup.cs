@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GameInfoService.Catalog.Contexts;
+using GameInfoService.Catalog.MappingInterfaces;
 using GameInfoService.Catalog.Repositories;
 using GameInfoService.Catalog.Services;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,8 @@ namespace GameInfoService.Catalog
             services.AddTransient<IGameInfoRepository, GameInfoRepository>();
 
             services.AddTransient<IGameInfoRetrieveService, GameInfoRetrieveService>();
+
+            services.AddTransient<IGameInfoMapper, GameInfoMapper>();
             
             services.AddSwaggerGen(c =>
             {

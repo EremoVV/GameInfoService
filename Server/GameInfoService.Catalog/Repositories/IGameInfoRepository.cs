@@ -11,5 +11,7 @@ namespace GameInfoService.Catalog.Repositories
     {
         IEnumerable<GameInfoEntity> GetAllGameInfos();
         GameInfoEntity GetGameInfoById(int id);
+        void AddGameInfo(GameInfoEntity gameInfo);
+        void RemoveGameInfo(GameInfoEntity gameInfo);
     }
 }

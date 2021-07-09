@@ -4,14 +4,16 @@ using GameInfoService.Catalog.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameInfoService.Catalog.Migrations
 {
     [DbContext(typeof(GameInfoContext))]
-    partial class GameInfoContextModelSnapshot : ModelSnapshot
+    [Migration("20210709072554_GameInfoReleaseDateFormatFix")]
+    partial class GameInfoReleaseDateFormatFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -114,11 +114,11 @@ namespace GameInfoService.IdentityService.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("User", "User not found");
+                    return NotFound("No such user");
                 }
             }
 
-            return Ok(ModelState);
+            return BadRequest(ModelState);
 
         }
 
