@@ -25,12 +25,17 @@ import InfoIcon from "@material-ui/icons/Info";
 import AuthorizationView, {
   AuthorizationCheck,
 } from "./components/authorization/AuthorizationView";
-import SignInView from "./components/authorization/SignInView";
+import SignInView, {
+  SignInFormikView,
+} from "./components/authorization/SignInView";
 import RegisterView from "./components/authorization/RegisterView";
 import CatalogView from "./components/catalog/CatalogView";
 import ProfileView from "./components/profile/ProfileView";
 import GameInfoView from "./components/catalog/GameInfoView";
 import Welcoming from "./components/Welcoming";
+import ErrorBoundary from "./errorHandling/ErrorBoundary";
+
+import ErrorComp from "./components/error";
 
 // let clientCredentials = {
 //   clientId : "ReactWebClient",
@@ -57,6 +62,9 @@ import Welcoming from "./components/Welcoming";
 //     </ButtonGroup>
 //   );
 // }
+
+const axios = require(`axios`).default;
+axios.defaults.baseURL = "https://localhost:44361/api/";
 
 function GetGameInfoView() {
   let { name } = useParams();
@@ -108,10 +116,18 @@ function App() {
             <Route path="/about" component={Welcoming} />
             <Route path="/catalog/:name" component={GetGameInfoView} />
             <Route exact path="/catalog" strict component={CatalogView} />
-            <Route path="/login" component={SignInView} />
+            <Route path="/login">
+              <SignInView />
+              <SignInFormikView />
+            </Route>
             <Route path="/register" component={RegisterView} />
             <Route path="/profile">
               <ProfileView name="user" />
+            </Route>
+            <Route path="/error">
+              <ErrorBoundary>
+                <ErrorComp />
+              </ErrorBoundary>
             </Route>
             <Redirect to="/about" />
           </Switch>

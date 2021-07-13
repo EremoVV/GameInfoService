@@ -41,7 +41,9 @@ namespace GameInfoService.Catalog.Controllers
         {
             if (!string.IsNullOrEmpty(name))
             {
-                return Ok(_gameInfoMapper.MapToFullInfoDto(_gameInfoService.GetGameInfoByName(name)));
+                var gameInfo = _gameInfoService.GetGameInfoByName(name);
+                if (gameInfo == null) return NotFound("No such game title");
+                return Ok(_gameInfoMapper.MapToFullInfoDto(gameInfo));
             }
 
             return BadRequest("Name parameter is not defined");

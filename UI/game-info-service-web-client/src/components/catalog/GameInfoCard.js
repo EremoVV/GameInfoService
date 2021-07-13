@@ -5,6 +5,8 @@ import {
   CardMedia,
   CardContent,
   Typography,
+  ButtonGroup,
+  Button,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -25,6 +27,11 @@ export default function GameInfoCard(props) {
         <CardContent>
           <Typography>{props.gameName}</Typography>
           <Avatar>{props.gameRating}</Avatar>
+          <Button>Add to wishlist</Button>
+          <ButtonGroup>
+            <Button href={`/catalog/update/${props.gameName}`}>Update</Button>
+            <Button>Remove</Button>
+          </ButtonGroup>
         </CardContent>
       </Card>
     </CardActionArea>
