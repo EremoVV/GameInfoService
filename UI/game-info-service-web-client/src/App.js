@@ -1,21 +1,36 @@
-import React from 'react';
-import './App.css';
-import './index.css';
+import React from "react";
+import "./App.css";
+import "./index.css";
 
-import {BrowserRouter, Route, Switch, Redirect, useParams} from 'react-router-dom';
+import {
+  BrowserRouter,
+  Route,
+  Switch,
+  Redirect,
+  useParams,
+} from "react-router-dom";
 
-import {Typography, Button, ButtonGroup, AppBar, Toolbar, Grid} from '@material-ui/core';
+import {
+  Typography,
+  Button,
+  ButtonGroup,
+  AppBar,
+  Toolbar,
+  Grid,
+} from "@material-ui/core";
 
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import InfoIcon from '@material-ui/icons/Info';
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import InfoIcon from "@material-ui/icons/Info";
 
-import { AuthorizationView, AuthorizationCheck } from './components/authorization/AuthorizationView';
-import SignInView from './components/authorization/SignInView';
-import RegisterView from './components/authorization/RegisterView';
-import CatalogView from './components/catalog/CatalogView';
-import ProfileView from './components/profile/ProfileView';
-import GameInfoView from './components/catalog/GameInfoView';
-import Welcoming from './components/Welcoming';
+import AuthorizationView, {
+  AuthorizationCheck,
+} from "./components/authorization/AuthorizationView";
+import SignInView from "./components/authorization/SignInView";
+import RegisterView from "./components/authorization/RegisterView";
+import CatalogView from "./components/catalog/CatalogView";
+import ProfileView from "./components/profile/ProfileView";
+import GameInfoView from "./components/catalog/GameInfoView";
+import Welcoming from "./components/Welcoming";
 
 // let clientCredentials = {
 //   clientId : "ReactWebClient",
@@ -33,8 +48,6 @@ import Welcoming from './components/Welcoming';
 //   post_logout_redirect_uri: "http://localhost:6001/api/catalog/Catalog/Index"
 // };
 
-
-
 // function GameInfoCardManageButtons(props){
 //   return(
 //     <ButtonGroup>
@@ -45,58 +58,66 @@ import Welcoming from './components/Welcoming';
 //   );
 // }
 
-function GetGameInfoView(){
-  let {name} = useParams();
-  return(
-    <GameInfoView name={name}/>
-  );
+function GetGameInfoView() {
+  let { name } = useParams();
+  return <GameInfoView name={name} />;
 }
 
 function App() {
   return (
     <BrowserRouter>
-    <AppBar position="static">
-      <Toolbar>
-        <Grid container>
-          <Grid item>
-            <Grid container spacing={3} alignContent="center" alignItems="center">
-              <Grid item>
-              <Typography>Game Info Service</Typography>
-              </Grid>
-              <Grid item>
-                <ButtonGroup variant="text" size="large">
-                  <Button color="inherit" variant="outlined" href="/catalog">
-                    <DashboardIcon/>
-                    <Typography>Catalog</Typography>
-                  </Button>
-                  <Button color="inherit" variant="outlined" href="/about">
-                    <InfoIcon/>
-                    <Typography>About</Typography>
-                  </Button>
-                 </ButtonGroup>
+      <AppBar position="static">
+        <Toolbar>
+          <Grid container>
+            <Grid item>
+              <Grid
+                container
+                spacing={3}
+                alignContent="center"
+                alignItems="center"
+              >
+                <Grid item>
+                  <Typography>Game Info Service</Typography>
+                </Grid>
+                <Grid item>
+                  <ButtonGroup variant="text" size="large">
+                    <Button color="inherit" variant="outlined" href="/catalog">
+                      <DashboardIcon />
+                      <Typography>Catalog</Typography>
+                    </Button>
+                    <Button color="inherit" variant="outlined" href="/about">
+                      <InfoIcon />
+                      <Typography>About</Typography>
+                    </Button>
+                  </ButtonGroup>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
+          <AuthorizationView isLoggedIn={AuthorizationCheck()} />
+        </Toolbar>
+      </AppBar>
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justifycontent="center"
+      >
+        <Grid item>
+          <Switch>
+            <Route path="/about" component={Welcoming} />
+            <Route path="/catalog/:name" component={GetGameInfoView} />
+            <Route exact path="/catalog" strict component={CatalogView} />
+            <Route path="/login" component={SignInView} />
+            <Route path="/register" component={RegisterView} />
+            <Route path="/profile">
+              <ProfileView name="user" />
+            </Route>
+            <Redirect to="/about" />
+          </Switch>
         </Grid>
-        <AuthorizationView isLoggedIn={AuthorizationCheck()}/>
-      </Toolbar>
-    </AppBar>
-    <Grid container direction="column" alignItems="center" justifycontent="center">
-      <Grid item>
-      <Switch>
-        <Route path="/about" component={Welcoming}/>
-        <Route path="/catalog/:name" component={GetGameInfoView}/>
-        <Route exact path="/catalog" strict component={CatalogView}/>
-        <Route path="/login" component={SignInView}/>
-        <Route path="/register" component={RegisterView}/>
-        <Route path="/profile">
-          <ProfileView name="user"/>
-        </Route>
-        <Redirect to="/about"/>
-      </Switch>
       </Grid>
-    </Grid>
-  </BrowserRouter>
+    </BrowserRouter>
   );
 }
 

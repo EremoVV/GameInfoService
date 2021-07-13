@@ -39,7 +39,12 @@ namespace GameInfoService.Catalog.Controllers
         [Authorize]
         public ActionResult<GameFullInfoDto> GetGameInfoByName(string name)
         {
-            return Ok(_gameInfoService.GetGameInfoByName(name));
+            if (!string.IsNullOrEmpty(name))
+            {
+                return Ok(_gameInfoMapper.MapToFullInfoDto(_gameInfoService.GetGameInfoByName(name)));
+            }
+
+            return BadRequest("Name parameter is not defined");
         }
 
         [HttpPost]
@@ -49,11 +54,9 @@ namespace GameInfoService.Catalog.Controllers
             {
                 return BadRequest(ModelState);
             }
-            else
-            {
-                _gameInfoService.AddGameInfo(_gameInfoMapper.MapToUdm(gameInfo));
-                return Accepted();
-            }
+
+            _gameInfoService.AddGameInfo(_gameInfoMapper.MapToUdm(gameInfo));
+            return Accepted();
         }
 
         [HttpPost]

@@ -31,12 +31,14 @@ namespace GameInfoService.Catalog.Repositories
         public GameInfoEntity GetGameInfoById(int id)
         {
             var gameInfo = _gameInfoContext.GameInfoSet.Find(id);
+
             return gameInfo;
         }
 
         public void AddGameInfo(GameInfoEntity gameInfo)
         {
             _gameInfoContext.GameInfoSet.Add(gameInfo);
+
             _gameInfoContext.SaveChanges();
         }
 

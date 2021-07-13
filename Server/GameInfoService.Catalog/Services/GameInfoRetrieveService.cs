@@ -7,6 +7,7 @@ using GameInfoService.Catalog.Models.Entities;
 using GameInfoService.Catalog.Models.UDMs;
 using GameInfoService.Catalog.Repositories;
 using Mapster;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GameInfoService.Catalog.Services
 {
@@ -31,8 +32,8 @@ namespace GameInfoService.Catalog.Services
         public GameInfoUdm GetGameInfoByName(string name)
         {
             return _gameInfoRepository.GetAllGameInfos()
-                .FirstOrDefault(x => x.Name.Normalize().Equals(name.Normalize())).Adapt(new GameInfoUdm());
-        }
+                    .FirstOrDefault(x => x.Name.Normalize().Equals(name.Normalize())).Adapt(new GameInfoUdm());
+            }
 
         public void AddGameInfo(GameInfoUdm gameInfo)
         {
