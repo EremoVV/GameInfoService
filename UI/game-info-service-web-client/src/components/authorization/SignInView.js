@@ -7,14 +7,14 @@ import { AuthorizationCheck } from "./AuthorizationView";
 import { signInUserRequest } from "../../api/identity/identityApi";
 
 const validationSchema = yup.object({
-  email: yup.string("Enter username").required("username required"),
+  username: yup.string("Enter username").required("username required"),
   password: yup.string("Enter your password").required("Password is required"),
 });
 
 export function SignInFormikView() {
   const formik = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       password: "",
     },
     validationSchema: validationSchema,
@@ -23,12 +23,12 @@ export function SignInFormikView() {
   return (
     <form onSubmit={formik.handleSubmit}>
       <TextField
-        id="email"
+        id="username"
         label="Username:"
-        value={formik.values.email}
+        value={formik.values.username}
         onChange={formik.handleChange}
-        error={formik.touched.email && Boolean(formik.errors.email)}
-        helperText={formik.touched.email && formik.errors.email}
+        error={formik.touched.username && Boolean(formik.errors.username)}
+        helperText={formik.touched.username && formik.errors.username}
       />
       <TextField
         id="password"
