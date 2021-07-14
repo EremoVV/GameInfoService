@@ -4,6 +4,7 @@ using GameInfoService.Catalog.Domain.Models.Entities;
 using GameInfoService.Catalog.Domain.Models.UDMs;
 using GameInfoService.Catalog.Domain.RepositoryInterfaces;
 using GameInfoService.Catalog.Infrastructure.MappingInterfaces;
+using Mapster;
 
 
 namespace GameInfoService.Catalog.Services.Services
@@ -18,23 +19,29 @@ namespace GameInfoService.Catalog.Services.Services
 
         public IEnumerable<GameInfoUdm> GetAllGameInfos()
         {
-            return _gameInfoRepository.GetAllGameInfos().Select(gameInfo => gameInfo.Adapt(new GameInfoUdm())).ToList();
+            return _gameInfoRepository
+                .GetAllGameInfos()
+                .Select(gameInfo => gameInfo.Adapt(new GameInfoUdm()))
+                .ToList();
         }
 
         public GameInfoUdm GetGameInfoByName(string name)
         {
             return _gameInfoRepository.GetAllGameInfos()
-                    .FirstOrDefault(x => x.Name.Normalize().Equals(name.Normalize())).Adapt(new GameInfoUdm());
+                    .FirstOrDefault(x => x.Name.Normalize().Equals(name.Normalize()))
+                    .Adapt(new GameInfoUdm());
             }
 
         public void AddGameInfo(GameInfoUdm gameInfo)
         {
-            _gameInfoRepository.AddGameInfo(gameInfo.Adapt<GameInfoEntity>());
+            _gameInfoRepository
+                .AddGameInfo(gameInfo.Adapt<GameInfoEntity>());
         }
 
-        public void RemoveGameInfo(GameInfoUdm gameInfo)
+        public void RemoveGameInfo(string name)
         {
-            _gameInfoRepository.RemoveGameInfo(gameInfo.Adapt<GameInfoEntity>());
+            _gameInfoRepository
+                .RemoveGameInfo(name);
         }
     }
 }

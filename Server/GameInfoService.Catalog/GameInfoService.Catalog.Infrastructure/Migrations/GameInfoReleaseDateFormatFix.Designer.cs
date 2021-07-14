@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace GameInfoService.Catalog.App.Migrations
+namespace GameInfoService.Catalog.Infrastructure.Migrations
 {
     [DbContext(typeof(GameInfoContext))]
     [Migration("20210709072554_GameInfoReleaseDateFormatFix")]

@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { Grid, Typography } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 
-import { getGameInfo } from "../../api/catalog/catalogApi";
+import { getGameInfoRequest } from "../../api/catalog/catalogApi";
 
 // function getGameInfoRequest(gameName) {
 //   const requestGameInfo = {
@@ -24,12 +24,12 @@ export default function GameInfoView() {
   const { name } = useParams();
 
   useEffect(() => {
-    getGameInfo(name)
+    getGameInfoRequest(name)
       .then((response) => {
         setGameData(response.data);
       })
       .catch((error) => console.log(error));
-  }, [gameData, name]);
+  }, []);
   return (
     <Grid container spacing={4}>
       <Grid item>

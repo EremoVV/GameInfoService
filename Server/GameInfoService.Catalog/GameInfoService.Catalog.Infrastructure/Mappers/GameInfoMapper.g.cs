@@ -11,6 +11,7 @@ namespace GameInfoService.Catalog.Infrastructure.MappingInterfaces
         {
             return p1 == null ? null : new GameInfoUdm()
             {
+                Id = p1.Id,
                 Name = p1.Name,
                 Description = p1.Description,
                 Rating = p1.Rating,
@@ -21,6 +22,7 @@ namespace GameInfoService.Catalog.Infrastructure.MappingInterfaces
         {
             return p2 == null ? null : new GameInfoUdm()
             {
+                Id = p2.Id,
                 Name = p2.Name,
                 Description = p2.Description,
                 Rating = p2.Rating,
@@ -31,6 +33,7 @@ namespace GameInfoService.Catalog.Infrastructure.MappingInterfaces
         {
             return p3 == null ? null : new GameFullInfoDto()
             {
+                Id = p3.Id,
                 Name = p3.Name,
                 Description = p3.Description,
                 Rating = p3.Rating,

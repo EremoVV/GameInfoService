@@ -1,14 +1,21 @@
 import axios from "axios";
-import { getBearerToken } from "../../components/authorization/AuthorizationView";
+import setCurrentAuthorizationHeader from "../authorization/authorizationApi";
 
-export async function getProductsRequest() {
-  axios.defaults.headers.common["Authorization"] = `Bearer ${getBearerToken()}`;
+export async function getGameInfosRequest() {
+  setCurrentAuthorizationHeader();
   return await axios.get("catalog/Catalog/Index");
 }
 
-export async function getGameInfo(gameName) {
-  axios.defaults.headers.common["Authorization"] = `Bearer ${getBearerToken()}`;
+export async function getGameInfoRequest(gameName) {
+  setCurrentAuthorizationHeader();
   return await axios.get(`catalog/Catalog/GetGameInfoByName`, {
+    params: { name: gameName },
+  });
+}
+
+export async function deleteGameInfoRequest(gameName) {
+  setCurrentAuthorizationHeader();
+  return await axios.delete("catalog/Catalog/DeleteInfo", {
     params: { name: gameName },
   });
 }

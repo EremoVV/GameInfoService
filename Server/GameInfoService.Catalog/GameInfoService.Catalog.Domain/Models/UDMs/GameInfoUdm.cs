@@ -6,6 +6,8 @@ namespace GameInfoService.Catalog.Domain.Models.UDMs
     public class GameInfoUdm
     {
         [Required]
+        public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }

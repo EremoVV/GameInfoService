@@ -10,16 +10,25 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 
 import GameInfoCard from "./GameInfoCard";
-import { getProductsRequest } from "../../api/catalog/catalogApi";
+import {
+  getGameInfosRequest,
+  deleteGameInfoRequest,
+} from "../../api/catalog/catalogApi";
 
 const axios = require(`axios`).default;
 axios.defaults.baseURL = "https://localhost:44361/api/";
+
+function sendDeleteRequest(name) {
+  deleteGameInfoRequest(name)
+    .then((response) => alert(response))
+    .catch((error) => console.log(error));
+}
 
 export default function CatalogView() {
   const [catalog, setCatalog] = useState([]);
 
   useEffect(() => {
-    getProductsRequest()
+    getGameInfosRequest()
       .then((response) => {
         setCatalog(response.data);
       })
@@ -46,7 +55,14 @@ export default function CatalogView() {
                   <Button color="primary" href={`/catalog/update/${game.name}`}>
                     Update
                   </Button>
-                  <Button color="secondary">Remove</Button>
+                  <Button
+                    color="secondary"
+                    onClick={() => {
+                      sendDeleteRequest(game.name);
+                    }}
+                  >
+                    Remove
+                  </Button>
                 </ButtonGroup>
               </Grid>
             );

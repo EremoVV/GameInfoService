@@ -8,6 +8,6 @@ namespace GameInfoService.Catalog.Domain.RepositoryInterfaces
         IEnumerable<GameInfoEntity> GetAllGameInfos();
         GameInfoEntity GetGameInfoById(int id);
         void AddGameInfo(GameInfoEntity gameInfo);
-        void RemoveGameInfo(GameInfoEntity gameInfo);
+        void RemoveGameInfo(string gameInfo);
     }
 }

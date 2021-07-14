@@ -12,6 +12,6 @@ namespace GameInfoService.Catalog.Services.Services
         IEnumerable<GameInfoUdm> GetAllGameInfos();
         GameInfoUdm GetGameInfoByName(string name);
         void AddGameInfo(GameInfoUdm gameInfo);
-        void RemoveGameInfo(GameInfoUdm gameInfo);
+        void RemoveGameInfo(string gameInfo);
     }
 }

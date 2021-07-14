@@ -57,9 +57,20 @@ namespace GameInfoService.Catalog.App.Controllers
         }
 
         [HttpDelete]
-        public ActionResult<string> DeleteInfo()
+        public ActionResult<string> DeleteInfo(string name)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(name)) return BadRequest();
+            var gameInfo = _gameInfoService.GetGameInfoByName(name);
+            if (gameInfo == null) return NotFound("No such game title");
+            try
+            {
+                _gameInfoService.RemoveGameInfo(gameInfo);
+                return Ok($"Gameinfo {name} deleted");
+            }
+            catch (Exception e)
+            {
+                return Conflict(e.Message);
+            }
         }
     }
 }

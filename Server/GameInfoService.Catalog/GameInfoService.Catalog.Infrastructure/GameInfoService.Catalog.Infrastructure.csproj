@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GameInfoService.Catalog.Domain\GameInfoService.Catalog.Domain.csproj" />
-    <ProjectReference Include="..\GameInfoService.Catalog.Domain\GameInfoService.Catalog.Domain\GameInfoService.Catalog.Domain.csproj" />
   </ItemGroup>
 	<Target Name="Mapster" AfterTargets="AfterBuild">
 		<Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tool restore" />

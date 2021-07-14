@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using GameInfoService.Catalog.Domain.Models.Entities;
 using GameInfoService.Catalog.Domain.RepositoryInterfaces;
@@ -35,9 +36,11 @@ namespace GameInfoService.Catalog.Infrastructure.Repositories
             _gameInfoContext.SaveChanges();
         }
 
-        public void RemoveGameInfo(GameInfoEntity gameInfo)
+        public void RemoveGameInfo(string name)
         {
-            _gameInfoContext.GameInfoSet.Remove(gameInfo);
+            var gameInfo = _gameInfoContext.GameInfoSet.FirstOrDefault(x => x.Name.Normalize().Equals(name));
+            if (gameInfo == null) throw new SqlNullValueException("GameInfo object not found");
+            _gameInfoContext.Remove(gameInfo);
             _gameInfoContext.SaveChanges();
         }
     }

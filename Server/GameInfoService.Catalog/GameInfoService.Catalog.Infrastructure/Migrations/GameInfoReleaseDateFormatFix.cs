@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace GameInfoService.Catalog.App.Migrations
+namespace GameInfoService.Catalog.Infrastructure.Migrations
 {
     public partial class GameInfoReleaseDateFormatFix : Migration
     {
