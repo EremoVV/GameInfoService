@@ -4,7 +4,6 @@ using GameInfoService.Catalog.Domain.Models.Entities;
 using GameInfoService.Catalog.Domain.Models.UDMs;
 using GameInfoService.Catalog.Domain.RepositoryInterfaces;
 using GameInfoService.Catalog.Infrastructure.MappingInterfaces;
-using Mapster;
 
 
 namespace GameInfoService.Catalog.Services.Services

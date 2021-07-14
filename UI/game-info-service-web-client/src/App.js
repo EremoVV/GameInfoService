@@ -36,6 +36,7 @@ import Welcoming from "./components/Welcoming";
 import ErrorBoundary from "./errorHandling/ErrorBoundary";
 
 import ErrorComp from "./components/error";
+import GameInfoUpdateView from "./components/catalog/GameInfoUpdateView";
 
 // let clientCredentials = {
 //   clientId : "ReactWebClient",
@@ -114,10 +115,13 @@ function App() {
         <Grid item>
           <Switch>
             <Route path="/about" component={Welcoming} />
+            <Route
+              path="/catalog/update/:name"
+              component={GameInfoUpdateView}
+            />
             <Route path="/catalog/:name" component={GetGameInfoView} />
             <Route exact path="/catalog" strict component={CatalogView} />
             <Route path="/login">
-              <SignInView />
               <SignInFormikView />
             </Route>
             <Route path="/register" component={RegisterView} />

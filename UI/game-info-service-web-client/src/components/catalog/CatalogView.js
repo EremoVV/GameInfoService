@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Grid, CardActionArea, Card, Typography } from "@material-ui/core";
+import {
+  Button,
+  ButtonGroup,
+  Grid,
+  CardActionArea,
+  Card,
+  Typography,
+} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
 import GameInfoCard from "./GameInfoCard";
@@ -34,6 +41,13 @@ export default function CatalogView() {
                   gameName={game.name}
                   gameRating={game.rating}
                 />
+                <Button>Add to wishlist</Button>
+                <ButtonGroup>
+                  <Button color="primary" href={`/catalog/update/${game.name}`}>
+                    Update
+                  </Button>
+                  <Button color="secondary">Remove</Button>
+                </ButtonGroup>
               </Grid>
             );
           })}

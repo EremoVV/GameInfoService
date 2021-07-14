@@ -31,14 +31,11 @@ namespace GameInfoService.Catalog.App.Controllers
         [Authorize]
         public ActionResult<GameFullInfoDto> GetGameInfoByName(string name)
         {
-            if (!string.IsNullOrEmpty(name))
-            {
-                var gameInfo = _gameInfoService.GetGameInfoByName(name);
-                if (gameInfo == null) return NotFound("No such game title");
-                return Ok(_gameInfoMapper.MapToFullInfoDto(gameInfo));
-            }
+            if (string.IsNullOrEmpty(name)) return BadRequest("Name parameter is not defined");
+            var gameInfo = _gameInfoService.GetGameInfoByName(name);
+            if (gameInfo == null) return NotFound("No such game title");
+            return Ok(_gameInfoMapper.MapToFullInfoDto(gameInfo));
 
-            return BadRequest("Name parameter is not defined");
         }
 
         [HttpPost]

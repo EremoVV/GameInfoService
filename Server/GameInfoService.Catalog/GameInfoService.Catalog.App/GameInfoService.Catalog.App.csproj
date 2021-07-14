@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameInfoService.Catalog.Domain\GameInfoService.Catalog.Domain\GameInfoService.Catalog.Domain.csproj" />
-    <ProjectReference Include="..\GameInfoService.Catalog.Repository\GameInfoService.Catalog.Infrastructure.csproj" />
+    <ProjectReference Include="..\GameInfoService.Catalog.Domain\GameInfoService.Catalog.Domain.csproj" />
+    <ProjectReference Include="..\GameInfoService.Catalog.Infrastructure\GameInfoService.Catalog.Infrastructure.csproj" />
     <ProjectReference Include="..\GameInfoService.Catalog.Services\GameInfoService.Catalog.Services.csproj" />
   </ItemGroup>
 
