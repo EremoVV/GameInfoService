@@ -11,14 +11,13 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 
 function registerUser(username, email, password, country, city, birthdayDate) {
-  registerUserRequest(
-    username,
-    email,
-    password,
-    country,
-    city,
-    birthdayDate
-  ).catch((error) => console.log(error));
+  registerUserRequest(username, email, password, country, city, birthdayDate)
+    .then(() => postRegisterRedirect())
+    .catch((error) => console.log(error));
+}
+
+function postRegisterRedirect() {
+  window.location.replace("/login");
 }
 
 const useStyles = makeStyles({
@@ -33,13 +32,15 @@ const useStyles = makeStyles({
 
 const validationSchema = yup.object({
   username: yup.string("Enter username").min(3).required("Username required"),
-  email: yup.string("Enter email").min(3).required("Email required"),
-  password: yup.string("Enter password").min(3).required("Password required"),
-  passwordConfirm: yup
-    .string("Confirm password:")
+  email: yup
+    .string("Enter email")
     .min(3)
-    .required("Please confirm password")
-    .clone("password"),
+    .email("Enter correct email")
+    .required("Email required"),
+  password: yup.string("Enter password").min(3).required("Password required"),
+  confirmPassword: yup
+    .string("Confirm password:")
+    .required("Please confirm password"),
 });
 
 export function RegisterViewFormik() {
@@ -55,6 +56,16 @@ export function RegisterViewFormik() {
       birthdayDate: [],
     },
     validationSchema: validationSchema,
+    onSubmit: (values) => {
+      registerUser(
+        values.username,
+        values.email,
+        values.password,
+        values.country,
+        values.city,
+        values.birthdayDate
+      );
+    },
   });
 
   return (
@@ -73,6 +84,7 @@ export function RegisterViewFormik() {
           className={classes.textField}
           id="email"
           label="Email:"
+          type="email"
           value={formik.values.email}
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
@@ -92,6 +104,7 @@ export function RegisterViewFormik() {
           className={classes.textField}
           id="confirmPassword"
           label="Confirm password:"
+          type="password"
           value={formik.values.confirmPassword}
           onChange={formik.handleChange}
           error={

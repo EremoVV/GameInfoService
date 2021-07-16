@@ -20,11 +20,6 @@ namespace GameInfoService.IdentityService.Models.DTO
         public string Password { get; set; }
 
         [Required]
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Passwords does not match")]
-        public string ConfirmPassword { get; set; }
-
-        [Required]
         public DateTime Birthday { get; set; }
 
         public string Country { get; set; }

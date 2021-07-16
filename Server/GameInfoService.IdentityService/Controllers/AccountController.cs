@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
@@ -61,64 +62,51 @@ namespace GameInfoService.IdentityService.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> RegisterUser(UserRegisterDto userRegister)
         {
-            if (TryValidateModel(userRegister))
+            if (!TryValidateModel(userRegister)) return BadRequest(ModelState);
+            var newUser = new UserEntity
             {
-                UserEntity newUser = new UserEntity
-                {
-                    UserName = userRegister.UserName,
-                    Email = userRegister.Email,
-                    Birthday = userRegister.Birthday,
-                    Country = userRegister.Country,
-                    City = userRegister.City
-                };
-                var result = await _userManager.CreateAsync(newUser, userRegister.Password);
-                await _userManager.AddToRoleAsync(newUser, "user");
-                await _userManager.AddClaimsAsync(newUser, new[]
-                {
-                    new Claim(ClaimTypes.Name, newUser.UserName),
-                    new Claim(ClaimTypes.Role, "user")
-                });
-                if (result.Succeeded) return Ok("User registered");
-            }
-
-            return BadRequest(ModelState);
+                UserName = userRegister.UserName,
+                Email = userRegister.Email,
+                Birthday = userRegister.Birthday,
+                Country = userRegister.Country,
+                City = userRegister.City
+            };
+            var result = await _userManager.CreateAsync(newUser, userRegister.Password);
+            if (result.Succeeded) return Ok("User registered");
+            //await _userManager.AddToRoleAsync(newUser, "user");
+            //await _userManager.AddClaimsAsync(newUser, new[]
+            //{
+            //    new Claim(ClaimTypes.Name, newUser.UserName),
+            //    new Claim(ClaimTypes.Role, "user")
+            //});
+            return BadRequest(result.Errors);
         }
         [HttpPost]
         public async Task<ActionResult<string>> SignInUser(ClientLoginCredentialsDto login)
         {
-            if (TryValidateModel(login))
+            if (!TryValidateModel(login)) return BadRequest(ModelState);
+            var user = await _userManager.FindByNameAsync(login.UserName);
+            if (user == null) return NotFound("No such user");
             {
-                UserEntity user = await _userManager.FindByNameAsync(login.UserName);
-                if (user != null)
+                var result = await _signInManager.PasswordSignInAsync(user, login.Password, false, lockoutOnFailure: false);
+                if (!result.Succeeded) return BadRequest("Sign in unsuccessful");
+
+                var client = new HttpClient();
+                var response = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
                 {
-                    var result = await _signInManager.PasswordSignInAsync(user, login.Password, false, lockoutOnFailure: false);
-                    if (result.Succeeded)
-                    {
+                    Address = "https://localhost:5000/connect/token",
 
-                        var client = new HttpClient();
-                        var response = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
-                        {
-                            Address = "https://localhost:5000/connect/token",
+                    ClientId = login.ClientId,
+                    ClientSecret = login.ClientSecret,
 
-                            ClientId = login.ClientId,
-                            ClientSecret = login.ClientSecret,
+                    Scope = login.Scope,
 
-                            Scope = login.Scope,
-
-                            UserName = login.UserName,
-                            Password = login.Password
-                        });
-                        await HttpContext.AuthenticateAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
-                        return Ok(response);
-                    }
-                }
-                else
-                {
-                    return NotFound("No such user");
-                }
+                    UserName = login.UserName,
+                    Password = login.Password
+                });
+                await HttpContext.AuthenticateAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
+                return Ok(response);
             }
-
-            return BadRequest(ModelState);
 
         }
 

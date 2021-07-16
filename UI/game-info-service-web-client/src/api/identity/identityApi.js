@@ -19,7 +19,7 @@ export async function registerUserRequest(
   city,
   birthdayDate
 ) {
-  return await axios.post("identity/Account/Register", {
+  return await axios.post("identity/Account/RegisterUser", {
     UserName: username,
     Email: email,
     Password: password,
