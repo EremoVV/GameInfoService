@@ -60,7 +60,7 @@ export function SignInFormikView() {
           label="Password:"
           value={formik.values.password}
           onChange={formik.handleChange}
-          error={formik.touched.password && formik.errors.password}
+          error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
         />
         <Button
@@ -99,47 +99,3 @@ function postLoginRedirect() {
     window.location.replace("/catalog");
   }
 }
-
-// export default function SignInView(props) {
-//   const [username, setUsername] = useState("");
-//   const [password, setPassword] = useState("");
-
-//   return (
-//     <Grid container direction="column" alignItems="center" spacing={2}>
-//       <Grid item>
-//         <TextField
-//           id="LoginField"
-//           label="Username:"
-//           onChange={(e) => setUsername(e.target.value)}
-//         />
-//       </Grid>
-//       <Grid item>
-//         <TextField
-//           id="PasswordField"
-//           type="password"
-//           label="Password:"
-//           onChange={(e) => setPassword(e.target.value)}
-//         />
-//       </Grid>
-//       <Grid item>
-//         <Grid container spacing={2}>
-//           <Grid item>
-//             <Button
-//               name="Confirm"
-//               variant="contained"
-//               color="primary"
-//               onClick={() => sendLogin(username, password)}
-//             >
-//               Log In
-//             </Button>
-//           </Grid>
-//           <Grid item>
-//             <Button href="/register" variant="contained" color="primary">
-//               Register
-//             </Button>
-//           </Grid>
-//         </Grid>
-//       </Grid>
-//     </Grid>
-//   );
-// }

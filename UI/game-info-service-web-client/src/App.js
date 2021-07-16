@@ -27,7 +27,9 @@ import AuthorizationView from "./components/authorization/AuthorizationView";
 import SignInView, {
   SignInFormikView,
 } from "./components/authorization/SignInView";
-import RegisterView from "./components/authorization/RegisterView";
+import RegisterView, {
+  RegisterViewFormik,
+} from "./components/authorization/RegisterView";
 import CatalogView from "./components/catalog/CatalogView";
 import ProfileView from "./components/profile/ProfileView";
 import GameInfoView from "./components/catalog/GameInfoView";
@@ -125,7 +127,9 @@ function App() {
             <Route path="/login">
               <SignInFormikView />
             </Route>
-            <Route path="/register" component={RegisterView} />
+            <Route path="/register">
+              <RegisterViewFormik />
+            </Route>
             <Route path="/profile">
               <ProfileView name="user" />
             </Route>
