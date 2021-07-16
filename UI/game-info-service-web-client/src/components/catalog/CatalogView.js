@@ -14,6 +14,7 @@ import {
   gameInfoListGetRequest,
   gameInfoDeleteRequest,
 } from "../../api/catalog/catalogApi";
+import { authorizationCheck } from "../../api/authorization/authorizationApi";
 
 const axios = require(`axios`).default;
 axios.defaults.baseURL = "https://localhost:44361/api/";
@@ -29,6 +30,18 @@ function sendDeleteRequest(name) {
 
 function postGameInfoDeleteRedirect() {
   window.location.replace("/catalog");
+}
+
+function createButton() {
+  if (authorizationCheck()) {
+    return (
+      <CardActionArea href="catalog/create">
+        <Card>
+          <AddIcon />
+        </Card>
+      </CardActionArea>
+    );
+  }
 }
 
 export default function CatalogView() {
@@ -74,13 +87,7 @@ export default function CatalogView() {
               </Grid>
             );
           })}
-          <Grid item>
-            <CardActionArea href="catalog/create">
-              <Card>
-                <AddIcon />
-              </Card>
-            </CardActionArea>
-          </Grid>
+          <Grid item>{createButton()}</Grid>
         </Grid>
       </Grid>
     </Grid>

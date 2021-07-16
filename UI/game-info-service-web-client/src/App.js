@@ -74,6 +74,48 @@ function GetGameInfoView() {
   return <GameInfoView name={name} />;
 }
 
+function AppRouting() {
+  if (authorizationCheck()) {
+    return (
+      <Switch>
+        <Route path="/about" component={Welcoming} />
+        <Route path="/catalog/create" component={GameInfoCreateView} />
+        <Route path="/catalog/update/:name" component={GameInfoUpdateView} />
+        <Route path="/catalog/:name" component={GetGameInfoView} />
+        <Route exact path="/catalog" strict component={CatalogView} />
+        <Route path="/profile">
+          <ProfileView name="user" />
+        </Route>
+        <Route path="/error">
+          <ErrorBoundary>
+            <ErrorComp />
+          </ErrorBoundary>
+        </Route>
+        <Redirect to="/about" />
+      </Switch>
+    );
+  } else {
+    return (
+      <Switch>
+        <Route path="/about" component={Welcoming} />
+        <Route exact path="/catalog" strict component={CatalogView} />
+        <Route path="/login">
+          <SignInFormikView />
+        </Route>
+        <Route path="/register">
+          <RegisterViewFormik />
+        </Route>
+        <Route path="/error">
+          <ErrorBoundary>
+            <ErrorComp />
+          </ErrorBoundary>
+        </Route>
+        <Redirect to="/about" />
+      </Switch>
+    );
+  }
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -115,31 +157,7 @@ function App() {
         justifycontent="center"
       >
         <Grid item>
-          <Switch>
-            <Route path="/about" component={Welcoming} />
-            <Route path="/catalog/create" component={GameInfoCreateView} />
-            <Route
-              path="/catalog/update/:name"
-              component={GameInfoUpdateView}
-            />
-            <Route path="/catalog/:name" component={GetGameInfoView} />
-            <Route exact path="/catalog" strict component={CatalogView} />
-            <Route path="/login">
-              <SignInFormikView />
-            </Route>
-            <Route path="/register">
-              <RegisterViewFormik />
-            </Route>
-            <Route path="/profile">
-              <ProfileView name="user" />
-            </Route>
-            <Route path="/error">
-              <ErrorBoundary>
-                <ErrorComp />
-              </ErrorBoundary>
-            </Route>
-            <Redirect to="/about" />
-          </Switch>
+          <AppRouting />
         </Grid>
       </Grid>
     </BrowserRouter>
