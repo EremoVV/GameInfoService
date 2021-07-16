@@ -9,7 +9,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 
 import React, { useState } from "react";
-import { AuthorizationCheck } from "./AuthorizationView";
+import { authorizationCheck } from "../../api/authorization/authorizationApi";
 import { signInUserRequest } from "../../api/identity/identityApi";
 
 const validationSchema = yup.object({
@@ -19,7 +19,15 @@ const validationSchema = yup.object({
 
 const useStyles = makeStyles({
   form: {
-    alignContent: "center",
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+  },
+  textfield: {
+    marginBottom: "10px",
+  },
+  button: {
+    marginBottom: "5px",
   },
 });
 
@@ -34,9 +42,10 @@ export function SignInFormikView() {
     onSubmit: (values) => sendLogin(values.username, values.password),
   });
   return (
-    <Container>
-      <form class={classes.form} onSubmit={formik.handleSubmit}>
+    <Container className={classes.container}>
+      <form className={classes.form} onSubmit={formik.handleSubmit}>
         <TextField
+          className={classes.textfield}
           id="username"
           label="Username:"
           value={formik.values.username}
@@ -45,6 +54,7 @@ export function SignInFormikView() {
           helperText={formik.touched.username && formik.errors.username}
         />
         <TextField
+          className={classes.textfield}
           id="password"
           type="password"
           label="Password:"
@@ -54,6 +64,7 @@ export function SignInFormikView() {
           helperText={formik.touched.password && formik.errors.password}
         />
         <Button
+          className={classes.button}
           name="Confirm"
           variant="contained"
           color="primary"
@@ -61,7 +72,12 @@ export function SignInFormikView() {
         >
           Log In
         </Button>
-        <Button href="/register" variant="contained" color="primary">
+        <Button
+          className={classes.button}
+          href="/register"
+          variant="contained"
+          color="primary"
+        >
           Register
         </Button>
       </form>
@@ -79,51 +95,51 @@ function sendLogin(username, password) {
 }
 
 function postLoginRedirect() {
-  if (AuthorizationCheck()) {
+  if (authorizationCheck()) {
     window.location.replace("/catalog");
   }
 }
 
-export default function SignInView(props) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+// export default function SignInView(props) {
+//   const [username, setUsername] = useState("");
+//   const [password, setPassword] = useState("");
 
-  return (
-    <Grid container direction="column" alignItems="center" spacing={2}>
-      <Grid item>
-        <TextField
-          id="LoginField"
-          label="Username:"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </Grid>
-      <Grid item>
-        <TextField
-          id="PasswordField"
-          type="password"
-          label="Password:"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </Grid>
-      <Grid item>
-        <Grid container spacing={2}>
-          <Grid item>
-            <Button
-              name="Confirm"
-              variant="contained"
-              color="primary"
-              onClick={() => sendLogin(username, password)}
-            >
-              Log In
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button href="/register" variant="contained" color="primary">
-              Register
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Grid>
-  );
-}
+//   return (
+//     <Grid container direction="column" alignItems="center" spacing={2}>
+//       <Grid item>
+//         <TextField
+//           id="LoginField"
+//           label="Username:"
+//           onChange={(e) => setUsername(e.target.value)}
+//         />
+//       </Grid>
+//       <Grid item>
+//         <TextField
+//           id="PasswordField"
+//           type="password"
+//           label="Password:"
+//           onChange={(e) => setPassword(e.target.value)}
+//         />
+//       </Grid>
+//       <Grid item>
+//         <Grid container spacing={2}>
+//           <Grid item>
+//             <Button
+//               name="Confirm"
+//               variant="contained"
+//               color="primary"
+//               onClick={() => sendLogin(username, password)}
+//             >
+//               Log In
+//             </Button>
+//           </Grid>
+//           <Grid item>
+//             <Button href="/register" variant="contained" color="primary">
+//               Register
+//             </Button>
+//           </Grid>
+//         </Grid>
+//       </Grid>
+//     </Grid>
+//   );
+// }

@@ -10,6 +10,8 @@ namespace GameInfoService.Catalog.Infrastructure.MappingInterfaces
     {
         GameInfoUdm MapToUdm(GameInfoEntity gameInfo);
         GameInfoUdm MapToUdm(GameFullInfoDto gameInfo);
+        GameInfoUdm MapToUdm(GameInfoCreateDto gameInfo);
+        GameInfoUdm MapToUdm(GameInfoUpdateDto gameInfo);
         GameFullInfoDto MapToFullInfoDto(GameInfoUdm gameInfo);
     }
 }

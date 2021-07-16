@@ -22,9 +22,8 @@ import {
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import InfoIcon from "@material-ui/icons/Info";
 
-import AuthorizationView, {
-  AuthorizationCheck,
-} from "./components/authorization/AuthorizationView";
+import { authorizationCheck } from "./api/authorization/authorizationApi";
+import AuthorizationView from "./components/authorization/AuthorizationView";
 import SignInView, {
   SignInFormikView,
 } from "./components/authorization/SignInView";
@@ -37,6 +36,7 @@ import ErrorBoundary from "./errorHandling/ErrorBoundary";
 
 import ErrorComp from "./components/error";
 import GameInfoUpdateView from "./components/catalog/GameInfoUpdateView";
+import GameInfoCreateView from "./components/catalog/GameInfoCreateView";
 
 // let clientCredentials = {
 //   clientId : "ReactWebClient",
@@ -103,7 +103,7 @@ function App() {
               </Grid>
             </Grid>
           </Grid>
-          <AuthorizationView isLoggedIn={AuthorizationCheck()} />
+          <AuthorizationView isLoggedIn={authorizationCheck()} />
         </Toolbar>
       </AppBar>
       <Grid
@@ -115,6 +115,7 @@ function App() {
         <Grid item>
           <Switch>
             <Route path="/about" component={Welcoming} />
+            <Route path="/catalog/create" component={GameInfoCreateView} />
             <Route
               path="/catalog/update/:name"
               component={GameInfoUpdateView}

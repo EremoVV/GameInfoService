@@ -11,24 +11,31 @@ import AddIcon from "@material-ui/icons/Add";
 
 import GameInfoCard from "./GameInfoCard";
 import {
-  getGameInfosRequest,
-  deleteGameInfoRequest,
+  gameInfoListGetRequest,
+  gameInfoDeleteRequest,
 } from "../../api/catalog/catalogApi";
 
 const axios = require(`axios`).default;
 axios.defaults.baseURL = "https://localhost:44361/api/";
 
 function sendDeleteRequest(name) {
-  deleteGameInfoRequest(name)
-    .then((response) => alert(response))
+  gameInfoDeleteRequest(name)
+    .then((response) => {
+      alert(response.data);
+      postGameInfoDeleteRedirect();
+    })
     .catch((error) => console.log(error));
+}
+
+function postGameInfoDeleteRedirect() {
+  window.location.replace("/catalog");
 }
 
 export default function CatalogView() {
   const [catalog, setCatalog] = useState([]);
 
   useEffect(() => {
-    getGameInfosRequest()
+    gameInfoListGetRequest()
       .then((response) => {
         setCatalog(response.data);
       })
@@ -44,7 +51,7 @@ export default function CatalogView() {
         <Grid container direction="row" spacing={2}>
           {catalog.map(function (game) {
             return (
-              <Grid item>
+              <Grid item key={game.id}>
                 <GameInfoCard
                   gameImage={game.picture}
                   gameName={game.name}
@@ -68,7 +75,7 @@ export default function CatalogView() {
             );
           })}
           <Grid item>
-            <CardActionArea>
+            <CardActionArea href="catalog/create">
               <Card>
                 <AddIcon />
               </Card>

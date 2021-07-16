@@ -1,14 +1,13 @@
 import { Button, Container, TextField, makeStyles } from "@material-ui/core";
 import { useFormik } from "formik";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
 import * as yup from "yup";
-import {
-  gameInfoUpdateRequest,
-  gameInfoGetRequest,
-} from "../../api/catalog/catalogApi";
+import { gameInfoCreateRequest } from "../../api/catalog/catalogApi";
 
 const validationSchema = yup.object({
+  gameName: yup.string("Enter title").required("Title required"),
+  gameDescription: yup
+    .string("Enter description")
+    .required("Description required"),
   gameRating: yup.number().max(10).min(0),
 });
 
@@ -26,37 +25,28 @@ const useStyles = makeStyles({
   },
 });
 
-function sendGameInfoUpdate(
-  gameId,
+function sendGameInfoCreate(
   gameName,
   gameDescription,
   gameRating,
   gameReleaseDate
 ) {
-  gameInfoUpdateRequest(
-    gameId,
-    gameName,
-    gameDescription,
-    gameRating,
-    gameReleaseDate
-  )
+  gameInfoCreateRequest(gameName, gameDescription, gameRating, gameReleaseDate)
     .then((response) => {
       alert(response.data);
-      postGameInfoUpdateRedirect();
+      postGameInfoCreateRedirect();
     })
     .catch((error) => console.log(error));
 }
 
-function postGameInfoUpdateRedirect() {
+function postGameInfoCreateRedirect() {
   window.location.replace("/catalog");
 }
 
-export default function GameInfoUpdateView() {
-  const { name } = useParams();
+export default function GameInfoCreateView() {
   const classes = useStyles();
   const formik = useFormik({
     initialValues: {
-      gameId: 0,
       gameName: "",
       gameDescription: "",
       gameRating: 1,
@@ -64,8 +54,7 @@ export default function GameInfoUpdateView() {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      sendGameInfoUpdate(
-        values.gameId,
+      sendGameInfoCreate(
         values.gameName,
         values.gameDescription,
         values.gameRating,
@@ -73,22 +62,11 @@ export default function GameInfoUpdateView() {
       );
     },
   });
-
-  useEffect(() => {
-    gameInfoGetRequest(name)
-      .then((response) => {
-        const data = response.data;
-        formik.setFieldValue("gameId", data.id);
-        formik.setFieldValue("gameName", data.name);
-        formik.setFieldValue("gameDescription", data.description);
-        formik.setFieldValue("gameRating", data.rating);
-      })
-      .catch((error) => console.log(error));
-  }, []);
   return (
     <Container>
       <form className={classes.form} onSubmit={formik.handleSubmit}>
         <TextField
+          required
           id="gameName"
           label="Title:"
           value={formik.values.gameName}
@@ -97,6 +75,7 @@ export default function GameInfoUpdateView() {
         />
         <TextField
           className={classes.textInput}
+          required
           id="gameDescription"
           label="Description:"
           value={formik.values.gameDescription}
@@ -128,7 +107,7 @@ export default function GameInfoUpdateView() {
           }
         />
         <Button className={classes.button} color="primary" type="submit">
-          Update game info
+          Add game title
         </Button>
       </form>
     </Container>

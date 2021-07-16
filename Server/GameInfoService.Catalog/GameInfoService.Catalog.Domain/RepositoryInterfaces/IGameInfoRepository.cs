@@ -9,5 +9,6 @@ namespace GameInfoService.Catalog.Domain.RepositoryInterfaces
         GameInfoEntity GetGameInfoById(int id);
         void AddGameInfo(GameInfoEntity gameInfo);
         void RemoveGameInfo(string gameInfo);
+        void UpdateGameInfo(GameInfoEntity gameInfo);
     }
 }

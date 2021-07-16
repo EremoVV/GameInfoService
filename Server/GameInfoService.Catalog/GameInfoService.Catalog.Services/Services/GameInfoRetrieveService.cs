@@ -28,7 +28,7 @@ namespace GameInfoService.Catalog.Services.Services
         public GameInfoUdm GetGameInfoByName(string name)
         {
             return _gameInfoRepository.GetAllGameInfos()
-                    .FirstOrDefault(x => x.Name.Normalize().Equals(name.Normalize()))
+                    .FirstOrDefault(x => x.Name.Equals(name.Normalize()))
                     .Adapt(new GameInfoUdm());
             }
 
@@ -42,6 +42,11 @@ namespace GameInfoService.Catalog.Services.Services
         {
             _gameInfoRepository
                 .RemoveGameInfo(name);
+        }
+
+        public void UpdateGameInfo(GameInfoUdm gameInfo)
+        {
+            _gameInfoRepository.UpdateGameInfo(gameInfo.Adapt<GameInfoEntity>());
         }
     }
 }

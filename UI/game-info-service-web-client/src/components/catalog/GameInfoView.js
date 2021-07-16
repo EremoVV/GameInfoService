@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { Grid, Typography } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 
-import { getGameInfoRequest } from "../../api/catalog/catalogApi";
+import { gameInfoGetRequest } from "../../api/catalog/catalogApi";
 
 // function getGameInfoRequest(gameName) {
 //   const requestGameInfo = {
@@ -24,7 +24,7 @@ export default function GameInfoView() {
   const { name } = useParams();
 
   useEffect(() => {
-    getGameInfoRequest(name)
+    gameInfoGetRequest(name)
       .then((response) => {
         setGameData(response.data);
       })

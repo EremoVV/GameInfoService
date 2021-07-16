@@ -5,6 +5,7 @@ using GameInfoService.Catalog.Infrastructure.MappingInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using GameInfoService.Catalog.Services.Services;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace GameInfoService.Catalog.App.Controllers
 {
@@ -39,7 +40,7 @@ namespace GameInfoService.Catalog.App.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> AddInfo(GameFullInfoDto gameInfo)
+        public ActionResult<string> AddGameInfo(GameInfoCreateDto gameInfo)
         {
             if (!TryValidateModel(gameInfo))
             {
@@ -47,13 +48,21 @@ namespace GameInfoService.Catalog.App.Controllers
             }
 
             _gameInfoService.AddGameInfo(_gameInfoMapper.MapToUdm(gameInfo));
-            return Accepted();
+            return Accepted($"{gameInfo.Name} added to the catalog");
         }
 
         [HttpPost]
-        public ActionResult<string> UpdateInfo()
+        public ActionResult<string> UpdateGameInfo(GameInfoUpdateDto gameInfo)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _gameInfoService.UpdateGameInfo(_gameInfoMapper.MapToUdm(gameInfo));
+                return Ok($"{gameInfo.Name} updated");
+            }
+            catch (Exception e)
+            {
+                return Conflict(e.Message);
+            }
         }
 
         [HttpDelete]
@@ -64,7 +73,7 @@ namespace GameInfoService.Catalog.App.Controllers
             if (gameInfo == null) return NotFound("No such game title");
             try
             {
-                _gameInfoService.RemoveGameInfo(gameInfo);
+                _gameInfoService.RemoveGameInfo(name);
                 return Ok($"Gameinfo {name} deleted");
             }
             catch (Exception e)

@@ -13,5 +13,6 @@ namespace GameInfoService.Catalog.Services.Services
         GameInfoUdm GetGameInfoByName(string name);
         void AddGameInfo(GameInfoUdm gameInfo);
         void RemoveGameInfo(string gameInfo);
+        void UpdateGameInfo(GameInfoUdm gameInfo);
     }
 }

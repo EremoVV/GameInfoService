@@ -1,3 +1,4 @@
+using System;
 using GameInfoService.Catalog.Domain.Models.DTOs;
 using GameInfoService.Catalog.Domain.Models.Entities;
 using GameInfoService.Catalog.Domain.Models.UDMs;
@@ -29,15 +30,37 @@ namespace GameInfoService.Catalog.Infrastructure.MappingInterfaces
                 ReleaseDate = p2.ReleaseDate
             };
         }
-        public GameFullInfoDto MapToFullInfoDto(GameInfoUdm p3)
+        public GameInfoUdm MapToUdm(GameInfoCreateDto p3)
         {
-            return p3 == null ? null : new GameFullInfoDto()
+            return p3 == null ? null : new GameInfoUdm()
             {
                 Id = p3.Id,
                 Name = p3.Name,
                 Description = p3.Description,
                 Rating = p3.Rating,
                 ReleaseDate = p3.ReleaseDate
+            };
+        }
+        public GameInfoUdm MapToUdm(GameInfoUpdateDto p4)
+        {
+            return p4 == null ? null : new GameInfoUdm()
+            {
+                Id = p4.Id,
+                Name = p4.Name,
+                Description = p4.Description,
+                Rating = p4.Rating,
+                ReleaseDate = p4.ReleaseDate == null ? default(DateTime) : (DateTime)p4.ReleaseDate
+            };
+        }
+        public GameFullInfoDto MapToFullInfoDto(GameInfoUdm p5)
+        {
+            return p5 == null ? null : new GameFullInfoDto()
+            {
+                Id = p5.Id,
+                Name = p5.Name,
+                Description = p5.Description,
+                Rating = p5.Rating,
+                ReleaseDate = p5.ReleaseDate
             };
         }
     }
