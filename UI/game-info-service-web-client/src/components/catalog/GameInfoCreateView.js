@@ -2,6 +2,7 @@ import { Button, Container, TextField, makeStyles } from "@material-ui/core";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { gameInfoCreateRequest } from "../../api/catalog/catalogApi";
+import { DatePicker } from "@material-ui/pickers";
 
 const validationSchema = yup.object({
   gameName: yup.string("Enter title").required("Title required"),
@@ -51,6 +52,7 @@ export default function GameInfoCreateView() {
       gameDescription: "",
       gameRating: 1,
       gameReleaseDate: [],
+      gameReleaseDate2: new Date(),
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -105,6 +107,10 @@ export default function GameInfoCreateView() {
             formik.touched.gameReleaseDate &&
             Boolean(formik.errors.gameReleaseDate)
           }
+        />
+        <DatePicker
+          value={formik.values.gameReleaseDate2}
+          onChange={formik.handleChange}
         />
         <Button className={classes.button} color="primary" type="submit">
           Add game title

@@ -14,7 +14,10 @@ import {
   gameInfoListGetRequest,
   gameInfoDeleteRequest,
 } from "../../api/catalog/catalogApi";
-import { authorizationCheck } from "../../api/authorization/authorizationApi";
+import {
+  authorizationCheck,
+  clearAuthorizationCookies,
+} from "../../api/authorization/authorizationApi";
 
 const axios = require(`axios`).default;
 axios.defaults.baseURL = "https://localhost:44361/api/";
@@ -52,7 +55,12 @@ export default function CatalogView() {
       .then((response) => {
         setCatalog(response.data);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        if (error.status === "401") {
+          clearAuthorizationCookies();
+        }
+      });
   }, []);
 
   return (
