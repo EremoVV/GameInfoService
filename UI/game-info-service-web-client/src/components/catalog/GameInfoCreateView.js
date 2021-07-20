@@ -51,16 +51,14 @@ export default function GameInfoCreateView() {
       gameName: "",
       gameDescription: "",
       gameRating: 1,
-      gameReleaseDate: [],
-      gameReleaseDate2: new Date(),
+      gameReleaseDate: new Date(),
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       sendGameInfoCreate(
         values.gameName,
         values.gameDescription,
-        values.gameRating,
-        values.gameReleaseDate2
+        values.gameRating
       );
     },
   });
@@ -97,29 +95,16 @@ export default function GameInfoCreateView() {
           onChange={formik.handleChange}
           error={formik.touched.gameRating && Boolean(formik.errors.gameRating)}
         />
-        <TextField
-          required
-          className={classes.textInput}
-          id="gameReleaseDate"
-          label="ReleaseDate:"
-          type="date"
-          value={formik.values.gameReleaseDate}
-          onChange={formik.handleChange}
-          error={
-            formik.touched.gameReleaseDate &&
-            Boolean(formik.errors.gameReleaseDate)
-          }
-        />
         <DatePicker
           required
-          id="gameReleaseDate2"
+          id="gameReleaseDate"
           label="Release date"
           openTo="year"
           format="dd/MM/yyyy"
           views={["year", "month", "date"]}
           value={formik.values.gameReleaseDate2}
           onChange={(data) => {
-            formik.setFieldValue("gameReleaseDate2", data);
+            formik.setFieldValue("gameReleaseDate", data);
             console.log(data);
           }}
         />

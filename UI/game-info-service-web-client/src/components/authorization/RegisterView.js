@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import { registerUserRequest } from "../../api/identity/identityApi";
 import { useFormik } from "formik";
+import { DatePicker } from "@material-ui/pickers";
 import * as yup from "yup";
 
 function registerUser(username, email, password, country, city, birthdayDate) {
@@ -26,6 +27,9 @@ const useStyles = makeStyles({
     flexDirection: "column",
   },
   textField: {
+    marginBottom: "20px",
+  },
+  birthdayDateField: {
     marginBottom: "20px",
   },
 });
@@ -53,7 +57,7 @@ export function RegisterViewFormik() {
       confirmPassword: "",
       country: "",
       city: "",
-      birthdayDate: [],
+      birthdayDate: new Date(),
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -72,6 +76,7 @@ export function RegisterViewFormik() {
     <Container>
       <form className={classes.form} onSubmit={formik.handleSubmit}>
         <TextField
+          required
           className={classes.textField}
           id="username"
           label="Username:"
@@ -81,6 +86,7 @@ export function RegisterViewFormik() {
           helperText={formik.touched.username && formik.errors.username}
         />
         <TextField
+          required
           className={classes.textField}
           id="email"
           label="Email:"
@@ -91,6 +97,7 @@ export function RegisterViewFormik() {
           helperText={formik.touched.email && formik.errors.email}
         />
         <TextField
+          required
           className={classes.textField}
           id="password"
           label="Password:"
@@ -101,6 +108,7 @@ export function RegisterViewFormik() {
           helperText={formik.touched.password && formik.errors.password}
         />
         <TextField
+          required
           className={classes.textField}
           id="confirmPassword"
           label="Confirm password:"
@@ -133,7 +141,7 @@ export function RegisterViewFormik() {
           error={formik.touched.city && Boolean(formik.errors.city)}
           helperText={formik.touched.city && formik.errors.city}
         />
-        <TextField
+        {/* <TextField
           className={classes.textField}
           id="birthdayDate"
           type="date"
@@ -143,8 +151,25 @@ export function RegisterViewFormik() {
             formik.touched.birthdayDate && Boolean(formik.errors.birthdayDate)
           }
           helperText={formik.touched.birthdayDate && formik.errors.birthdayDate}
+        /> */}
+        <DatePicker
+          className={classes.birthdayDateField}
+          id="birthdayDate"
+          label="Birthday Date:"
+          openTo="year"
+          format="dd/MM/yyyy"
+          views={["year", "month", "date"]}
+          value={formik.values.gameReleaseDate2}
+          onChange={(data) => {
+            formik.setFieldValue("gameReleaseDate", data);
+            console.log(data);
+          }}
+          error={
+            formik.touched.birthdayDate && Boolean(formik.errors.birthdayDate)
+          }
+          helperText={formik.touched.birthdayDate && formik.errors.birthdayDate}
         />
-        <Button color="primary" type="submit">
+        <Button variant="contained" color="primary" type="submit">
           Register user
         </Button>
       </form>

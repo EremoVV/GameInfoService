@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import {
+  Box,
   Button,
   ButtonGroup,
   Grid,
   CardActionArea,
   Card,
   Typography,
+  makeStyles,
+  Container,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
@@ -22,6 +25,22 @@ import {
 const axios = require(`axios`).default;
 axios.defaults.baseURL = "https://localhost:44361/api/";
 
+const useStyles = makeStyles({
+  gameInfoCardBox: {
+    marginBottom: "20px",
+    marginLeft: "20px",
+    marginRight: "20px",
+  },
+  addButton: {
+    height: "300px",
+    width: "300px",
+  },
+  addIcon: {
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+});
+
 function sendDeleteRequest(name) {
   gameInfoDeleteRequest(name)
     .then((response) => {
@@ -35,20 +54,24 @@ function postGameInfoDeleteRedirect() {
   window.location.replace("/catalog");
 }
 
-function createButton() {
+function CreateButton(props) {
   if (authorizationCheck()) {
     return (
-      <CardActionArea href="catalog/create">
-        <Card>
-          <AddIcon />
+      <CardActionArea className={props.className} href="catalog/create">
+        <Card className={props.className}>
+          <Box display="flex">
+            <AddIcon className={props.iconClassname} />
+          </Box>
         </Card>
       </CardActionArea>
     );
   }
+  return null;
 }
 
 export default function CatalogView() {
   const [catalog, setCatalog] = useState([]);
+  const classes = useStyles();
 
   useEffect(() => {
     gameInfoListGetRequest()
@@ -57,47 +80,45 @@ export default function CatalogView() {
       })
       .catch((error) => {
         console.log(error);
-        if (error.status === "401") {
+        if (error.response.status === 401) {
           clearAuthorizationCookies();
         }
       });
   }, []);
 
   return (
-    <Grid container direction="column" alignItems="center">
-      <Grid item>
-        <Typography variant="h2">Games:</Typography>
-      </Grid>
-      <Grid item>
-        <Grid container direction="row" spacing={2}>
-          {catalog.map(function (game) {
-            return (
-              <Grid item key={game.id}>
-                <GameInfoCard
-                  gameImage={game.picture}
-                  gameName={game.name}
-                  gameRating={game.rating}
-                />
-                <Button>Add to wishlist</Button>
-                <ButtonGroup>
-                  <Button color="primary" href={`/catalog/update/${game.name}`}>
-                    Update
-                  </Button>
-                  <Button
-                    color="secondary"
-                    onClick={() => {
-                      sendDeleteRequest(game.name);
-                    }}
-                  >
-                    Remove
-                  </Button>
-                </ButtonGroup>
-              </Grid>
-            );
-          })}
-          <Grid item>{createButton()}</Grid>
+    <Container>
+      <Typography variant="h2">Games:</Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={3}>
+          <CreateButton className={classes.addButton} />
         </Grid>
+        {catalog.map(function (game) {
+          return (
+            <Grid item xs={3} id={game.id}>
+              <GameInfoCard
+                gameImage={game.picture}
+                gameName={game.name}
+                gameRating={game.rating}
+              />
+              <Button>Add to wishlist</Button>
+              <ButtonGroup>
+                <Button color="primary" href={`/catalog/update/${game.name}`}>
+                  Update
+                </Button>
+                <Button
+                  color="secondary"
+                  onClick={() => {
+                    sendDeleteRequest(game.name);
+                  }}
+                >
+                  Remove
+                </Button>
+              </ButtonGroup>
+            </Grid>
+          );
+        })}
       </Grid>
-    </Grid>
+    </Container>
   );
 }

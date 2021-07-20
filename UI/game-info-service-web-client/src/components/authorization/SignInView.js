@@ -1,9 +1,11 @@
 import {
+  Box,
   Button,
   Container,
   Grid,
   TextField,
   makeStyles,
+  ButtonGroup,
 } from "@material-ui/core";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -13,7 +15,7 @@ import { authorizationCheck } from "../../api/authorization/authorizationApi";
 import { signInUserRequest } from "../../api/identity/identityApi";
 
 const validationSchema = yup.object({
-  username: yup.string("Enter username").required("username required"),
+  username: yup.string("Enter username").required("Username required"),
   password: yup.string("Enter your password").required("Password is required"),
 });
 
@@ -28,6 +30,8 @@ const useStyles = makeStyles({
   },
   button: {
     marginBottom: "5px",
+    marginLeft: "5px",
+    marginRight: "5px",
   },
 });
 
@@ -63,23 +67,25 @@ export function SignInFormikView() {
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
         />
-        <Button
-          className={classes.button}
-          name="Confirm"
-          variant="contained"
-          color="primary"
-          type="submit"
-        >
-          Log In
-        </Button>
-        <Button
-          className={classes.button}
-          href="/register"
-          variant="contained"
-          color="primary"
-        >
-          Register
-        </Button>
+        <Box display="flex">
+          <Button
+            className={classes.button}
+            name="Confirm"
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
+            Log In
+          </Button>
+          <Button
+            className={classes.button}
+            href="/register"
+            variant="contained"
+            color="primary"
+          >
+            Register
+          </Button>
+        </Box>
       </form>
     </Container>
   );

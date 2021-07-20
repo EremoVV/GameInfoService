@@ -9,11 +9,15 @@ import {
   Button,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import RatingView from "../common/RatingView";
 
 const useStyles = makeStyles({
   card: {
     minWidth: 210,
     minHeight: 300,
+  },
+  rating: {
+    backgroundColor: "#e1b12c",
   },
 });
 
@@ -26,7 +30,7 @@ export default function GameInfoCard(props) {
         <CardMedia>{/* {props.gameImage} */}</CardMedia>
         <CardContent>
           <Typography>{props.gameName}</Typography>
-          <Avatar>{props.gameRating}</Avatar>
+          <RatingView value={props.gameRating} />
         </CardContent>
       </Card>
     </CardActionArea>
