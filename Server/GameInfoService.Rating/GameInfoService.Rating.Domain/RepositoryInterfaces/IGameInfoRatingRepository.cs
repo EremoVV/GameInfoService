@@ -10,6 +10,6 @@ namespace GameInfoService.Rating.Domain.RepositoryInterfaces
         public void Update(GameInfoRatingEntity ratingEntity);
         public void Remove(GameInfoRatingEntity ratingEntity);
         public void Remove(int id);
-        public Task<IEnumerable<GameInfoRatingEntity>> GetAll();
+        public IEnumerable<GameInfoRatingEntity> GetAll();
     }
 }

@@ -16,14 +16,33 @@ namespace GameInfoService.Rating.App.MappingInterfaces
                 Rating = p1.Rating
             };
         }
-        public GameInfoRatingDto MapToDto(GameInfoRatingUdm p2)
+        public GameInfoRatingUdm MapToUdm(GameInfoRatingUpdateDto p2)
         {
-            return p2 == null ? null : new GameInfoRatingDto()
+            return p2 == null ? null : new GameInfoRatingUdm()
             {
                 Id = p2.Id,
                 UserId = p2.UserId,
                 GameInfoId = p2.GameInfoId,
                 Rating = p2.Rating
+            };
+        }
+        public GameInfoRatingUdm MapToUdm(GameInfoRatingCreateDto p3)
+        {
+            return p3 == null ? null : new GameInfoRatingUdm()
+            {
+                UserId = p3.UserId,
+                GameInfoId = p3.GameInfoId,
+                Rating = p3.Rating
+            };
+        }
+        public GameInfoRatingDto MapToDto(GameInfoRatingUdm p4)
+        {
+            return p4 == null ? null : new GameInfoRatingDto()
+            {
+                Id = p4.Id,
+                UserId = p4.UserId,
+                GameInfoId = p4.GameInfoId,
+                Rating = p4.Rating
             };
         }
     }

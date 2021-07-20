@@ -7,34 +7,44 @@ const useStyles = makeStyles({
     height: "100px",
   },
   red: {
-    backgroundColor: "#c23616",
+    backgroundColor: "#575fcf",
   },
   yellow: {
-    backgroundColor: "#e1b12c",
+    backgroundColor: "#4bcffa",
   },
   green: {
-    backgroundColor: "#44bd32",
+    backgroundColor: "#ffa801",
+  },
+  greenBright: {
+    backgroundColor: "#ff3f34",
   },
 });
 
 export default function RatingView(props) {
   const classes = useStyles();
   const num = Number(props.value).toPrecision(2);
-  if (props.value <= 3) {
+  if (props.value >= 9) {
+    return (
+      <Avatar variant={props.variant} className={classes.greenBright}>
+        {num}
+      </Avatar>
+    );
+  }
+  if (props.value <= 4) {
     return (
       <Avatar variant={props.variant} className={classes.red}>
         {num}
       </Avatar>
     );
   }
-  if (props.value > 3 && props.value < 8) {
+  if (props.value > 4 && props.value < 7) {
     return (
       <Avatar variant={props.variant} className={classes.yellow}>
         {num}
       </Avatar>
     );
   }
-  if (props.value >= 8) {
+  if (props.value >= 7 && props.value < 9) {
     return (
       <Avatar variant={props.variant} className={classes.green}>
         {num}

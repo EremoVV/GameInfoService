@@ -1,5 +1,7 @@
 using System;
 using GameInfoService.Rating.App.MappingInterfaces;
+using GameInfoService.Rating.App.Middleware.ExceptionHandling;
+using GameInfoService.Rating.App.Middleware.ExceptionHandling.ExceptionHandlers;
 using GameInfoService.Rating.Domain.RepositoryInterfaces;
 using GameInfoService.Rating.Infrastructure.Context;
 using GameInfoService.Rating.Infrastructure.Repositories;
@@ -39,7 +41,7 @@ namespace GameInfoService.Rating.App
 
             services.AddDbContext<GameInfoRatingContext>(options => options.UseSqlServer(connectionString));
 
-            services.AddScoped<IGameInfoRatingRepository, GameInfoRatingRepository>();
+            services.AddTransient<IGameInfoRatingRepository, GameInfoRatingRepository>();
 
             services.AddTransient<IGameInfoRatingService, GameInfoRatingService>();
 
@@ -52,9 +54,10 @@ namespace GameInfoService.Rating.App
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandleMiddleware();
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GameInfoRating.App v1"));
             }

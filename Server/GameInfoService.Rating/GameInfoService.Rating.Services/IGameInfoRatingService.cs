@@ -10,9 +10,10 @@ namespace GameInfoService.Rating.Services
 {
     public interface IGameInfoRatingService
     {
-        public Task<IEnumerable<GameInfoRatingUdm>> GetAll();
+        public IEnumerable<GameInfoRatingUdm> GetAll();
         public void RemoveGameInfoRatingById(int id);
         public void UpdateGameInfoRating(GameInfoRatingUdm gameInfoRatingUdmUdm);
         public void AddGameInfoRating(GameInfoRatingUdm gameInfoRatingUdmUdm);
+        public void Error();
     }
 }

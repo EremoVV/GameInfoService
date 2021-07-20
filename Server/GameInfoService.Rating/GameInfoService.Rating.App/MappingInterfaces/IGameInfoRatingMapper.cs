@@ -12,6 +12,8 @@ namespace GameInfoService.Rating.App.MappingInterfaces
     public interface IGameInfoRatingMapper
     {
         public GameInfoRatingUdm MapToUdm(GameInfoRatingDto gameInfoRatingDto);
+        public GameInfoRatingUdm MapToUdm(GameInfoRatingUpdateDto gameInfoRatingDto);
+        public GameInfoRatingUdm MapToUdm(GameInfoRatingCreateDto gameInfoRatingDto);
         public GameInfoRatingDto MapToDto(GameInfoRatingUdm gameInfoRatingUdm);
     }
 }

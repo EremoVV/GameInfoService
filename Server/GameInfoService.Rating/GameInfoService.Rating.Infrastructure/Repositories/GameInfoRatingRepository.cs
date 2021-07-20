@@ -19,16 +19,16 @@ namespace GameInfoService.Rating.Infrastructure.Repositories
         {
             _gameInfoContext = gameInfoContext;
         }
-        public async void Create(GameInfoRatingEntity ratingEntity)
+        public void Create(GameInfoRatingEntity ratingEntity)
         {
-            ratingEntity.CreateDate = DateTime.Now;
-            await _gameInfoContext.RatingEntities.AddAsync(ratingEntity);
-            await _gameInfoContext.SaveChangesAsync();
+            ratingEntity.CreateDate = DateTime.Now; 
+            _gameInfoContext.RatingEntities.Add(ratingEntity);
+            _gameInfoContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<GameInfoRatingEntity>> GetAll()
+        public IEnumerable<GameInfoRatingEntity> GetAll()
         {
-            return await _gameInfoContext.RatingEntities.ToListAsync();
+            return _gameInfoContext.RatingEntities.ToList();
         }
 
         public async void Remove(GameInfoRatingEntity ratingEntity)
@@ -44,11 +44,11 @@ namespace GameInfoService.Rating.Infrastructure.Repositories
             await _gameInfoContext.SaveChangesAsync();
         }
 
-        public async void Update(GameInfoRatingEntity ratingEntity)
+        public void Update(GameInfoRatingEntity ratingEntity)
         {
-            var gameInfoRating = await _gameInfoContext.RatingEntities.FindAsync(ratingEntity.Id);
+            var gameInfoRating =  _gameInfoContext.RatingEntities.FindAsync(ratingEntity.Id);
             ratingEntity.Adapt(gameInfoRating);
-            await _gameInfoContext.SaveChangesAsync();
+            _gameInfoContext.SaveChangesAsync();
         }
     }
 }

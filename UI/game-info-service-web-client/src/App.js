@@ -17,6 +17,7 @@ import {
   AppBar,
   Toolbar,
   Grid,
+  makeStyles,
 } from "@material-ui/core";
 
 import DashboardIcon from "@material-ui/icons/Dashboard";
@@ -72,6 +73,15 @@ import {
 //   );
 // }
 
+const useStyles = makeStyles({
+  body: {
+    backgroundColor: "#485460",
+  },
+  appBar: {
+    backgroundColor: "#1e272e",
+  },
+});
+
 const axios = require(`axios`).default;
 axios.defaults.baseURL = "https://localhost:44361/api/";
 
@@ -123,10 +133,11 @@ function AppRouting() {
 }
 
 function App() {
+  const classes = useStyles();
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <BrowserRouter>
-        <AppBar position="static">
+        <AppBar className={classes.appBar} position="static">
           <Toolbar>
             <Grid container>
               <Grid item>

@@ -19,6 +19,10 @@
     <ProjectReference Include="..\GameInfoService.Rating.Infrastructure\GameInfoService.Rating.Infrastructure.csproj" />
     <ProjectReference Include="..\GameInfoService.Rating.Services\GameInfoService.Rating.Services.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Mappers\" />
+  </ItemGroup>
 	<Target Name="Mapster" AfterTargets="AfterBuild">
 		<Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tool restore" />
 		<Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster model -a &quot;$(TargetDir)$(ProjectName).dll&quot;" />

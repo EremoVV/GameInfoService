@@ -13,6 +13,7 @@ import RatingView from "../common/RatingView";
 
 const useStyles = makeStyles({
   card: {
+    // backgroundColor: "#1e272e",
     minWidth: 210,
     minHeight: 300,
   },
