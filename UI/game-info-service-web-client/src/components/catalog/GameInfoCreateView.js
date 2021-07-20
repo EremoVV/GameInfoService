@@ -60,7 +60,7 @@ export default function GameInfoCreateView() {
         values.gameName,
         values.gameDescription,
         values.gameRating,
-        values.gameReleaseDate
+        values.gameReleaseDate2
       );
     },
   });
@@ -78,6 +78,7 @@ export default function GameInfoCreateView() {
         <TextField
           className={classes.textInput}
           required
+          multiline
           id="gameDescription"
           label="Description:"
           value={formik.values.gameDescription}
@@ -97,6 +98,7 @@ export default function GameInfoCreateView() {
           error={formik.touched.gameRating && Boolean(formik.errors.gameRating)}
         />
         <TextField
+          required
           className={classes.textInput}
           id="gameReleaseDate"
           label="ReleaseDate:"
@@ -109,8 +111,17 @@ export default function GameInfoCreateView() {
           }
         />
         <DatePicker
+          required
+          id="gameReleaseDate2"
+          label="Release date"
+          openTo="year"
+          format="dd/MM/yyyy"
+          views={["year", "month", "date"]}
           value={formik.values.gameReleaseDate2}
-          onChange={formik.handleChange}
+          onChange={(data) => {
+            formik.setFieldValue("gameReleaseDate2", data);
+            console.log(data);
+          }}
         />
         <Button className={classes.button} color="primary" type="submit">
           Add game title

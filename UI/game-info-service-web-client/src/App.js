@@ -22,6 +22,8 @@ import {
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import InfoIcon from "@material-ui/icons/Info";
 
+import DateFnsUtils from "@date-io/date-fns";
+
 import { authorizationCheck } from "./api/authorization/authorizationApi";
 import AuthorizationView from "./components/authorization/AuthorizationView";
 import SignInView, {
@@ -39,6 +41,10 @@ import ErrorBoundary from "./errorHandling/ErrorBoundary";
 import ErrorComp from "./components/error";
 import GameInfoUpdateView from "./components/catalog/GameInfoUpdateView";
 import GameInfoCreateView from "./components/catalog/GameInfoCreateView";
+import {
+  MuiPickersContext,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 
 // let clientCredentials = {
 //   clientId : "ReactWebClient",
@@ -118,49 +124,55 @@ function AppRouting() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppBar position="static">
-        <Toolbar>
-          <Grid container>
-            <Grid item>
-              <Grid
-                container
-                spacing={3}
-                alignContent="center"
-                alignItems="center"
-              >
-                <Grid item>
-                  <Typography>Game Info Service</Typography>
-                </Grid>
-                <Grid item>
-                  <ButtonGroup variant="text" size="large">
-                    <Button color="inherit" variant="outlined" href="/catalog">
-                      <DashboardIcon />
-                      <Typography>Catalog</Typography>
-                    </Button>
-                    <Button color="inherit" variant="outlined" href="/about">
-                      <InfoIcon />
-                      <Typography>About</Typography>
-                    </Button>
-                  </ButtonGroup>
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <BrowserRouter>
+        <AppBar position="static">
+          <Toolbar>
+            <Grid container>
+              <Grid item>
+                <Grid
+                  container
+                  spacing={3}
+                  alignContent="center"
+                  alignItems="center"
+                >
+                  <Grid item>
+                    <Typography>Game Info Service</Typography>
+                  </Grid>
+                  <Grid item>
+                    <ButtonGroup variant="text" size="large">
+                      <Button
+                        color="inherit"
+                        variant="outlined"
+                        href="/catalog"
+                      >
+                        <DashboardIcon />
+                        <Typography>Catalog</Typography>
+                      </Button>
+                      <Button color="inherit" variant="outlined" href="/about">
+                        <InfoIcon />
+                        <Typography>About</Typography>
+                      </Button>
+                    </ButtonGroup>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
+            <AuthorizationView isLoggedIn={authorizationCheck()} />
+          </Toolbar>
+        </AppBar>
+        <Grid
+          container
+          direction="column"
+          alignItems="center"
+          justifycontent="center"
+        >
+          <Grid item>
+            <AppRouting />
           </Grid>
-          <AuthorizationView isLoggedIn={authorizationCheck()} />
-        </Toolbar>
-      </AppBar>
-      <Grid
-        container
-        direction="column"
-        alignItems="center"
-        justifycontent="center"
-      >
-        <Grid item>
-          <AppRouting />
         </Grid>
-      </Grid>
-    </BrowserRouter>
+      </BrowserRouter>
+    </MuiPickersUtilsProvider>
   );
 }
 

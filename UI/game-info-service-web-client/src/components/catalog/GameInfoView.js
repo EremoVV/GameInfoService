@@ -52,7 +52,6 @@ export default function GameInfoView() {
               precision={0.1}
               max={10}
               value={Number(gameData.rating)}
-              disabled
             />
           </Grid>
           <Grid item>{gameData.rating}</Grid>

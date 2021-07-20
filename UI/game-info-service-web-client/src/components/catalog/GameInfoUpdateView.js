@@ -7,6 +7,7 @@ import {
   gameInfoUpdateRequest,
   gameInfoGetRequest,
 } from "../../api/catalog/catalogApi";
+import { DatePicker } from "@material-ui/pickers";
 
 const validationSchema = yup.object({
   gameRating: yup.number().max(10).min(0),
@@ -60,7 +61,7 @@ export default function GameInfoUpdateView() {
       gameName: "",
       gameDescription: "",
       gameRating: 1,
-      gameReleaseDate: [],
+      gameReleaseDate: new Date(),
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -82,6 +83,7 @@ export default function GameInfoUpdateView() {
         formik.setFieldValue("gameName", data.name);
         formik.setFieldValue("gameDescription", data.description);
         formik.setFieldValue("gameRating", data.rating);
+        formik.setFieldValue("gameReleaseDate", data.releaseDate);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -96,6 +98,7 @@ export default function GameInfoUpdateView() {
           error={formik.touched.gameName && Boolean(formik.errors.gameName)}
         />
         <TextField
+          multiline
           className={classes.textInput}
           id="gameDescription"
           label="Description:"
@@ -115,17 +118,18 @@ export default function GameInfoUpdateView() {
           onChange={formik.handleChange}
           error={formik.touched.gameRating && Boolean(formik.errors.gameRating)}
         />
-        <TextField
-          className={classes.textInput}
+        <DatePicker
+          required
           id="gameReleaseDate"
-          label="ReleaseDate:"
-          type="date"
+          label="Release date"
+          openTo="year"
+          format="dd/MM/yyyy"
+          views={["year", "month", "date"]}
           value={formik.values.gameReleaseDate}
-          onChange={formik.handleChange}
-          error={
-            formik.touched.gameReleaseDate &&
-            Boolean(formik.errors.gameReleaseDate)
-          }
+          onChange={(data) => {
+            formik.setFieldValue("gameReleaseDate", data);
+            console.log(data);
+          }}
         />
         <Button className={classes.button} color="primary" type="submit">
           Update game info
