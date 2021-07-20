@@ -58,7 +58,8 @@ export default function GameInfoCreateView() {
       sendGameInfoCreate(
         values.gameName,
         values.gameDescription,
-        values.gameRating
+        values.gameRating,
+        values.gameReleaseDate
       );
     },
   });
@@ -102,10 +103,9 @@ export default function GameInfoCreateView() {
           openTo="year"
           format="dd/MM/yyyy"
           views={["year", "month", "date"]}
-          value={formik.values.gameReleaseDate2}
+          value={formik.values.gameReleaseDate}
           onChange={(data) => {
             formik.setFieldValue("gameReleaseDate", data);
-            console.log(data);
           }}
         />
         <Button className={classes.button} color="primary" type="submit">

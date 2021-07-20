@@ -128,7 +128,6 @@ export default function GameInfoUpdateView() {
           value={formik.values.gameReleaseDate}
           onChange={(data) => {
             formik.setFieldValue("gameReleaseDate", data);
-            console.log(data);
           }}
         />
         <Button className={classes.button} color="primary" type="submit">
