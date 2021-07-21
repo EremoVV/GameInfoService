@@ -81,8 +81,10 @@ export default function CatalogView() {
       })
       .catch((error) => {
         console.log(error);
-        if (error.response.status === 401) {
-          clearAuthorizationCookies();
+        if (error.response) {
+          if (error.response.status === 401) {
+            clearAuthorizationCookies();
+          }
         }
       });
   }, []);

@@ -7,7 +7,6 @@ export default function setCurrentAuthorziationHeader() {
 export function clearAuthorizationCookies() {
   document.cookie = "Authorization=";
 }
-
 export function authorizationCheck() {
   if (getBearerToken() === "" || getBearerToken() == null) return false;
   else return true;

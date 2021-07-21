@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
-import { Avatar, Box } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 
 import { gameInfoGetRequest } from "../../api/catalog/catalogApi";
 import RatingView from "../common/RatingView";

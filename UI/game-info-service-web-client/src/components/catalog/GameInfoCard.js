@@ -1,19 +1,15 @@
 import {
-  Avatar,
   CardActionArea,
   Card,
   CardMedia,
   CardContent,
   Typography,
-  ButtonGroup,
-  Button,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import RatingView from "../common/RatingView";
 
 const useStyles = makeStyles({
   card: {
-    // backgroundColor: "#1e272e",
     minWidth: 210,
     minHeight: 300,
   },
