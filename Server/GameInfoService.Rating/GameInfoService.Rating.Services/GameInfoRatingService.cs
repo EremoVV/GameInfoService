@@ -19,9 +19,9 @@ namespace GameInfoService.Rating.Services
             _gameInfoRatingRepository = gameInfoRatingRepository;
             _gameInfoRatingServiceMapper = gameInfoRatingServiceMapper;
         }
-        public void AddGameInfoRating(GameInfoRatingUdm gameInfoRatingUdm)
+        public async Task AddGameInfoRating(GameInfoRatingUdm gameInfoRatingUdm)
         {
-            _gameInfoRatingRepository.Create(_gameInfoRatingServiceMapper.MapToEntity(gameInfoRatingUdm));
+            await _gameInfoRatingRepository.CreateAsync(_gameInfoRatingServiceMapper.MapToEntity(gameInfoRatingUdm));
         }
 
         public IEnumerable<GameInfoRatingUdm>GetAll()
@@ -29,17 +29,17 @@ namespace GameInfoService.Rating.Services
             return _gameInfoRatingServiceMapper.MapArrayToUdm(_gameInfoRatingRepository.GetAll());
         }
 
-        public void RemoveGameInfoRatingById(int id)
+        public async Task RemoveGameInfoRatingById(int id)
         {
-            _gameInfoRatingRepository.Remove(id);
+            await _gameInfoRatingRepository.RemoveAsync(id);
         }
 
-        public void UpdateGameInfoRating(GameInfoRatingUdm gameInfoRatingUdm)
+        public async Task UpdateGameInfoRating(GameInfoRatingUdm gameInfoRatingUdm)
         {
-            _gameInfoRatingRepository.Update(_gameInfoRatingServiceMapper.MapToEntity(gameInfoRatingUdm));
+            await _gameInfoRatingRepository.UpdateAsync(_gameInfoRatingServiceMapper.MapToEntity(gameInfoRatingUdm));
         }
 
-        public void Error()
+        public Task Error()
         {
             throw new KeyNotFoundException();
         }

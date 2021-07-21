@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using GameInfoService.Rating.App.Middleware.ExceptionHandling.CustomExceptions;
+using GameInfoService.Rating.App.Middleware.ExceptionHandling.ExceptionHandleResponses;
 
 namespace GameInfoService.Rating.App.Middleware.ExceptionHandling.ExceptionHandlers
 {
@@ -17,32 +19,41 @@ namespace GameInfoService.Rating.App.Middleware.ExceptionHandling.ExceptionHandl
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await _next.Invoke(context);
+                await _next(context);
             }
-            catch (CustomException ex)
+            catch (InternalException ex)
             {
-                var response = context.Response;
-                response.ContentType = "application/json";
-                var responseModel = ex.Message;
-                response.StatusCode = (int)HttpStatusCode.Conflict;
-                await response.WriteAsync(responseModel);
+                await HandleException(context, ex);
             }
             catch (Exception ex)
             {
-                var response = context.Response;
-                response.ContentType = "application/json";
-                const string responseModel = "I am response";
-                response.StatusCode = ex switch
-                {
-                    KeyNotFoundException => (int) HttpStatusCode.NotFound,
-                    _ => response.StatusCode
-                };
-                await response.WriteAsync(responseModel);
+                await HandleException(context, ex);
             }
+        }
+
+        private async Task HandleException(HttpContext context, Exception ex)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = ex switch
+            {
+                KeyNotFoundException => (int) HttpStatusCode.BadRequest,
+                _ => (int) HttpStatusCode.InternalServerError,
+            };
+            //var message = ex switch
+            //{
+            //    KeyNotFoundException => "Object not found",
+            //    _ => "Unexpected error"
+            //};
+            await context.Response.WriteAsync(new ExceptionHandleDefaultResponse
+            {
+                StatusCode = context.Response.StatusCode,
+                Message = ex.Message
+            }.ToString());
+
         }
 
     }

@@ -23,19 +23,19 @@ namespace GameInfoService.Rating.App.Controllers
             _gameInfoRatingMapper = gameInfoRatingMapper;
         }
         [HttpPost]
-        public ActionResult<string> AddRating(GameInfoRatingCreateDto gameInfoRatingDto)
+        public async Task<ActionResult<string>> AddRating(GameInfoRatingCreateDto gameInfoRatingDto)
         {
             if (!TryValidateModel(gameInfoRatingDto)) return BadRequest(ModelState);
-            _gameInfoRatingService.AddGameInfoRating(_gameInfoRatingMapper.MapToUdm(gameInfoRatingDto));
+            await _gameInfoRatingService.AddGameInfoRating(_gameInfoRatingMapper.MapToUdm(gameInfoRatingDto));
             return Ok("Added successfully");
         }
         [HttpPost]
-        public ActionResult<string> UpdateRating(GameInfoRatingUpdateDto gameInfoRatingDto)
+        public async Task<ActionResult<string>> UpdateRating(GameInfoRatingUpdateDto gameInfoRatingDto)
         {
             if (!TryValidateModel(gameInfoRatingDto)) return BadRequest(ModelState);
             try
             {
-                _gameInfoRatingService.UpdateGameInfoRating(_gameInfoRatingMapper.MapToUdm(gameInfoRatingDto));
+                await _gameInfoRatingService.UpdateGameInfoRating(_gameInfoRatingMapper.MapToUdm(gameInfoRatingDto));
                 return Ok("Updated successfully");
             }
             catch (Exception e)
@@ -44,11 +44,11 @@ namespace GameInfoService.Rating.App.Controllers
             }
         }
         [HttpDelete]
-        public ActionResult<string> DeleteRating(int id)
+        public async Task<ActionResult<string>> DeleteRating(int id)
         {
             try
             {
-                _gameInfoRatingService.RemoveGameInfoRatingById(id);
+                await _gameInfoRatingService.RemoveGameInfoRatingById(id);
                 return Ok("Removed successfully");
             }
             catch (Exception e)
@@ -63,9 +63,9 @@ namespace GameInfoService.Rating.App.Controllers
         }
 
         [HttpGet]
-        public ActionResult<string> Error()
+        public async Task<ActionResult<string>> Error()
         {
-            _gameInfoRatingService.Error();
+            await _gameInfoRatingService.Error();
             return Ok("Error");
         }
     }
