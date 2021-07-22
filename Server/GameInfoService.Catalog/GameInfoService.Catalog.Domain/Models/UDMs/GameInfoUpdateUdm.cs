@@ -5,11 +5,9 @@ namespace GameInfoService.Catalog.Domain.Models.UDMs
 {
     public class GameInfoUpdateUdm
     {
-        [Required]
         public string Name { get; set; }
-        [Required]
         public string Description { get; set; }
-        [Required]
+        public string PicturePath { get; set; }
         public DateTime ReleaseDate { get; set; }
     }
 }

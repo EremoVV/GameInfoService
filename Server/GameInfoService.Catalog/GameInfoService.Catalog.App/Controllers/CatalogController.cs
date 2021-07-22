@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Security.Claims;
+using System.Text.Json;
+using System.Threading.Tasks;
 using GameInfoService.Catalog.Domain.Models.DTOs;
 using GameInfoService.Catalog.Infrastructure.MappingInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using GameInfoService.Catalog.Services.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.Net.Http.Headers;
 
 namespace GameInfoService.Catalog.App.Controllers
 {
@@ -80,6 +86,13 @@ namespace GameInfoService.Catalog.App.Controllers
             {
                 return Conflict(e.Message);
             }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<string>> Header()
+        {
+            var token2 = HttpContext.Request.Headers[HeaderNames.Authorization];
+            return Ok(JsonSerializer.Serialize(HttpContext.Request.Headers));
         }
     }
 }

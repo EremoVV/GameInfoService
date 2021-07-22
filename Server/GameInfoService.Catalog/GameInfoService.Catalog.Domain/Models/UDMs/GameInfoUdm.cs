@@ -12,6 +12,7 @@ namespace GameInfoService.Catalog.Domain.Models.UDMs
         [Required]
         public string Description { get; set; }
         public double Rating { get; set; }
+        public string PicturePath { get; set; }
         [Required]
         public DateTime ReleaseDate { get; set; }
     }

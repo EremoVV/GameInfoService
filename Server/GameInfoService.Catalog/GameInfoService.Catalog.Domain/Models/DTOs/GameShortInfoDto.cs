@@ -8,5 +8,6 @@ namespace GameInfoService.Catalog.Domain.Models.DTOs
         public string Picture { get; set; }
         [Range(0, 10)]
         public double Rating { get; set; }
+        public string PicturePath { get; set; }
     }
 }

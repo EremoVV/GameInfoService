@@ -13,6 +13,7 @@ namespace GameInfoService.Catalog.Domain.Models.Entities
         [Required]
         public string Description { get; set; }
         public double Rating { get; set; }
+        public string PicturePath { get; set; }
         [Required]
         [Column(TypeName = "Date")]
         public DateTime ReleaseDate { get; set; }

@@ -16,6 +16,7 @@ namespace GameInfoService.Catalog.Infrastructure.MappingInterfaces
                 Name = p1.Name,
                 Description = p1.Description,
                 Rating = p1.Rating,
+                PicturePath = p1.PicturePath,
                 ReleaseDate = p1.ReleaseDate
             };
         }
@@ -27,6 +28,7 @@ namespace GameInfoService.Catalog.Infrastructure.MappingInterfaces
                 Name = p2.Name,
                 Description = p2.Description,
                 Rating = p2.Rating,
+                PicturePath = p2.PicturePath,
                 ReleaseDate = p2.ReleaseDate
             };
         }
@@ -38,6 +40,7 @@ namespace GameInfoService.Catalog.Infrastructure.MappingInterfaces
                 Name = p3.Name,
                 Description = p3.Description,
                 Rating = p3.Rating,
+                PicturePath = p3.PicturePath,
                 ReleaseDate = p3.ReleaseDate
             };
         }
@@ -49,6 +52,7 @@ namespace GameInfoService.Catalog.Infrastructure.MappingInterfaces
                 Name = p4.Name,
                 Description = p4.Description,
                 Rating = p4.Rating,
+                PicturePath = p4.PicturePath,
                 ReleaseDate = p4.ReleaseDate == null ? default(DateTime) : (DateTime)p4.ReleaseDate
             };
         }
@@ -60,6 +64,7 @@ namespace GameInfoService.Catalog.Infrastructure.MappingInterfaces
                 Name = p5.Name,
                 Description = p5.Description,
                 Rating = p5.Rating,
+                PicturePath = p5.PicturePath,
                 ReleaseDate = p5.ReleaseDate
             };
         }
