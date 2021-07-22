@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Grid, Typography } from "@material-ui/core";
+import { Container, Grid, makeStyles, Typography } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import { Box } from "@material-ui/core";
 
@@ -20,6 +20,12 @@ import RatingView from "../common/RatingView";
 //     requestGameInfo
 //   );
 // }
+
+const useStyles = makeStyles({
+  container: {
+    justifyContent: "center",
+  },
+});
 
 const ratingLabels = {
   0: "",
@@ -41,6 +47,8 @@ export default function GameInfoView() {
   const [hoverIndex, setHoverIndex] = useState(-1);
   const { name } = useParams();
 
+  const classes = useStyles();
+
   useEffect(() => {
     gameInfoGetRequest(name)
       .then((response) => {
@@ -49,44 +57,26 @@ export default function GameInfoView() {
       .catch((error) => console.log(error));
   }, []);
   return (
-    <Grid container spacing={4}>
-      <Grid item xs>
-        <Typography>{gameData.picture}</Typography>
-      </Grid>
-      <Grid item>
-        <Grid container direction="column" spacing={2}>
-          <Grid item>
-            <Typography variant="h4">{gameData.name}</Typography>
-          </Grid>
-          <Grid item>
-            <Box display="flex">
-              <Typography variant="h5">Rating</Typography>
-              <RatingView variant="square" value={gameData.rating} />
-            </Box>
-          </Grid>
-          <Grid item>
-            <Typography variant="h5">{gameData.description}</Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="h6">{gameData.releaseDate}</Typography>
-          </Grid>
-          <Grid item>
-            <Typography>Rate this game!</Typography>
-            <Box display="flex">
-              <Rating
-                size="large"
-                max={10}
-                value={Number(gameData.rating)}
-                onChange={(e) => setGameInfoRating(e.target.value)}
-                onChangeActive={(event, hoverIndex) => {
-                  setHoverIndex(hoverIndex);
-                }}
-              />
-              {ratingLabels[hoverIndex !== -1 ? hoverIndex : 0]}
-            </Box>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Grid>
+    <Container>
+      <Typography>{gameData.picture}</Typography>
+      <Box className={classes.container}>
+        <Typography variant="h4">{gameData.name}</Typography>
+        <Typography variant="h5">Rating</Typography>
+        <RatingView variant="square" value={gameData.rating} />
+        <Typography variant="h5">{gameData.description}</Typography>
+        <Typography variant="h6">{gameData.releaseDate}</Typography>
+        <Typography>Rate this game!</Typography>
+        <Rating
+          size="large"
+          max={10}
+          value={Number(gameData.rating)}
+          onChange={(e) => setGameInfoRating(e.target.value)}
+          onChangeActive={(event, hoverIndex) => {
+            setHoverIndex(hoverIndex);
+          }}
+        />
+        {ratingLabels[hoverIndex !== -1 ? hoverIndex : 0]}
+      </Box>
+    </Container>
   );
 }

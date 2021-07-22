@@ -16,6 +16,10 @@ const useStyles = makeStyles({
   rating: {
     backgroundColor: "#e1b12c",
   },
+  image: {
+    height: 200,
+    width: 300,
+  },
 });
 
 export default function GameInfoCard(props) {
@@ -23,8 +27,12 @@ export default function GameInfoCard(props) {
 
   return (
     <CardActionArea href={`/catalog/${props.gameName}`}>
+      {/* <CardMedia
+        className={classes.media}
+        src="https://images5.alphacoders.com/690/thumb-1920-690653.png"
+      /> */}
       <Card className={classes.card}>
-        <CardMedia>{/* {props.gameImage} */}</CardMedia>
+        <img className={classes.image} src={props.gameImageSource}></img>
         <CardContent>
           <Typography>{props.gameName}</Typography>
           <RatingView value={props.gameRating} />

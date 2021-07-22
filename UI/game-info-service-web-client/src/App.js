@@ -139,49 +139,21 @@ function App() {
       <BrowserRouter>
         <AppBar className={classes.appBar} position="static">
           <Toolbar>
-            <Grid container>
-              <Grid item>
-                <Grid
-                  container
-                  spacing={3}
-                  alignContent="center"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <Typography>Game Info Service</Typography>
-                  </Grid>
-                  <Grid item>
-                    <ButtonGroup variant="text" size="large">
-                      <Button
-                        color="inherit"
-                        variant="outlined"
-                        href="/catalog"
-                      >
-                        <DashboardIcon />
-                        <Typography>Catalog</Typography>
-                      </Button>
-                      <Button color="inherit" variant="outlined" href="/about">
-                        <InfoIcon />
-                        <Typography>About</Typography>
-                      </Button>
-                    </ButtonGroup>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
+            <Typography>Game Info Service</Typography>
+            <ButtonGroup variant="text" size="large">
+              <Button color="inherit" variant="outlined" href="/catalog">
+                <DashboardIcon />
+                <Typography>Catalog</Typography>
+              </Button>
+              <Button color="inherit" variant="outlined" href="/about">
+                <InfoIcon />
+                <Typography>About</Typography>
+              </Button>
+            </ButtonGroup>
             <AuthorizationView isLoggedIn={authorizationCheck()} />
           </Toolbar>
         </AppBar>
-        <Grid
-          container
-          direction="column"
-          alignItems="center"
-          justifycontent="center"
-        >
-          <Grid item>
-            <AppRouting />
-          </Grid>
-        </Grid>
+        <AppRouting />
       </BrowserRouter>
     </MuiPickersUtilsProvider>
   );

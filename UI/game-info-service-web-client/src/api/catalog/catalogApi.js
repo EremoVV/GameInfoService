@@ -51,3 +51,8 @@ export async function gameInfoUpdateRequest(
     ReleaseDate: gameReleaseDate,
   });
 }
+
+export async function userNameRequest() {
+  setCurrentAuthorizationHeader();
+  return await axios.get("catalog/Catalog/Header");
+}

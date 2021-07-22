@@ -16,6 +16,7 @@ import GameInfoCard from "./GameInfoCard";
 import {
   gameInfoListGetRequest,
   gameInfoDeleteRequest,
+  userNameRequest,
 } from "../../api/catalog/catalogApi";
 import {
   authorizationCheck,
@@ -34,7 +35,7 @@ const useStyles = makeStyles({
   addButton: {
     // backgroundColor: "#1e272e",
     height: "300px",
-    width: "300px",
+    width: "296px",
   },
   addIcon: {
     marginLeft: "auto",
@@ -53,6 +54,10 @@ function sendDeleteRequest(name) {
 
 function postGameInfoDeleteRedirect() {
   window.location.replace("/catalog");
+}
+
+function loginRedirect() {
+  window.location.replace("/login");
 }
 
 function CreateButton(props) {
@@ -84,6 +89,7 @@ export default function CatalogView() {
         if (error.response) {
           if (error.response.status === 401) {
             clearAuthorizationCookies();
+            loginRedirect();
           }
         }
       });
@@ -93,14 +99,14 @@ export default function CatalogView() {
     <Container>
       <Typography variant="h2">Games:</Typography>
       <Grid container spacing={2}>
-        <Grid item xs={3}>
+        <Grid item xs>
           <CreateButton className={classes.addButton} />
         </Grid>
         {catalog.map(function (game) {
           return (
-            <Grid item xs={3} id={game.id}>
+            <Grid item sm={3} id={game.id}>
               <GameInfoCard
-                gameImage={game.picture}
+                gameImageSource={game.picturePath}
                 gameName={game.name}
                 gameRating={game.rating}
               />
