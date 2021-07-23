@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using GameInfoService.Catalog.Domain.Models.Entities;
 using GameInfoService.Catalog.Domain.RepositoryInterfaces;
 using GameInfoService.Catalog.Infrastructure.Repositories.Contexts;
@@ -21,38 +22,38 @@ namespace GameInfoService.Catalog.Infrastructure.Repositories
             _gameInfoContext = gameInfoContext;
         }
 
-        public IEnumerable<GameInfoEntity> GetAllGameInfos()
+        public async Task<IEnumerable<GameInfoEntity>> GetAllGameInfos()
         {
-            return _gameInfoContext.GameInfoSet.ToList();
+            return await _gameInfoContext.GameInfoSet.ToListAsync();
         }
 
-        public GameInfoEntity GetGameInfoById(int id)
+        public async Task<GameInfoEntity> GetGameInfoById(int id)
         {
-            var gameInfo = _gameInfoContext.GameInfoSet.Find(id);
+            var gameInfo = await _gameInfoContext.GameInfoSet.FindAsync(id);
 
             return gameInfo;
         }
 
-        public void AddGameInfo(GameInfoEntity gameInfo)
+        public async Task AddGameInfo(GameInfoEntity gameInfo)
         {
-            _gameInfoContext.GameInfoSet.Add(gameInfo);
+            await _gameInfoContext.GameInfoSet.AddAsync(gameInfo);
 
-            _gameInfoContext.SaveChanges();
+            await _gameInfoContext.SaveChangesAsync();
         }
 
-        public void RemoveGameInfo(string name)
+        public async Task RemoveGameInfo(string name)
         {
-            var gameInfo = _gameInfoContext.GameInfoSet.FirstOrDefault(x => x.Name.Equals(name));
+            var gameInfo = await _gameInfoContext.GameInfoSet.FirstOrDefaultAsync(x => x.Name.Equals(name));
             if (gameInfo == null) throw new SqlNullValueException("GameInfo object not found");
             _gameInfoContext.Remove(gameInfo);
-            _gameInfoContext.SaveChanges();
+            await _gameInfoContext.SaveChangesAsync();
         }
 
-        public void UpdateGameInfo(GameInfoEntity gameInfo)
+        public async Task UpdateGameInfo(GameInfoEntity gameInfo)
         {
-            var gameInfoEntity = _gameInfoContext.GameInfoSet.Find(gameInfo.Id);
+            var gameInfoEntity = await _gameInfoContext.GameInfoSet.FindAsync(gameInfo.Id);
             gameInfo.Adapt(gameInfoEntity);
-            _gameInfoContext.SaveChanges();
+            await _gameInfoContext.SaveChangesAsync();
         }
     }
 }

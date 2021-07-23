@@ -9,10 +9,11 @@ namespace GameInfoService.Catalog.Services.Services
 {
     public interface IGameInfoRetrieveService
     {
-        IEnumerable<GameInfoUdm> GetAllGameInfos();
-        GameInfoUdm GetGameInfoByName(string name);
-        void AddGameInfo(GameInfoUdm gameInfo);
-        void RemoveGameInfo(string gameInfo);
-        void UpdateGameInfo(GameInfoUdm gameInfo);
+        Task<IEnumerable<GameInfoUdm>> GetAllGameInfos();
+        Task<GameInfoUdm> GetGameInfoByName(string name);
+        Task<GameInfoUdm> GetGameInfo(int id);
+        Task AddGameInfo(GameInfoUdm gameInfo);
+        Task RemoveGameInfo(string gameInfo);
+        Task UpdateGameInfo(GameInfoUdm gameInfo);
     }
 }

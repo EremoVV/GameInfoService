@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GameInfoService.Catalog.Domain.Models.Entities;
 using GameInfoService.Catalog.Domain.Models.UDMs;
 using GameInfoService.Catalog.Domain.RepositoryInterfaces;
@@ -17,36 +18,41 @@ namespace GameInfoService.Catalog.Services.Services
             _gameInfoRepository = repository;
         }
 
-        public IEnumerable<GameInfoUdm> GetAllGameInfos()
+        public async Task<IEnumerable<GameInfoUdm>> GetAllGameInfos()
         {
-            return _gameInfoRepository
-                .GetAllGameInfos()
+            return (await _gameInfoRepository
+                .GetAllGameInfos())
                 .Select(gameInfo => gameInfo.Adapt(new GameInfoUdm()))
                 .ToList();
         }
 
-        public GameInfoUdm GetGameInfoByName(string name)
+        public async Task<GameInfoUdm> GetGameInfoByName(string name)
         {
-            return _gameInfoRepository.GetAllGameInfos()
+            return (await _gameInfoRepository.GetAllGameInfos())
                     .FirstOrDefault(x => x.Name.Equals(name.Normalize()))
                     .Adapt(new GameInfoUdm());
             }
 
-        public void AddGameInfo(GameInfoUdm gameInfo)
+        public async Task<GameInfoUdm> GetGameInfo(int id)
         {
-            _gameInfoRepository
+            return (await _gameInfoRepository.GetGameInfoById(id)).Adapt(new GameInfoUdm());
+        }
+
+        public async Task AddGameInfo(GameInfoUdm gameInfo)
+        {
+            await _gameInfoRepository
                 .AddGameInfo(gameInfo.Adapt<GameInfoEntity>());
         }
 
-        public void RemoveGameInfo(string name)
+        public async Task RemoveGameInfo(string name)
         {
-            _gameInfoRepository
+            await _gameInfoRepository
                 .RemoveGameInfo(name);
         }
 
-        public void UpdateGameInfo(GameInfoUdm gameInfo)
+        public async Task UpdateGameInfo(GameInfoUdm gameInfo)
         {
-            _gameInfoRepository.UpdateGameInfo(gameInfo.Adapt<GameInfoEntity>());
+            await _gameInfoRepository.UpdateGameInfo(gameInfo.Adapt<GameInfoEntity>());
         }
     }
 }

@@ -6,6 +6,7 @@ using GameInfoService.Rating.Domain.RepositoryInterfaces;
 using GameInfoService.Rating.Infrastructure.Context;
 using GameInfoService.Rating.Infrastructure.Repositories;
 using GameInfoService.Rating.Services;
+using GameInfoService.Rating.Services.Communication;
 using GameInfoService.Rating.Services.MappingInterfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +35,8 @@ namespace GameInfoService.Rating.App
 
             var connectionString = Configuration.GetConnectionString("RatingConnectionString");
             if (string.IsNullOrEmpty(connectionString)) throw new NullReferenceException("Connection string is empty");
+
+            services.AddSingleton<GameInfoCatalogCommunicationService>();
 
             services.AddTransient<IGameInfoRatingServiceMapper, GameInfoRatingServiceMapper>();
 

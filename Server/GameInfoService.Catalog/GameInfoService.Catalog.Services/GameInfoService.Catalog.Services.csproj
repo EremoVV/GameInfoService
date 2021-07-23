@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EasyNetQ" Version="6.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GameInfoService.Catalog.Domain\GameInfoService.Catalog.Domain.csproj" />
     <ProjectReference Include="..\GameInfoService.Catalog.Infrastructure\GameInfoService.Catalog.Infrastructure.csproj" />
   </ItemGroup>

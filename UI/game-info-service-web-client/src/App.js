@@ -20,11 +20,15 @@ import {
   makeStyles,
 } from "@material-ui/core";
 
+//Import Icons
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import InfoIcon from "@material-ui/icons/Info";
+import DeveloperBoardIcon from "@material-ui/icons/DeveloperBoard";
 
+//Import Data Utils
 import DateFnsUtils from "@date-io/date-fns";
 
+//Own Components
 import { authorizationCheck } from "./api/authorization/authorizationApi";
 import AuthorizationView from "./components/authorization/AuthorizationView";
 import SignInView, {
@@ -42,10 +46,7 @@ import ErrorBoundary from "./errorHandling/ErrorBoundary";
 import ErrorComp from "./components/error";
 import GameInfoUpdateView from "./components/catalog/GameInfoUpdateView";
 import GameInfoCreateView from "./components/catalog/GameInfoCreateView";
-import {
-  MuiPickersContext,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 
 // let clientCredentials = {
 //   clientId : "ReactWebClient",
@@ -144,6 +145,10 @@ function App() {
               <Button color="inherit" variant="outlined" href="/catalog">
                 <DashboardIcon />
                 <Typography>Catalog</Typography>
+              </Button>
+              <Button color="inherit" variant="outlined" href="/developers">
+                <DeveloperBoardIcon />
+                <Typography>Developers</Typography>
               </Button>
               <Button color="inherit" variant="outlined" href="/about">
                 <InfoIcon />

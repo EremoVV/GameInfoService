@@ -1,4 +1,5 @@
 using GameInfoService.Catalog.Domain.RepositoryInterfaces;
+using GameInfoService.Catalog.Infrastructure.Config;
 using GameInfoService.Catalog.Infrastructure.MappingInterfaces;
 using GameInfoService.Catalog.Infrastructure.Repositories;
 using GameInfoService.Catalog.Infrastructure.Repositories.Contexts;
@@ -38,7 +39,8 @@ namespace GameInfoService.Catalog.App
             services.AddTransient<IGameInfoRetrieveService, GameInfoRetrieveService>();
 
             services.AddTransient<IGameInfoMapper, GameInfoMapper>();
-            
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GameInfoService.Catalog", Version = "v1" });
@@ -62,6 +64,9 @@ namespace GameInfoService.Catalog.App
             //    options.Authority = "https://localhost:5001";
 
             //});
+
+            var rabbitMqConfiguration = Configuration.GetSection("RabbitMQ");
+            services.Configure<RabbitMqConfig>(rabbitMqConfiguration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

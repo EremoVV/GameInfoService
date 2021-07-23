@@ -1,11 +1,15 @@
 import axios from "axios";
+import CookeManager from "js-cookie-manager";
+
+const authorizationCookieKey = "Authorization";
+let cookieManager = new CookeManager();
 
 export default function setCurrentAuthorziationHeader() {
   axios.defaults.headers.common["Authorization"] = `Bearer ${getBearerToken()}`;
 }
 
 export function clearAuthorizationCookies() {
-  document.cookie = "Authorization=";
+  cookieManager.remove(authorizationCookieKey);
 }
 export function authorizationCheck() {
   if (getBearerToken() === "" || getBearerToken() == null) return false;
@@ -13,5 +17,5 @@ export function authorizationCheck() {
 }
 
 export function getBearerToken() {
-  return document.cookie.split("=")[1];
+  return cookieManager.get(authorizationCookieKey);
 }

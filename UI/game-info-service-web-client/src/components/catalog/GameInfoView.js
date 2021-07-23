@@ -58,7 +58,8 @@ export default function GameInfoView() {
   }, []);
   return (
     <Container>
-      <Typography>{gameData.picture}</Typography>
+      <Typography>{gameData.picturePath}</Typography>
+      <img src={gameData.picturePath} />
       <Box className={classes.container}>
         <Typography variant="h4">{gameData.name}</Typography>
         <Typography variant="h5">Rating</Typography>
