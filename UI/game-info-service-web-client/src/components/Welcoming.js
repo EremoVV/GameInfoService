@@ -1,15 +1,18 @@
-import {Grid, Typography} from '@material-ui/core';
+import { Container, Grid, makeStyles, Typography } from "@material-ui/core";
 
-export default function Welcoming(){
-    return(
-        <Grid container>
-          <Grid item>
-            <Grid container>
-              <Grid item>
-                <Typography variant="h2">Welcome to Game Info Service!</Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-    );
-  }
+const useStyles = makeStyles({
+  text: {
+    margin: "auto",
+  },
+});
+
+export default function Welcoming() {
+  const classes = useStyles();
+  return (
+    <Container>
+      <Typography className={classes.text} variant="h2">
+        Welcome to Game Info Service!
+      </Typography>
+    </Container>
+  );
+}

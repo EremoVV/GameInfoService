@@ -29,29 +29,12 @@ namespace GameInfoService.Catalog.App.Controllers
         private readonly IGameInfoRetrieveService _gameInfoService;
         private readonly IGameInfoMapper _gameInfoMapper;
 
-        private readonly IOptions<RabbitMqConfig> _rabbitConfig;
 
-        public CatalogController(IGameInfoRetrieveService gameInfoService, IGameInfoMapper gameInfoMapper, IOptions<RabbitMqConfig> rabbitConfig)
+        public CatalogController(IGameInfoRetrieveService gameInfoService, IGameInfoMapper gameInfoMapper)
         {
             _gameInfoService = gameInfoService;
             _gameInfoMapper = gameInfoMapper;
-            _rabbitConfig = rabbitConfig;
 
-            Console.WriteLine("Constructed!");
-
-            var brokerConnectionString = _rabbitConfig.Value.BrokerConnectionString;
-            if (string.IsNullOrEmpty(brokerConnectionString)) brokerConnectionString = "host=localhost";
-            var bus = RabbitHutch.CreateBus(brokerConnectionString);
-            bus.PubSub.SubscribeAsync<RatingUpdateDto>("CatalogSub", UpdateRating);
-            Console.WriteLine("Configured!");
-            }
-
-        private async Task UpdateRating(RatingUpdateDto ratingUpdate)
-        {
-            var updatedGameInfo = await _gameInfoService.GetGameInfo(ratingUpdate.GameId);
-            updatedGameInfo.Rating = ratingUpdate.GameRating;
-            await _gameInfoService.UpdateGameInfo(updatedGameInfo);
-            Console.WriteLine($"Updated {ratingUpdate.GameId} with value: {ratingUpdate.GameRating}!");
         }
 
         [HttpGet]
@@ -120,12 +103,6 @@ namespace GameInfoService.Catalog.App.Controllers
         {
             var token2 = HttpContext.Request.Headers[HeaderNames.Authorization];
             return Ok(JsonSerializer.Serialize(HttpContext.Request.Headers));
-        }
-
-        [HttpGet]
-        public ActionResult<string> GetRabbitConfig()
-        {
-            return _rabbitConfig.Value.BrokerConnectionString;
         }
     }
 }

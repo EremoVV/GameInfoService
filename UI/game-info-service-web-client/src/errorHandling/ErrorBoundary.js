@@ -17,7 +17,7 @@ export default class ErrorBoundary extends React.Component {
   }
 
   render() {
-    console.log(this.state.error);
+    console.log(this.state.hasError);
     console.log(this.state.errorInfo);
     if (this.state.hasError) {
       return (
@@ -27,6 +27,11 @@ export default class ErrorBoundary extends React.Component {
         </div>
       );
     }
+    return (
+      <div>
+        <h3>Error boundary child</h3>
+      </div>
+    );
     return this.props.children;
   }
 }

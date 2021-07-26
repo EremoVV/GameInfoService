@@ -104,9 +104,7 @@ function AppRouting() {
           <ProfileView name="user" />
         </Route>
         <Route path="/error">
-          <ErrorBoundary>
-            <ErrorComp />
-          </ErrorBoundary>
+          <ErrorComp />
         </Route>
         <Redirect to="/about" />
       </Switch>
@@ -123,9 +121,7 @@ function AppRouting() {
           <RegisterViewFormik />
         </Route>
         <Route path="/error">
-          <ErrorBoundary>
-            <ErrorComp />
-          </ErrorBoundary>
+          <ErrorComp />
         </Route>
         <Redirect to="/about" />
       </Switch>

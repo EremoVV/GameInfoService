@@ -23,7 +23,17 @@ import RatingView from "../common/RatingView";
 
 const useStyles = makeStyles({
   container: {
-    justifyContent: "center",
+    display: "flex",
+  },
+  gameInfo: {
+    marginLeft: 10,
+    marginTop: 50,
+    padding: 5,
+  },
+  image: {
+    margin: "50px 50px 50px 50px",
+    width: 800,
+    height: 500,
   },
 });
 
@@ -54,18 +64,25 @@ export default function GameInfoView() {
       .then((response) => {
         setGameData(response.data);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
   return (
-    <Container>
-      <Typography>{gameData.picturePath}</Typography>
-      <img src={gameData.picturePath} />
-      <Box className={classes.container}>
+    <Container className={classes.container}>
+      <img
+        className={classes.image}
+        alt={gameData.picturePath}
+        src={`http://localhost:8080/Images/${gameData.picturePath}`}
+      />
+      <Box className={classes.gameInfo}>
         <Typography variant="h4">{gameData.name}</Typography>
         <Typography variant="h5">Rating</Typography>
         <RatingView variant="square" value={gameData.rating} />
         <Typography variant="h5">{gameData.description}</Typography>
-        <Typography variant="h6">{gameData.releaseDate}</Typography>
+        <Typography variant="h6">
+          {new Date(gameData.releaseDate).toDateString()}
+        </Typography>
         <Typography>Rate this game!</Typography>
         <Rating
           size="large"

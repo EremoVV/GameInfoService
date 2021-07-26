@@ -13,15 +13,17 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 
 import GameInfoCard from "./GameInfoCard";
+import { GameInfoCardCustom } from "./GameInfoCard";
 import {
   gameInfoListGetRequest,
   gameInfoDeleteRequest,
-  userNameRequest,
 } from "../../api/catalog/catalogApi";
 import {
   authorizationCheck,
   clearAuthorizationCookies,
 } from "../../api/authorization/authorizationApi";
+
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 const axios = require(`axios`).default;
 axios.defaults.baseURL = "https://localhost:44361/api/";
@@ -34,12 +36,25 @@ const useStyles = makeStyles({
   },
   addButton: {
     // backgroundColor: "#1e272e",
-    height: "300px",
+    height: "264px",
     width: "296px",
   },
   addIcon: {
-    marginLeft: "auto",
-    marginRight: "auto",
+    position: "relative",
+    marginLeft: "47%",
+    marginTop: "47%",
+  },
+  wishlistButton: {
+    background: "linear-gradient(45deg, #e67e22 30%, #e74c3c 90%)",
+    marginRight: 5,
+    color: "white",
+  },
+  buttonsBox: {
+    marginLeft: "5%",
+  },
+  crudButtonBox: {
+    marginTop: 5,
+    paddingTop: 5,
   },
 });
 
@@ -60,14 +75,12 @@ function loginRedirect() {
   window.location.replace("/login");
 }
 
-function CreateButton(props) {
+function AddGameInfoButton(props) {
   if (authorizationCheck()) {
     return (
       <CardActionArea className={props.className} href="catalog/create">
         <Card className={props.className}>
-          <Box display="flex">
-            <AddIcon className={props.iconClassname} />
-          </Box>
+          <AddIcon className={props.iconClassname} />
         </Card>
       </CardActionArea>
     );
@@ -91,6 +104,8 @@ export default function CatalogView() {
             clearAuthorizationCookies();
             loginRedirect();
           }
+        } else {
+          throw error;
         }
       });
   }, []);
@@ -100,30 +115,47 @@ export default function CatalogView() {
       <Typography variant="h2">Games:</Typography>
       <Grid container spacing={2}>
         <Grid item xs>
-          <CreateButton className={classes.addButton} />
+          <AddGameInfoButton
+            className={classes.addButton}
+            iconClassname={classes.addIcon}
+          />
         </Grid>
         {catalog.map(function (game) {
           return (
-            <Grid item sm={3} id={game.id}>
+            <Grid style={{ position: "relative" }} item sm={3} key={game.id}>
               <GameInfoCard
                 gameImageSource={game.picturePath}
                 gameName={game.name}
                 gameRating={game.rating}
               />
-              <Button>Add to wishlist</Button>
-              <ButtonGroup>
-                <Button color="primary" href={`/catalog/update/${game.name}`}>
-                  Update
-                </Button>
-                <Button
-                  color="secondary"
-                  onClick={() => {
-                    sendDeleteRequest(game.name);
-                  }}
+              {/* <MoreVertIcon
+                style={{
+                  position: "absolute",
+                  top: "75%",
+                  left: "85%",
+                  // color: "#F8F8FF",
+                }}
+                fontSize="large"
+              /> */}
+              <Box className={classes.buttonsBox}>
+                <Button className={classes.wishlistButton}>Wishlist</Button>
+                <ButtonGroup
+                  variant="contained"
+                  className={classes.crudButtonBox}
                 >
-                  Remove
-                </Button>
-              </ButtonGroup>
+                  <Button color="primary" href={`/catalog/update/${game.name}`}>
+                    Update
+                  </Button>
+                  <Button
+                    color="secondary"
+                    onClick={() => {
+                      sendDeleteRequest(game.name);
+                    }}
+                  >
+                    Remove
+                  </Button>
+                </ButtonGroup>
+              </Box>
             </Grid>
           );
         })}
