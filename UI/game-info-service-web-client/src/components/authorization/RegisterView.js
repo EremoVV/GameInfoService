@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Container,
-  Grid,
-  TextField,
-  makeStyles,
-} from "@material-ui/core";
+import { Button, Grid, TextField, makeStyles } from "@material-ui/core";
 import { registerUserRequest } from "../../api/identity/identityApi";
 import { useFormik } from "formik";
 import { DatePicker } from "@material-ui/pickers";
@@ -25,12 +19,18 @@ const useStyles = makeStyles({
   form: {
     display: "flex",
     flexDirection: "column",
+    paddingTop: "5%",
+    margin: "auto",
+    width: "25%",
   },
   textField: {
     marginBottom: "20px",
   },
   birthdayDateField: {
     marginBottom: "20px",
+  },
+  button: {
+    backgroundColor: "#1e272e",
   },
 });
 
@@ -47,7 +47,7 @@ const validationSchema = yup.object({
     .required("Please confirm password"),
 });
 
-export function RegisterViewFormik() {
+export default function RegisterView() {
   const classes = useStyles();
   const formik = useFormik({
     initialValues: {
@@ -73,75 +73,74 @@ export function RegisterViewFormik() {
   });
 
   return (
-    <Container>
-      <form className={classes.form} onSubmit={formik.handleSubmit}>
-        <TextField
-          required
-          className={classes.textField}
-          id="username"
-          label="Username:"
-          value={formik.values.username}
-          onChange={formik.handleChange}
-          error={formik.touched.username && Boolean(formik.errors.username)}
-          helperText={formik.touched.username && formik.errors.username}
-        />
-        <TextField
-          required
-          className={classes.textField}
-          id="email"
-          label="Email:"
-          type="email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
-        />
-        <TextField
-          required
-          className={classes.textField}
-          id="password"
-          label="Password:"
-          type="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-        />
-        <TextField
-          required
-          className={classes.textField}
-          id="confirmPassword"
-          label="Confirm password:"
-          type="password"
-          value={formik.values.confirmPassword}
-          onChange={formik.handleChange}
-          error={
-            formik.touched.confirmPassword &&
-            Boolean(formik.errors.confirmPassword)
-          }
-          helperText={
-            formik.touched.confirmPassword && formik.errors.confirmPassword
-          }
-        />
-        <TextField
-          className={classes.textField}
-          id="country"
-          label="Contry:"
-          value={formik.values.country}
-          onChange={formik.handleChange}
-          error={formik.touched.country && Boolean(formik.errors.country)}
-          helperText={formik.touched.country && formik.errors.country}
-        />
-        <TextField
-          className={classes.textField}
-          id="city"
-          label="City:"
-          value={formik.values.city}
-          onChange={formik.handleChange}
-          error={formik.touched.city && Boolean(formik.errors.city)}
-          helperText={formik.touched.city && formik.errors.city}
-        />
-        {/* <TextField
+    <form className={classes.form} onSubmit={formik.handleSubmit}>
+      <TextField
+        required
+        className={classes.textField}
+        id="username"
+        label="Username:"
+        value={formik.values.username}
+        onChange={formik.handleChange}
+        error={formik.touched.username && Boolean(formik.errors.username)}
+        helperText={formik.touched.username && formik.errors.username}
+      />
+      <TextField
+        required
+        className={classes.textField}
+        id="email"
+        label="Email:"
+        type="email"
+        value={formik.values.email}
+        onChange={formik.handleChange}
+        error={formik.touched.email && Boolean(formik.errors.email)}
+        helperText={formik.touched.email && formik.errors.email}
+      />
+      <TextField
+        required
+        className={classes.textField}
+        id="password"
+        label="Password:"
+        type="password"
+        value={formik.values.password}
+        onChange={formik.handleChange}
+        error={formik.touched.password && Boolean(formik.errors.password)}
+        helperText={formik.touched.password && formik.errors.password}
+      />
+      <TextField
+        required
+        className={classes.textField}
+        id="confirmPassword"
+        label="Confirm password:"
+        type="password"
+        value={formik.values.confirmPassword}
+        onChange={formik.handleChange}
+        error={
+          formik.touched.confirmPassword &&
+          Boolean(formik.errors.confirmPassword)
+        }
+        helperText={
+          formik.touched.confirmPassword && formik.errors.confirmPassword
+        }
+      />
+      <TextField
+        className={classes.textField}
+        id="country"
+        label="Contry:"
+        value={formik.values.country}
+        onChange={formik.handleChange}
+        error={formik.touched.country && Boolean(formik.errors.country)}
+        helperText={formik.touched.country && formik.errors.country}
+      />
+      <TextField
+        className={classes.textField}
+        id="city"
+        label="City:"
+        value={formik.values.city}
+        onChange={formik.handleChange}
+        error={formik.touched.city && Boolean(formik.errors.city)}
+        helperText={formik.touched.city && formik.errors.city}
+      />
+      {/* <TextField
           className={classes.textField}
           id="birthdayDate"
           type="date"
@@ -152,119 +151,31 @@ export function RegisterViewFormik() {
           }
           helperText={formik.touched.birthdayDate && formik.errors.birthdayDate}
         /> */}
-        <DatePicker
-          className={classes.birthdayDateField}
-          id="birthdayDate"
-          label="Birthday Date:"
-          openTo="year"
-          format="dd/MM/yyyy"
-          views={["year", "month", "date"]}
-          value={formik.values.gameReleaseDate2}
-          onChange={(data) => {
-            formik.setFieldValue("gameReleaseDate", data);
-            console.log(data);
-          }}
-          error={
-            formik.touched.birthdayDate && Boolean(formik.errors.birthdayDate)
-          }
-          helperText={formik.touched.birthdayDate && formik.errors.birthdayDate}
-        />
-        <Button variant="contained" color="primary" type="submit">
-          Register user
-        </Button>
-      </form>
-    </Container>
-  );
-}
-
-export default function RegisterView(props) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("example@email.com");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
-  const [birthdayDate, setBirthdayDate] = useState(new Date());
-
-  return (
-    <Grid
-      container
-      direction="column"
-      alignItems="center"
-      justifycontent="center"
-      spacing={2}
-    >
-      <Grid item>
-        <TextField
-          id="UsernameField"
-          label="Username:"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </Grid>
-      <Grid item>
-        <TextField
-          id="EmailField"
-          type="email"
-          label="Email:"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </Grid>
-      <Grid item>
-        <TextField
-          id="PasswordField"
-          type="password"
-          label="Password:"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </Grid>
-      <Grid item>
-        <TextField
-          id="PasswordConfirmField"
-          type="password"
-          label="Confirm password:"
-        />
-      </Grid>
-      <Grid item>
-        <TextField
-          id="CountryField"
-          label="County:"
-          onChange={(e) => setCountry(e.target.value)}
-        />
-      </Grid>
-      <Grid item>
-        <TextField
-          id="CityField"
-          label="City:"
-          onChange={(e) => setCity(e.target.value)}
-        />
-      </Grid>
-      <Grid item>
-        <TextField
-          id="BirthdayDateField"
-          label="Birthday:"
-          type="date"
-          defaultValue="2000-01-01"
-          onChange={(e) => setBirthdayDate(e.target.value)}
-        />
-      </Grid>
-      <Grid item>
-        <Button
-          name="Confirm"
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            registerUser(
-              username,
-              email,
-              password,
-              country,
-              city,
-              birthdayDate
-            );
-          }}
-        >
-          Register
-        </Button>
-      </Grid>
-    </Grid>
+      <DatePicker
+        className={classes.birthdayDateField}
+        id="birthdayDate"
+        label="Birthday Date:"
+        openTo="year"
+        format="dd/MM/yyyy"
+        views={["year", "month", "date"]}
+        value={formik.values.gameReleaseDate2}
+        onChange={(data) => {
+          formik.setFieldValue("gameReleaseDate", data);
+          console.log(data);
+        }}
+        error={
+          formik.touched.birthdayDate && Boolean(formik.errors.birthdayDate)
+        }
+        helperText={formik.touched.birthdayDate && formik.errors.birthdayDate}
+      />
+      <Button
+        className={classes.button}
+        variant="contained"
+        color="primary"
+        type="submit"
+      >
+        Register
+      </Button>
+    </form>
   );
 }

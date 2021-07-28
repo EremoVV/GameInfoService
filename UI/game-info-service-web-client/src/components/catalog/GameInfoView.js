@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Container, Grid, makeStyles, Typography } from "@material-ui/core";
+import { Container, makeStyles, Typography } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import { Box } from "@material-ui/core";
 
@@ -24,6 +24,7 @@ import RatingView from "../common/RatingView";
 const useStyles = makeStyles({
   container: {
     display: "flex",
+    marginRight: "50%",
   },
   gameInfo: {
     marginLeft: 10,
@@ -32,23 +33,23 @@ const useStyles = makeStyles({
   },
   image: {
     margin: "50px 50px 50px 50px",
-    width: 800,
-    height: 500,
+    width: 900,
+    height: 508,
   },
 });
 
 const ratingLabels = {
   0: "",
-  1: "Awful",
-  2: "Waste of time",
-  3: "Bad",
-  4: "Meh",
-  5: "Have problems",
-  6: "Not bad",
-  7: "Good",
-  8: "Nice",
-  9: "Awesome!",
-  10: "Masterpiece!",
+  1: " 1/10 Awful",
+  2: " 2/10 Waste of time",
+  3: " 3/10 Bad",
+  4: " 4/10 Meh",
+  5: " 5/10 5Have problems",
+  6: " 6/10 Not bad",
+  7: " 7/10 Good",
+  8: " 8/10 Nice",
+  9: " 9/10 Awesome!",
+  10: " 10/10 Masterpiece!",
 };
 
 export default function GameInfoView() {

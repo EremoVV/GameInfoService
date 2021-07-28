@@ -7,14 +7,12 @@ export async function gameInfoListGetRequest() {
 }
 
 export async function gameInfoGetRequest(gameName) {
-  setCurrentAuthorizationHeader();
   return await axios.get(`catalog/Catalog/GetGameInfoByName`, {
     params: { name: gameName },
   });
 }
 
 export async function gameInfoDeleteRequest(gameName) {
-  setCurrentAuthorizationHeader();
   return await axios.delete("catalog/Catalog/DeleteInfo", {
     params: { name: gameName },
   });
@@ -26,7 +24,6 @@ export async function gameInfoCreateRequest(
   gameRating,
   gameReleaseDate
 ) {
-  setCurrentAuthorizationHeader();
   return await axios.post("catalog/Catalog/AddGameInfo", {
     Name: gameName,
     Description: gameDescriprion,
@@ -42,7 +39,6 @@ export async function gameInfoUpdateRequest(
   gameRating,
   gameReleaseDate
 ) {
-  setCurrentAuthorizationHeader();
   return await axios.post("catalog/Catalog/UpdateGameInfo", {
     Id: gameId,
     Name: gameName,
@@ -53,6 +49,5 @@ export async function gameInfoUpdateRequest(
 }
 
 export async function userNameRequest() {
-  setCurrentAuthorizationHeader();
   return await axios.get("catalog/Catalog/Header");
 }

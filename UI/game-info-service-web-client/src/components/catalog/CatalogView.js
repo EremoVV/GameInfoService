@@ -34,6 +34,9 @@ const useStyles = makeStyles({
     marginLeft: "20px",
     marginRight: "20px",
   },
+  gameInfoCardContainer: {
+    margin: "auto",
+  },
   addButton: {
     // backgroundColor: "#1e272e",
     height: "264px",
@@ -42,7 +45,7 @@ const useStyles = makeStyles({
   addIcon: {
     position: "relative",
     marginLeft: "47%",
-    marginTop: "47%",
+    marginTop: "40%",
   },
   wishlistButton: {
     background: "linear-gradient(45deg, #e67e22 30%, #e74c3c 90%)",
@@ -112,9 +115,8 @@ export default function CatalogView() {
 
   return (
     <Container>
-      <Typography variant="h2">Games:</Typography>
-      <Grid container spacing={2}>
-        <Grid item xs>
+      <Grid className={classes.gameInfoCardContainer} container spacing={2}>
+        <Grid item md>
           <AddGameInfoButton
             className={classes.addButton}
             iconClassname={classes.addIcon}
@@ -122,7 +124,7 @@ export default function CatalogView() {
         </Grid>
         {catalog.map(function (game) {
           return (
-            <Grid style={{ position: "relative" }} item sm={3} key={game.id}>
+            <Grid style={{ position: "relative" }} item lg={3} key={game.id}>
               <GameInfoCard
                 gameImageSource={game.picturePath}
                 gameName={game.name}

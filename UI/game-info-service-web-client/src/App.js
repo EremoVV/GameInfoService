@@ -11,12 +11,12 @@ import {
 } from "react-router-dom";
 
 import {
-  Typography,
+  Box,
   Button,
   ButtonGroup,
   AppBar,
   Toolbar,
-  Grid,
+  Typography,
   makeStyles,
 } from "@material-ui/core";
 
@@ -29,14 +29,13 @@ import DeveloperBoardIcon from "@material-ui/icons/DeveloperBoard";
 import DateFnsUtils from "@date-io/date-fns";
 
 //Own Components
-import { authorizationCheck } from "./api/authorization/authorizationApi";
+import {
+  authorizationCheck,
+  getBearerToken,
+} from "./api/authorization/authorizationApi";
 import AuthorizationView from "./components/authorization/AuthorizationView";
-import SignInView, {
-  SignInFormikView,
-} from "./components/authorization/SignInView";
-import RegisterView, {
-  RegisterViewFormik,
-} from "./components/authorization/RegisterView";
+import SignInView from "./components/authorization/SignInView";
+import RegisterView from "./components/authorization/RegisterView";
 import CatalogView from "./components/catalog/CatalogView";
 import ProfileView from "./components/profile/ProfileView";
 import GameInfoView from "./components/catalog/GameInfoView";
@@ -81,10 +80,18 @@ const useStyles = makeStyles({
   appBar: {
     backgroundColor: "#1e272e",
   },
+  navigationButtons: {
+    paddingLeft: "35%",
+  },
 });
 
 const axios = require(`axios`).default;
 axios.defaults.baseURL = "https://localhost:44361/api/";
+
+axios.interceptors.request.use((request) => {
+  request.headers["Authorization"] = `Bearer ${getBearerToken()}`;
+  return request;
+});
 
 function GetGameInfoView() {
   let { name } = useParams();
@@ -115,10 +122,10 @@ function AppRouting() {
         <Route path="/about" component={Welcoming} />
         <Route exact path="/catalog" strict component={CatalogView} />
         <Route path="/login">
-          <SignInFormikView />
+          <SignInView />
         </Route>
         <Route path="/register">
-          <RegisterViewFormik />
+          <RegisterView />
         </Route>
         <Route path="/error">
           <ErrorComp />
@@ -136,17 +143,25 @@ function App() {
       <BrowserRouter>
         <AppBar className={classes.appBar} position="static">
           <Toolbar>
-            <Typography>Game Info Service</Typography>
-            <ButtonGroup variant="text" size="large">
-              <Button color="inherit" variant="outlined" href="/catalog">
+            <Box style={{ width: 600 }}>
+              <Button color="inherit" href="/catalog">
+                <Typography>Game Info Service</Typography>
+              </Button>
+            </Box>
+            <ButtonGroup
+              className={classes.navigationButtons}
+              variant="text"
+              size="large"
+            >
+              <Button color="inherit" href="/catalog">
                 <DashboardIcon />
                 <Typography>Catalog</Typography>
               </Button>
-              <Button color="inherit" variant="outlined" href="/developers">
+              <Button color="inherit" href="/developers">
                 <DeveloperBoardIcon />
                 <Typography>Developers</Typography>
               </Button>
-              <Button color="inherit" variant="outlined" href="/about">
+              <Button color="inherit" href="/about">
                 <InfoIcon />
                 <Typography>About</Typography>
               </Button>

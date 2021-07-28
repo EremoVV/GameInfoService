@@ -17,9 +17,9 @@ const useStyles = makeStyles({
   rating: {
     marginLeft: 20,
   },
-  image: {
-    height: 200,
-    width: 360,
+  cardMedia: {
+    height: 190,
+    width: 300,
   },
   cardContent: {
     display: "flex",
@@ -45,14 +45,14 @@ export default function GameInfoCard(props) {
     <CardActionArea href={`/catalog/${props.gameName}`}>
       <Card className={classes.card} style={{ position: "relative" }}>
         <CardMedia
-          className={classes.image}
+          className={classes.cardMedia}
           image={`http://localhost:8080/Images/${props.gameImageSource}`}
         />
         <CardContent className={classes.cardContent}>
-          <Typography className={classes.gameTitle}>
+          <Typography className={classes.gameTitle} variant="h6">
             {props.gameName}
           </Typography>
-          <Box style={{ position: "absolute", top: "55%", left: "80%" }}>
+          <Box style={{ position: "absolute", top: "53%", left: "83%" }}>
             <RatingView className={classes.rating} value={props.gameRating} />
           </Box>
         </CardContent>

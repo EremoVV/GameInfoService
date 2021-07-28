@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  TextField,
-  makeStyles,
-  ButtonGroup,
-} from "@material-ui/core";
+import { Box, Button, TextField, makeStyles } from "@material-ui/core";
 import * as yup from "yup";
 import { useFormik } from "formik";
 
@@ -24,18 +16,20 @@ const useStyles = makeStyles({
     display: "flex",
     alignItems: "center",
     flexDirection: "column",
+    paddingTop: "5%",
   },
   textfield: {
     marginBottom: "10px",
   },
   button: {
+    backgroundColor: "#1e272e",
     marginBottom: "5px",
     marginLeft: "5px",
     marginRight: "5px",
   },
 });
 
-export function SignInFormikView() {
+export default function SignInView() {
   const classes = useStyles();
   const formik = useFormik({
     initialValues: {
@@ -46,48 +40,46 @@ export function SignInFormikView() {
     onSubmit: (values) => sendLogin(values.username, values.password),
   });
   return (
-    <Container className={classes.container}>
-      <form className={classes.form} onSubmit={formik.handleSubmit}>
-        <TextField
-          className={classes.textfield}
-          id="username"
-          label="Username:"
-          value={formik.values.username}
-          onChange={formik.handleChange}
-          error={formik.touched.username && Boolean(formik.errors.username)}
-          helperText={formik.touched.username && formik.errors.username}
-        />
-        <TextField
-          className={classes.textfield}
-          id="password"
-          type="password"
-          label="Password:"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-        />
-        <Box display="flex">
-          <Button
-            className={classes.button}
-            name="Confirm"
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
-            Log In
-          </Button>
-          <Button
-            className={classes.button}
-            href="/register"
-            variant="contained"
-            color="primary"
-          >
-            Register
-          </Button>
-        </Box>
-      </form>
-    </Container>
+    <form className={classes.form} onSubmit={formik.handleSubmit}>
+      <TextField
+        className={classes.textfield}
+        id="username"
+        label="Username:"
+        value={formik.values.username}
+        onChange={formik.handleChange}
+        error={formik.touched.username && Boolean(formik.errors.username)}
+        helperText={formik.touched.username && formik.errors.username}
+      />
+      <TextField
+        className={classes.textfield}
+        id="password"
+        type="password"
+        label="Password:"
+        value={formik.values.password}
+        onChange={formik.handleChange}
+        error={formik.touched.password && Boolean(formik.errors.password)}
+        helperText={formik.touched.password && formik.errors.password}
+      />
+      <Box display="flex">
+        <Button
+          className={classes.button}
+          name="Confirm"
+          variant="contained"
+          color="primary"
+          type="submit"
+        >
+          Log In
+        </Button>
+        <Button
+          className={classes.button}
+          href="/register"
+          variant="contained"
+          color="primary"
+        >
+          Register
+        </Button>
+      </Box>
+    </form>
   );
 }
 
