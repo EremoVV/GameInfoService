@@ -45,7 +45,6 @@ namespace GameInfoService.Catalog.App
 
             services.AddHostedService<GameInfoRatingUpdatedCommunicationServiceHostedService>();
 
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GameInfoService.Catalog", Version = "v1" });
