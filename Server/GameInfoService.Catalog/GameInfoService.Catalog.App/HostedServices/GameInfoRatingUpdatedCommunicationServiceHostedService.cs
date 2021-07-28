@@ -1,5 +1,6 @@
 ﻿using GameInfoService.Catalog.Domain.Models.ModuleCommunication.Rating;
 using GameInfoService.Catalog.Services;
+using GameInfoService.Catalog.Services.GameInfoRatingCommunicationServices;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
@@ -17,34 +18,15 @@ namespace GameInfoService.Catalog.App.HostedServices
     public class GameInfoRatingUpdatedCommunicationServiceHostedService : BackgroundService
     {
 
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        public GameInfoRatingUpdatedCommunicationServiceHostedService(IServiceScopeFactory serviceScopeFactory)
+        private readonly IGameInfoRatingUpdatedCommunicationService _gameInfoRatingUpdatedCommunicationService;
+        public GameInfoRatingUpdatedCommunicationServiceHostedService(IGameInfoRatingUpdatedCommunicationService gameInfoRatingUpdatedCommunicationService)
         {
-            _serviceScopeFactory = serviceScopeFactory;
+            _gameInfoRatingUpdatedCommunicationService = gameInfoRatingUpdatedCommunicationService;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var factory = new ConnectionFactory();
-            var connection = factory.CreateConnection();
-            var channel = connection.CreateModel();
-            channel.QueueDeclare(queue: "UpdateRatingQueue", false, false, false, null);
-            var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += async (ch, message) =>
-            {
-                using(var scope = _serviceScopeFactory.CreateScope())
-                {
-                    var content = Encoding.UTF8.GetString(message.Body.ToArray());
-                    var updateInfo = JsonSerializer.Deserialize<UpdateRatingDto>(content);
-                    var gameInfoRetrieveService = scope.ServiceProvider.GetRequiredService<IGameInfoRetrieveService>();
-                    await gameInfoRetrieveService.UpdateGameInfoRating(updateInfo.GameId, updateInfo.GameRating);
-                    Console.WriteLine($"Updated {updateInfo.GameId} with rating {updateInfo.GameRating}");
-                }
-
-                //channel.BasicAck(message.DeliveryTag, false);
-            };
-
-            channel.BasicConsume("UpdateRatingQueue", true, consumer);
+            _gameInfoRatingUpdatedCommunicationService.ConsumeUpdatedRating();
             return Task.CompletedTask;
         }
     }

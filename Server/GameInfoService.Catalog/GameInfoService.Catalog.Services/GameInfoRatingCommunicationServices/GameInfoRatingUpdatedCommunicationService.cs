@@ -1,4 +1,5 @@
 ﻿using GameInfoService.Catalog.Domain.Models.ModuleCommunication.Rating;
+using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
@@ -12,10 +13,10 @@ namespace GameInfoService.Catalog.Services.GameInfoRatingCommunicationServices
 {
     public class GameInfoRatingUpdatedCommunicationService : IGameInfoRatingUpdatedCommunicationService
     {
-        private readonly IGameInfoRetrieveService _gameInfoRetrieveService;
-        public GameInfoRatingUpdatedCommunicationService(IGameInfoRetrieveService gameInfoRetrieveService)
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+        public GameInfoRatingUpdatedCommunicationService(IServiceScopeFactory serviceScopeFactory)
         {
-            _gameInfoRetrieveService = gameInfoRetrieveService;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         public async Task ConsumeUpdatedRating()
@@ -27,10 +28,14 @@ namespace GameInfoService.Catalog.Services.GameInfoRatingCommunicationServices
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += async (ch, message) =>
             {
-                var content = Encoding.UTF8.GetString(message.Body.ToArray());
-                var updateInfo = JsonSerializer.Deserialize<UpdateRatingDto>(content);
-                await _gameInfoRetrieveService.UpdateGameInfoRating(updateInfo.GameId, updateInfo.GameRating);
-                Console.WriteLine($"Updated {updateInfo.GameId} with rating {updateInfo.GameRating}");
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var content = Encoding.UTF8.GetString(message.Body.ToArray());
+                    var updateInfo = JsonSerializer.Deserialize<UpdateRatingDto>(content);
+                    var gameInfoRetrieveService = scope.ServiceProvider.GetRequiredService<IGameInfoRetrieveService>();
+                    await gameInfoRetrieveService.UpdateGameInfoRating(updateInfo.GameId, updateInfo.GameRating);
+                    Console.WriteLine($"Updated {updateInfo.GameId} with rating {updateInfo.GameRating}");
+                }
 
                 //channel.BasicAck(message.DeliveryTag, false);
             };
