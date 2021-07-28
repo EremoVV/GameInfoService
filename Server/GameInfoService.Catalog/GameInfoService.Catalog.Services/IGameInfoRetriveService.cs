@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameInfoService.Catalog.Services.Services
+namespace GameInfoService.Catalog.Services
 {
     public interface IGameInfoRetrieveService
     {
@@ -15,5 +15,6 @@ namespace GameInfoService.Catalog.Services.Services
         Task AddGameInfo(GameInfoUdm gameInfo);
         Task RemoveGameInfo(string gameInfo);
         Task UpdateGameInfo(GameInfoUdm gameInfo);
+        Task UpdateGameInfoRating(int gameInfoId, double gameInfoRating);
     }
 }

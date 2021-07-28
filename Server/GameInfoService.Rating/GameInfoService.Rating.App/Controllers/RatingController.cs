@@ -6,7 +6,6 @@ using GameInfoService.Rating.App.MappingInterfaces;
 using GameInfoService.Rating.App.Middleware.ExceptionHandling.CustomExceptions;
 using GameInfoService.Rating.Domain.Models.DTOs;
 using GameInfoService.Rating.Services;
-using GameInfoService.Rating.Services.Communication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameInfoService.Rating.App.Controllers
@@ -17,13 +16,11 @@ namespace GameInfoService.Rating.App.Controllers
     {
         private readonly IGameInfoRatingService _gameInfoRatingService;
         private readonly IGameInfoRatingMapper _gameInfoRatingMapper;
-        private readonly GameInfoCatalogCommunicationService _gameInfoCatalogCommunicationService;
 
-        public RatingController(IGameInfoRatingService gameInfoRatingService, IGameInfoRatingMapper gameInfoRatingMapper, GameInfoCatalogCommunicationService catalogCommunicationService)
+        public RatingController(IGameInfoRatingService gameInfoRatingService, IGameInfoRatingMapper gameInfoRatingMapper)
         {
             _gameInfoRatingService = gameInfoRatingService;
             _gameInfoRatingMapper = gameInfoRatingMapper;
-            _gameInfoCatalogCommunicationService = catalogCommunicationService;
         }
         [HttpPost]
         public async Task<ActionResult<string>> AddRating(GameInfoRatingCreateDto gameInfoRatingDto)
@@ -70,20 +67,6 @@ namespace GameInfoService.Rating.App.Controllers
         {
             await _gameInfoRatingService.Error();
             return Ok("Error");
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<string>> UpdateRatingSendMessage(UpdateRatingDto updateRating)
-        {
-            try
-            {
-                await _gameInfoCatalogCommunicationService.SendUpdateRatingMessage(updateRating);
-                return Ok("Updated");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
         }
     }
 }

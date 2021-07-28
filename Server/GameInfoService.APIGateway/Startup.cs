@@ -32,6 +32,8 @@ namespace GameInfoService.APIGateway
 
             services.AddOcelot();
 
+
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
@@ -42,7 +44,6 @@ namespace GameInfoService.APIGateway
                             .AllowAnyOrigin();
                     });
             });
-
 
             services.AddSwaggerGen(c =>
             {

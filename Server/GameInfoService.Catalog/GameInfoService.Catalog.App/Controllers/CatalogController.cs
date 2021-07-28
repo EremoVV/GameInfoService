@@ -5,13 +5,11 @@ using System.IO;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using EasyNetQ;
 using GameInfoService.Catalog.Domain.Models.DTOs;
 using GameInfoService.Catalog.Infrastructure.Config;
 using GameInfoService.Catalog.Infrastructure.MappingInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using GameInfoService.Catalog.Services.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
@@ -19,6 +17,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using RabbitMQ.Client;
+using System.Text;
+using GameInfoService.Catalog.Services;
 
 namespace GameInfoService.Catalog.App.Controllers
 {
@@ -104,5 +105,16 @@ namespace GameInfoService.Catalog.App.Controllers
             var token2 = HttpContext.Request.Headers[HeaderNames.Authorization];
             return Ok(JsonSerializer.Serialize(HttpContext.Request.Headers));
         }
+        //[HttpGet]
+        //public ActionResult<string> RabbitMQ(string message)
+        //{
+        //    ConnectionFactory factory = new ConnectionFactory();
+        //    var body = Encoding.UTF8.GetBytes(message);
+        //    IConnection conn = factory.CreateConnection();
+        //    IModel channel = conn.CreateModel();
+        //    channel.QueueDeclare(queue: "MyTestQueue", false, false, false, null);
+        //    channel.BasicPublish(exchange: "", routingKey: "MyTestQueue", basicProperties: null, body: body);
+        //    return Ok("Sent");
+        //}
     }
 }

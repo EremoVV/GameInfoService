@@ -36,7 +36,6 @@ namespace GameInfoService.Catalog.Infrastructure.MappingInterfaces
         {
             return p3 == null ? null : new GameInfoUdm()
             {
-                Id = p3.Id,
                 Name = p3.Name,
                 Description = p3.Description,
                 Rating = p3.Rating,

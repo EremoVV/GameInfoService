@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using GameInfoService.Rating.Domain.RepositoryInterfaces;
 using GameInfoService.Rating.Services.MappingInterfaces;
+using GameInfoService.Rating.Services.ModuleCommunication;
+using GameInfoService.Rating.Domain.Models.DTOs;
 
 namespace GameInfoService.Rating.Services
 {
@@ -13,15 +15,20 @@ namespace GameInfoService.Rating.Services
     {
         private readonly IGameInfoRatingRepository _gameInfoRatingRepository;
         private readonly IGameInfoRatingServiceMapper _gameInfoRatingServiceMapper;
+        private readonly IRatingUpdatedQueueSender _ratingUpdatedQueueSender;
 
-        public GameInfoRatingService(IGameInfoRatingRepository gameInfoRatingRepository, IGameInfoRatingServiceMapper gameInfoRatingServiceMapper)
+        public GameInfoRatingService(IGameInfoRatingRepository gameInfoRatingRepository, 
+            IGameInfoRatingServiceMapper gameInfoRatingServiceMapper, 
+            IRatingUpdatedQueueSender ratingUpdatedQueueSender)
         {
             _gameInfoRatingRepository = gameInfoRatingRepository;
             _gameInfoRatingServiceMapper = gameInfoRatingServiceMapper;
+            _ratingUpdatedQueueSender = ratingUpdatedQueueSender;
         }
         public async Task AddGameInfoRating(GameInfoRatingUdm gameInfoRatingUdm)
         {
             await _gameInfoRatingRepository.CreateAsync(_gameInfoRatingServiceMapper.MapToEntity(gameInfoRatingUdm));
+            HandleUpdateCommunication(gameInfoRatingUdm.GameInfoId);
         }
 
         public IEnumerable<GameInfoRatingUdm>GetAll()
@@ -32,16 +39,35 @@ namespace GameInfoService.Rating.Services
         public async Task RemoveGameInfoRatingById(int id)
         {
             await _gameInfoRatingRepository.RemoveAsync(id);
+            //HandleUpdateCommunication(gameInfoRatingUdm.GameInfoId);
         }
 
         public async Task UpdateGameInfoRating(GameInfoRatingUdm gameInfoRatingUdm)
         {
             await _gameInfoRatingRepository.UpdateAsync(_gameInfoRatingServiceMapper.MapToEntity(gameInfoRatingUdm));
+            HandleUpdateCommunication(gameInfoRatingUdm.GameInfoId);
         }
 
         public Task Error()
         {
             throw new KeyNotFoundException();
+        }
+
+        private void HandleUpdateCommunication(int gameId)
+        {
+            double gameRating = CalculateGameRatingById(gameId);
+            _ratingUpdatedQueueSender.SendUpdateRatingQueue(new UpdateRatingDto { GameId = gameId, GameRating=gameRating });
+        }
+
+        private double CalculateGameRatingById(int gameId)
+        {
+            double gameRating = 0;
+            var gameInfoRatings = this.GetAll().Where(x => x.GameInfoId == gameId);
+            foreach (GameInfoRatingUdm gameInfoRating in gameInfoRatings)
+            {
+                gameRating += gameInfoRating.Rating;
+            }
+            return gameRating / gameInfoRatings.Count();
         }
     }
 }

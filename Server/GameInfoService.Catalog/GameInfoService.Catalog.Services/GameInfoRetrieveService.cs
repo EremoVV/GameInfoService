@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GameInfoService.Catalog.Domain.Models.Entities;
@@ -8,7 +9,7 @@ using GameInfoService.Catalog.Infrastructure.MappingInterfaces;
 using Mapster;
 
 
-namespace GameInfoService.Catalog.Services.Services
+namespace GameInfoService.Catalog.Services
 {
     public class GameInfoRetrieveService : IGameInfoRetrieveService
     {
@@ -31,7 +32,7 @@ namespace GameInfoService.Catalog.Services.Services
             return (await _gameInfoRepository.GetAllGameInfos())
                     .FirstOrDefault(x => x.Name.Equals(name.Normalize()))
                     .Adapt(new GameInfoUdm());
-            }
+        }
 
         public async Task<GameInfoUdm> GetGameInfo(int id)
         {
@@ -52,6 +53,14 @@ namespace GameInfoService.Catalog.Services.Services
 
         public async Task UpdateGameInfo(GameInfoUdm gameInfo)
         {
+            await _gameInfoRepository.UpdateGameInfo(gameInfo.Adapt<GameInfoEntity>());
+        }
+
+        public async Task UpdateGameInfoRating(int gameInfoId, double gameInfoRating)
+        {
+            var gameInfo = (await _gameInfoRepository.GetGameInfoById(gameInfoId)).Adapt<GameInfoUdm>();
+            if (gameInfo == null) throw new KeyNotFoundException("No gameInfo with given Id");
+            gameInfo.Rating = gameInfoRating;
             await _gameInfoRepository.UpdateGameInfo(gameInfo.Adapt<GameInfoEntity>());
         }
     }

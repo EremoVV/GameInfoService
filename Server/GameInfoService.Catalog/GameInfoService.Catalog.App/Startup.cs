@@ -1,9 +1,10 @@
+using GameInfoService.Catalog.App.HostedServices;
 using GameInfoService.Catalog.Domain.RepositoryInterfaces;
-using GameInfoService.Catalog.Infrastructure.Config;
 using GameInfoService.Catalog.Infrastructure.MappingInterfaces;
 using GameInfoService.Catalog.Infrastructure.Repositories;
 using GameInfoService.Catalog.Infrastructure.Repositories.Contexts;
-using GameInfoService.Catalog.Services.Services;
+using GameInfoService.Catalog.Services;
+using GameInfoService.Catalog.Services.GameInfoRatingCommunicationServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -32,13 +33,17 @@ namespace GameInfoService.Catalog.App
 
             var gameInfoConnectionString = Configuration.GetConnectionString("GameInfoConnectionString");
 
+            services.AddScoped<IGameInfoMapper, GameInfoMapper>();
+
             services.AddDbContext<GameInfoContext>(options => options.UseSqlServer(gameInfoConnectionString));
 
             services.AddTransient<IGameInfoRepository, GameInfoRepository>();
 
             services.AddTransient<IGameInfoRetrieveService, GameInfoRetrieveService>();
 
-            services.AddTransient<IGameInfoMapper, GameInfoMapper>();
+            services.AddTransient<IGameInfoRatingUpdatedCommunicationService, GameInfoRatingUpdatedCommunicationService>();
+
+            services.AddHostedService<GameInfoRatingUpdatedCommunicationServiceHostedService>();
 
 
             services.AddSwaggerGen(c =>
@@ -65,8 +70,8 @@ namespace GameInfoService.Catalog.App
 
             //});
 
-            var rabbitMqConfiguration = Configuration.GetSection("RabbitMQ");
-            services.Configure<RabbitMqConfig>(rabbitMqConfiguration);
+            //var rabbitMqConfiguration = Configuration.GetSection("RabbitMQ");
+            //services.Configure<RabbitMqConfig>(rabbitMqConfiguration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
