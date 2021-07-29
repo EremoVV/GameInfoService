@@ -4,14 +4,16 @@ using GameInfoService.Catalog.Infrastructure.Repositories.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace GameInfoService.Catalog.Migrations
+namespace GameInfoService.Catalog.Infrastructure.Migrations
 {
     [DbContext(typeof(GameInfoContext))]
-    partial class GameInfoContextModelSnapshot : ModelSnapshot
+    [Migration("20210729134955_DeveloperAdditionToEntity")]
+    partial class DeveloperAdditionToEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -24,7 +24,7 @@ namespace GameInfoService.Catalog.Infrastructure.Repositories
 
         public async Task<IEnumerable<GameInfoEntity>> GetAllGameInfos()
         {
-            return await _gameInfoContext.GameInfoSet.ToListAsync();
+            return await _gameInfoContext.GameInfoSet.Include(x => x.Developer).ToListAsync();
         }
 
         public async Task<GameInfoEntity> GetGameInfoById(int id)

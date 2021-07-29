@@ -7,6 +7,7 @@ namespace GameInfoService.Catalog.Infrastructure.Repositories.Contexts
     {
         public DbSet<GameInfoEntity> GameInfoSet { get; set; }
 
+        public DbSet<GameDeveloperEntity> GameDeveloperSet { get; set; }
         public GameInfoContext(DbContextOptions<GameInfoContext> options)
         : base(options)
         {

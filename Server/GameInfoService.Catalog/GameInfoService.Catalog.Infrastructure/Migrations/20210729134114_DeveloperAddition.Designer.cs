@@ -4,14 +4,16 @@ using GameInfoService.Catalog.Infrastructure.Repositories.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace GameInfoService.Catalog.Migrations
+namespace GameInfoService.Catalog.Infrastructure.Migrations
 {
     [DbContext(typeof(GameInfoContext))]
-    partial class GameInfoContextModelSnapshot : ModelSnapshot
+    [Migration("20210729134114_DeveloperAddition")]
+    partial class DeveloperAddition
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,9 +51,6 @@ namespace GameInfoService.Catalog.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DeveloperId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -67,18 +66,7 @@ namespace GameInfoService.Catalog.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeveloperId");
-
                     b.ToTable("GameInfoSet");
-                });
-
-            modelBuilder.Entity("GameInfoService.Catalog.Domain.Models.Entities.GameInfoEntity", b =>
-                {
-                    b.HasOne("GameInfoService.Catalog.Domain.Models.Entities.GameDeveloperEntity", "Developer")
-                        .WithMany()
-                        .HasForeignKey("DeveloperId");
-
-                    b.Navigation("Developer");
                 });
 #pragma warning restore 612, 618
         }

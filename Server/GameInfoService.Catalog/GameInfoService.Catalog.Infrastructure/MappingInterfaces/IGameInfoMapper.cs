@@ -1,4 +1,5 @@
 ﻿using GameInfoService.Catalog.Domain.Models.DTOs;
+using GameInfoService.Catalog.Domain.Models.DTOs.GameInfo;
 using GameInfoService.Catalog.Domain.Models.Entities;
 using GameInfoService.Catalog.Domain.Models.UDMs;
 using Mapster;

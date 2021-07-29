@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GameInfoService.Catalog.Domain.Models.UDMs.GameDevs;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GameInfoService.Catalog.Domain.Models.DTOs
+namespace GameInfoService.Catalog.Domain.Models.UDMs
 {
-    public class GameInfoCreateDto
+    public class GameInfoUdm
     {
         [Required]
+        public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        public GameDeveloperUdm Developer { get; set; }
         [Required]
         public string Description { get; set; }
-        public string Picture { get; set; }
-        [Range(0, 10)]
         public double? Rating { get; set; }
         public string PicturePath { get; set; }
+        [Required]
         public DateTime ReleaseDate { get; set; }
     }
 }

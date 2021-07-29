@@ -1,12 +1,14 @@
-﻿using System;
+﻿using GameInfoService.Catalog.Domain.Models.DTOs.GameDevs;
+using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace GameInfoService.Catalog.Domain.Models.DTOs
+namespace GameInfoService.Catalog.Domain.Models.DTOs.GameInfo
 {
     public class GameInfoUpdateDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public GameDeveloperDto Developer { get; set; }
         public string Description { get; set; }
         public string Picture { get; set; }
         [Range(0, 10)]

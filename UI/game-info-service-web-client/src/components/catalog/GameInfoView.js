@@ -91,12 +91,20 @@ export default function GameInfoView() {
       />
       <Box className={classes.gameInfo}>
         <Typography variant="h4">{gameData.name}</Typography>
-        <Typography variant="h5">Rating</Typography>
-        <RatingView variant="square" value={gameData.rating} />
-        <Typography variant="h5">{gameData.description}</Typography>
         <Typography variant="h6">
           {new Date(gameData.releaseDate).toDateString()}
         </Typography>
+        <Typography variant="h5">
+          <Typography variant="h5" style={{ color: "#f39c12" }}>
+            Developer:
+          </Typography>
+          {gameData.developer == null ? null : gameData.developer.name}
+        </Typography>
+        <Typography variant="h6">Rating</Typography>
+        <RatingView variant="square" value={gameData.rating} />
+
+        <Typography variant="h7">{gameData.description}</Typography>
+
         <Typography>Rate this game!</Typography>
         <Rating
           size="large"

@@ -20,6 +20,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 using RabbitMQ.Client;
 using System.Text;
 using GameInfoService.Catalog.Services;
+using GameInfoService.Catalog.Domain.Models.DTOs.GameInfo;
 
 namespace GameInfoService.Catalog.App.Controllers
 {

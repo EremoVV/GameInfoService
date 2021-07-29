@@ -10,6 +10,7 @@ namespace GameInfoService.Catalog.Domain.Models.Entities
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public GameDeveloperEntity Developer { get; set; }
         [Required]
         public string Description { get; set; }
         public double? Rating { get; set; }
