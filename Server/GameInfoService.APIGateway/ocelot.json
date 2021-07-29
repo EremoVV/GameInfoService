@@ -23,8 +23,19 @@
       ],
       "UpstreamPathTemplate": "/api/catalog/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "UPDATE", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/rating/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "UPDATE", "DELETE" ]
     }
-
 
   ],
   "GlobalConfiguration": {

@@ -28,12 +28,16 @@ namespace GameInfoService.Rating.Services
         public async Task AddGameInfoRating(GameInfoRatingUdm gameInfoRatingUdm)
         {
             await _gameInfoRatingRepository.CreateAsync(_gameInfoRatingServiceMapper.MapToEntity(gameInfoRatingUdm));
+            var gameInfoRating = _gameInfoRatingRepository
+                .GetAll()
+                .First(x => x.UserId == gameInfoRatingUdm.UserId && x.GameInfoId == gameInfoRatingUdm.GameInfoId);
             HandleUpdateCommunication(gameInfoRatingUdm.GameInfoId);
         }
 
         public IEnumerable<GameInfoRatingUdm>GetAll()
         {
-            return _gameInfoRatingServiceMapper.MapArrayToUdm(_gameInfoRatingRepository.GetAll());
+            return _gameInfoRatingServiceMapper
+                .MapArrayToUdm(_gameInfoRatingRepository.GetAll());
         }
 
         public async Task RemoveGameInfoRatingById(int id)
@@ -44,7 +48,8 @@ namespace GameInfoService.Rating.Services
 
         public async Task UpdateGameInfoRating(GameInfoRatingUdm gameInfoRatingUdm)
         {
-            await _gameInfoRatingRepository.UpdateAsync(_gameInfoRatingServiceMapper.MapToEntity(gameInfoRatingUdm));
+            await _gameInfoRatingRepository
+                .UpdateAsync(_gameInfoRatingServiceMapper.MapToEntity(gameInfoRatingUdm));
             HandleUpdateCommunication(gameInfoRatingUdm.GameInfoId);
         }
 
@@ -62,12 +67,30 @@ namespace GameInfoService.Rating.Services
         private double CalculateGameRatingById(int gameId)
         {
             double gameRating = 0;
-            var gameInfoRatings = this.GetAll().Where(x => x.GameInfoId == gameId);
+            var gameInfoRatings = this
+                .GetAll()
+                .Where(x => x.GameInfoId == gameId);
             foreach (GameInfoRatingUdm gameInfoRating in gameInfoRatings)
             {
                 gameRating += gameInfoRating.Rating;
             }
             return gameRating / gameInfoRatings.Count();
+        }
+
+        public async Task AppendGameInfoRating(GameInfoRatingUdm gameInfoRatingUdm)
+        {
+            var gameInfoRating = _gameInfoRatingRepository
+                .GetAll()
+                .Where(x => x.UserId == gameInfoRatingUdm.UserId && x.GameInfoId == gameInfoRatingUdm.GameInfoId).FirstOrDefault();
+            if (gameInfoRating == null) await _gameInfoRatingRepository
+                    .CreateAsync(_gameInfoRatingServiceMapper.MapToEntity(gameInfoRatingUdm));
+            else
+            {
+                gameInfoRating.Rating = gameInfoRatingUdm.Rating;
+                await _gameInfoRatingRepository
+                    .UpdateAsync(gameInfoRating);
+            }
+            HandleUpdateCommunication(gameInfoRatingUdm.GameInfoId);
         }
     }
 }

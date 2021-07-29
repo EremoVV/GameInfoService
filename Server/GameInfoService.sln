@@ -13,13 +13,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameInfoService.APIGateway"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameInfoService.Catalog", "GameInfoService.Catalog", "{28B2AE26-991D-401F-8204-4887515EFA79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameInfoService.Catalog.Services", "GameInfoService.Catalog\GameInfoService.Catalog.Services\GameInfoService.Catalog.Services.csproj", "{1E122068-6859-4E1F-B1DC-FAD9DF43840C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameInfoService.Catalog.Services", "GameInfoService.Catalog\GameInfoService.Catalog.Services\GameInfoService.Catalog.Services.csproj", "{1E122068-6859-4E1F-B1DC-FAD9DF43840C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameInfoService.Catalog.App", "GameInfoService.Catalog\GameInfoService.Catalog.App\GameInfoService.Catalog.App.csproj", "{3DA2BFF1-ADEC-45F2-8EEC-D6FA862E98D7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameInfoService.Catalog.Domain", "GameInfoService.Catalog\GameInfoService.Catalog.Domain\GameInfoService.Catalog.Domain.csproj", "{B95F66CB-E4BE-4838-83DA-6488234328DB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameInfoService.Catalog.Infrastructure", "GameInfoService.Catalog\GameInfoService.Catalog.Infrastructure\GameInfoService.Catalog.Infrastructure.csproj", "{54D2B2A5-DFB0-4588-87CB-15C4BA62466C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameInfoService.Rating", "GameInfoService.Rating", "{EE94DD51-D5A3-4CCD-847B-E93B8CDDB85C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameInfoService.Rating.App", "GameInfoService.Rating\GameInfoService.Rating.App\GameInfoService.Rating.App.csproj", "{64A93B06-534C-43CE-AB26-942E0491A480}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameInfoService.Rating.Domain", "GameInfoService.Rating\GameInfoService.Rating.Domain\GameInfoService.Rating.Domain.csproj", "{EC2BAB1A-99CB-4D5F-8D75-9B579BFB95EB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameInfoService.Rating.Services", "GameInfoService.Rating\GameInfoService.Rating.Services\GameInfoService.Rating.Services.csproj", "{FE9F9260-AC2E-4700-AFC2-C83B4C7C88B4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameInfoService.Rating.Infrastructure", "GameInfoService.Rating\GameInfoService.Rating.Infrastructure\GameInfoService.Rating.Infrastructure.csproj", "{C67C374F-1795-4835-90CD-8E414CF1A7ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +61,22 @@ Global
 		{54D2B2A5-DFB0-4588-87CB-15C4BA62466C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54D2B2A5-DFB0-4588-87CB-15C4BA62466C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54D2B2A5-DFB0-4588-87CB-15C4BA62466C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64A93B06-534C-43CE-AB26-942E0491A480}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64A93B06-534C-43CE-AB26-942E0491A480}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64A93B06-534C-43CE-AB26-942E0491A480}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64A93B06-534C-43CE-AB26-942E0491A480}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC2BAB1A-99CB-4D5F-8D75-9B579BFB95EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC2BAB1A-99CB-4D5F-8D75-9B579BFB95EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC2BAB1A-99CB-4D5F-8D75-9B579BFB95EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC2BAB1A-99CB-4D5F-8D75-9B579BFB95EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE9F9260-AC2E-4700-AFC2-C83B4C7C88B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE9F9260-AC2E-4700-AFC2-C83B4C7C88B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE9F9260-AC2E-4700-AFC2-C83B4C7C88B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE9F9260-AC2E-4700-AFC2-C83B4C7C88B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C67C374F-1795-4835-90CD-8E414CF1A7ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C67C374F-1795-4835-90CD-8E414CF1A7ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C67C374F-1795-4835-90CD-8E414CF1A7ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C67C374F-1795-4835-90CD-8E414CF1A7ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +88,10 @@ Global
 		{3DA2BFF1-ADEC-45F2-8EEC-D6FA862E98D7} = {28B2AE26-991D-401F-8204-4887515EFA79}
 		{B95F66CB-E4BE-4838-83DA-6488234328DB} = {28B2AE26-991D-401F-8204-4887515EFA79}
 		{54D2B2A5-DFB0-4588-87CB-15C4BA62466C} = {28B2AE26-991D-401F-8204-4887515EFA79}
+		{64A93B06-534C-43CE-AB26-942E0491A480} = {EE94DD51-D5A3-4CCD-847B-E93B8CDDB85C}
+		{EC2BAB1A-99CB-4D5F-8D75-9B579BFB95EB} = {EE94DD51-D5A3-4CCD-847B-E93B8CDDB85C}
+		{FE9F9260-AC2E-4700-AFC2-C83B4C7C88B4} = {EE94DD51-D5A3-4CCD-847B-E93B8CDDB85C}
+		{C67C374F-1795-4835-90CD-8E414CF1A7ED} = {EE94DD51-D5A3-4CCD-847B-E93B8CDDB85C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F8126060-01B5-4FB2-AAD7-708FB5A372BB}

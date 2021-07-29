@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GameInfoService.Rating.Domain\GameInfoService.Rating.Domain.csproj" />
-    <ProjectReference Include="..\GameInfoService.Rating.Infrastructure\GameInfoService.Rating.Infrastructure.csproj" />
     <ProjectReference Include="..\GameInfoService.Rating.Services\GameInfoService.Rating.Services.csproj" />
   </ItemGroup>
 

@@ -6,6 +6,8 @@ import { Box } from "@material-ui/core";
 
 import { gameInfoGetRequest } from "../../api/catalog/catalogApi";
 import RatingView from "../common/RatingView";
+import { gameInfoRatingAppendRequest } from "../../api/rating/ratingApi";
+import { getUserId } from "../../api/authorization/authorizationApi";
 
 // function getGameInfoRequest(gameName) {
 //   const requestGameInfo = {
@@ -52,6 +54,12 @@ const ratingLabels = {
   10: " 10/10 Masterpiece!",
 };
 
+function sendAppendRatingData(rating, gameId) {
+  gameInfoRatingAppendRequest(getUserId(), gameId, rating).catch((error) => {
+    console.log(error);
+  });
+}
+
 export default function GameInfoView() {
   const [gameData, setGameData] = useState([]);
   const [gameInfoRating, setGameInfoRating] = useState(-1);
@@ -89,9 +97,10 @@ export default function GameInfoView() {
           size="large"
           max={10}
           value={Number(gameData.rating)}
-          onChange={(e) => setGameInfoRating(e.target.value)}
+          onChange={() => sendAppendRatingData(gameInfoRating, gameData.id)}
           onChangeActive={(event, hoverIndex) => {
             setHoverIndex(hoverIndex);
+            setGameInfoRating(hoverIndex);
           }}
         />
         {ratingLabels[hoverIndex !== -1 ? hoverIndex : 0]}

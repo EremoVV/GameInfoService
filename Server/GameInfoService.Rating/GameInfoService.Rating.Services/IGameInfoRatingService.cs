@@ -12,8 +12,9 @@ namespace GameInfoService.Rating.Services
     {
         public IEnumerable<GameInfoRatingUdm> GetAll();
         public Task RemoveGameInfoRatingById(int id);
-        public Task UpdateGameInfoRating(GameInfoRatingUdm gameInfoRatingUdmUdm);
-        public Task AddGameInfoRating(GameInfoRatingUdm gameInfoRatingUdmUdm);
+        public Task UpdateGameInfoRating(GameInfoRatingUdm gameInfoRatingUdm);
+        public Task AddGameInfoRating(GameInfoRatingUdm gameInfoRatingUdm);
+        public Task AppendGameInfoRating(GameInfoRatingUdm gameInfoRatingUdm);
         public Task Error();
     }
 }

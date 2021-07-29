@@ -1,8 +1,6 @@
 import axios from "axios";
-import setCurrentAuthorizationHeader from "../authorization/authorizationApi";
 
 export async function gameInfoListGetRequest() {
-  setCurrentAuthorizationHeader();
   return await axios.get("catalog/Catalog/Index");
 }
 

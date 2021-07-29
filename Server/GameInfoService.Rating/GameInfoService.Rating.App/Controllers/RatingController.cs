@@ -68,5 +68,21 @@ namespace GameInfoService.Rating.App.Controllers
             await _gameInfoRatingService.Error();
             return Ok("Error");
         }
+
+        [HttpPost]
+        public async Task<ActionResult<string>> AppendRating(GameInfoRatingDto ratingDto)
+        {
+            try
+            {
+                if (!TryValidateModel(ratingDto)) return BadRequest(ModelState);
+                await _gameInfoRatingService.AppendGameInfoRating(_gameInfoRatingMapper.MapToUdm(ratingDto));
+                return Ok($"{ratingDto.UserId} Appended rating");
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine($"{e.Message} + {e.StackTrace}");
+                return StatusCode(500, $"Message: {e.Message}, trace: {e.StackTrace}");
+            }
+        }
     }
 }
