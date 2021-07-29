@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GameInfoService.Rating.App.MappingInterfaces;
 using GameInfoService.Rating.App.Middleware.ExceptionHandling.CustomExceptions;
 using GameInfoService.Rating.Domain.Models.DTOs;
+using GameInfoService.Rating.Domain.Models.UDMs;
 using GameInfoService.Rating.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -56,11 +57,19 @@ namespace GameInfoService.Rating.App.Controllers
                 return Conflict(e.Message);
             }
         }
-        [HttpGet]
-        public ActionResult<string> GetAllRating()
+
+        [HttpGet] 
+        public ActionResult<IEnumerable<GameInfoRatingUdm>> GetAllRating()
         {
-            return Ok(_gameInfoRatingService.GetAll());
+            return Ok(_gameInfoRatingMapper.MapToDto(_gameInfoRatingService.GetAll()));
         }
+
+        [HttpGet]
+        public  async Task<ActionResult<GameInfoRatingDto>> GetGameInfoRating(string userId, int gameId)
+        {
+            return _gameInfoRatingMapper.MapToDto(await _gameInfoRatingService.GetGameInfoRating(userId, gameId));
+        }
+
 
         [HttpGet]
         public async Task<ActionResult<string>> Error()

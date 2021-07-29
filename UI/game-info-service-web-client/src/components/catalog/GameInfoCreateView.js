@@ -9,7 +9,7 @@ const validationSchema = yup.object({
   gameDescription: yup
     .string("Enter description")
     .required("Description required"),
-  gameRating: yup.number().max(10).min(0),
+  //gameRating: yup.number().max(10).min(0),
 });
 
 const useStyles = makeStyles({
@@ -50,7 +50,7 @@ export default function GameInfoCreateView() {
     initialValues: {
       gameName: "",
       gameDescription: "",
-      gameRating: 1,
+      gameRating: [],
       gameReleaseDate: new Date(),
     },
     validationSchema: validationSchema,
@@ -88,6 +88,7 @@ export default function GameInfoCreateView() {
           }
         />
         <TextField
+          required
           className={classes.textInput}
           id="gameRating"
           label="Rating:"

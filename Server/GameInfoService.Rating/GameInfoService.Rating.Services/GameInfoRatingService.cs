@@ -92,5 +92,13 @@ namespace GameInfoService.Rating.Services
             }
             HandleUpdateCommunication(gameInfoRatingUdm.GameInfoId);
         }
+
+        public async Task<GameInfoRatingUdm> GetGameInfoRating(string userId, int gameId)
+        {
+            var gameInfoRating = _gameInfoRatingServiceMapper.MapArrayToUdm(_gameInfoRatingRepository.GetAll())
+                .FirstOrDefault(x => x.UserId == userId && x.GameInfoId == gameId);
+            if (gameInfoRating == null) throw new KeyNotFoundException("No gameInfoRating with given userId");
+            return gameInfoRating;
+        }
     }
 }

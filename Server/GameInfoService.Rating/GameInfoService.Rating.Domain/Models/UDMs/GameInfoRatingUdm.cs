@@ -14,7 +14,6 @@ namespace GameInfoService.Rating.Domain.Models.UDMs
         public string UserId { get; set; }
         [Required]
         public int GameInfoId { get; set; }
-        [Required]
         public int Rating { get; set; }
     }
 }
