@@ -6,10 +6,10 @@ Game Info View:
 ![image](https://user-images.githubusercontent.com/79301398/126324585-c1457f08-d4de-4fc0-98bf-4b77a2eb6930.png)
 Register View:
 ![image](https://user-images.githubusercontent.com/79301398/126324712-5ecacee6-630f-4d5d-8542-f56d1b3d0e65.png)
-Ver 0.1
+Ver 0.15
 Catalog View:
-![image](https://user-images.githubusercontent.com/79301398/127013303-880aff23-2d26-4da5-ad2c-46867abec2a0.png)
+![image](https://user-images.githubusercontent.com/79301398/127621789-03770823-a2e9-4c0f-92e6-fcb26ec42c92.png)
 Game Info View:
-![image](https://user-images.githubusercontent.com/79301398/127013357-cbe56da6-5e53-4241-af60-fce6d95dab38.png)
+![image](https://user-images.githubusercontent.com/79301398/127621831-915aa5fc-9960-4b59-af8b-e6558e2b0608.png)
 Register View:
-![image](https://user-images.githubusercontent.com/79301398/127013732-e9585993-b11a-4786-b009-3c55c648aa96.png)
+![image](https://user-images.githubusercontent.com/79301398/127621869-25d2d50b-4190-44b9-8087-83a0df396527.png)
